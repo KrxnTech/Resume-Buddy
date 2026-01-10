@@ -56,10 +56,6 @@ Built using the MERN stack with a focus on clean architecture and AI-assisted de
 
 ---
 
-## 📂 Project Structure
-
-<img width="212" height="705" alt="image" src="https://github.com/user-attachments/assets/79118ae1-335f-43bc-abeb-b0be9a62a18b" />
-
 ````
 
 ---
