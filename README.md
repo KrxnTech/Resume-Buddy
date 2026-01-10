@@ -54,8 +54,6 @@ Built using the MERN stack with a focus on clean architecture and AI-assisted de
 - Large Language Model API (LLM)
 - Prompt-based analysis
 
----
-
 ````
 
 ---
