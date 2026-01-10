@@ -59,22 +59,7 @@ Built using the MERN stack with a focus on clean architecture and AI-assisted de
 ## 📂 Project Structure
 
 ```
-
-ai-resume-analyzer/
-│
-├── client/                 # React frontend
-│   ├── src/
-│   │   ├── components/
-│   │   ├── App.jsx
-│   │   └── main.jsx
-│
-├── server/                 # Node + Express backend
-│   ├── controllers/
-│   ├── routes/
-│   ├── app.js
-│   └── .env
-│
-└── README.md
+<img width="212" height="705" alt="image" src="https://github.com/user-attachments/assets/79118ae1-335f-43bc-abeb-b0be9a62a18b" />
 
 ````
 
@@ -136,15 +121,15 @@ http://localhost:5173
 
 ### Frontend UI
 
-<!-- IMAGE: Frontend UI screenshot here -->
+<img width="720" height="505" alt="image" src="https://github.com/user-attachments/assets/b6475024-8527-4d06-bf4a-f0a6a65645e5" />
 
 ### Resume Upload & Analysis
 
-<!-- IMAGE: Resume upload and result screenshot here -->
+<img width="775" height="612" alt="image" src="https://github.com/user-attachments/assets/274d3475-b235-44dd-bb2e-8ec9927ac6f1" />
 
 ### Backend API Running
 
-<!-- IMAGE: Backend running screenshot here -->
+<img width="354" height="287" alt="image" src="https://github.com/user-attachments/assets/939c2248-f514-4842-834d-17773e764374" />
 
 ---
 
