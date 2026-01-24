@@ -3,6 +3,7 @@ import JobDescription from "./components/JobDescription";
 import AnalyzeButton from "./components/AnalyzeButton";
 import ResultBox from "./components/ResultBox";
 import { useState } from "react";
+import "./App.css";
 
 function App() {
   const [resume, setResume] = useState(null);
@@ -10,7 +11,7 @@ function App() {
   const [result, setResult] = useState(null);
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div className="Main_div">
       <h1>AI Resume Analyzer</h1>
 
       <ResumeUpload setResume={setResume} />
