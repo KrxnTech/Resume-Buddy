@@ -289,31 +289,32 @@ AI-Resume-Analyzer
 
 ## Home Page
 
-> Insert Screenshot
+<img width="1640" height="351" alt="image" src="https://github.com/user-attachments/assets/7fea4677-4fb3-4343-976e-82c1d0cc5fb6" />
 
 ---
 
 ## Resume Upload
 
-> Insert Screenshot
+<img width="1585" height="830" alt="image" src="https://github.com/user-attachments/assets/cfb9a513-3f0c-4115-a7fb-b64760da1d61" />
 
 ---
 
 ## AI Resume Profile
 
-> Insert Screenshot
+<img width="1568" height="620" alt="image" src="https://github.com/user-attachments/assets/36d059ac-1300-4c32-9ee7-099c56ea939a" />
 
 ---
 
 ## ATS Match Analysis
 
-> Insert Screenshot
+<img width="1567" height="770" alt="image" src="https://github.com/user-attachments/assets/648b69e5-2ac1-4ebb-a6d6-4bad027e7549" />
 
 ---
 
 ## Resume Strengths & Missing Skills
 
-> Insert Screenshot
+<img width="1545" height="412" alt="image" src="https://github.com/user-attachments/assets/f7f05040-70d8-4895-bdf9-f8ac46976378" />
+<img width="1510" height="232" alt="image" src="https://github.com/user-attachments/assets/a08f5759-8004-4a87-a3d8-960d3fbb5697" />
 
 ---
 
