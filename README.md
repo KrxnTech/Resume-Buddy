@@ -114,15 +114,18 @@ http://localhost:5173
 
 ### Frontend UI
 
-<img width="720" height="505" alt="image" src="https://github.com/user-attachments/assets/b6475024-8527-4d06-bf4a-f0a6a65645e5" />
+<img width="1812" height="750" alt="image" src="https://github.com/user-attachments/assets/7f4a3df1-0360-4b7b-9e45-55b9616a8250" />
 
 ### Resume Upload & Analysis
 
-<img width="775" height="612" alt="image" src="https://github.com/user-attachments/assets/274d3475-b235-44dd-bb2e-8ec9927ac6f1" />
+<img width="1577" height="515" alt="image" src="https://github.com/user-attachments/assets/7319dc5a-9394-4aee-9416-ba6d2d64cb75" />
 
 ### Backend API Running
 
-<img width="354" height="287" alt="image" src="https://github.com/user-attachments/assets/939c2248-f514-4842-834d-17773e764374" />
+<img width="1602" height="828" alt="image" src="https://github.com/user-attachments/assets/cc525232-9eae-41b5-859c-c7b5c9209ad8" />
+<img width="1547" height="608" alt="image" src="https://github.com/user-attachments/assets/c32a9d5a-d777-46c3-bc8a-84927dd8a0bc" />
+<img width="1581" height="787" alt="image" src="https://github.com/user-attachments/assets/c4f641da-24d5-414f-8a80-3bff773c0cac" />
+<img width="1576" height="652" alt="image" src="https://github.com/user-attachments/assets/e5d50da8-acb6-40d2-a469-a62b5f178502" />
 
 ---
 
