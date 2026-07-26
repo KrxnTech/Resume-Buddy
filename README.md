@@ -239,7 +239,7 @@ Resume Buddy closes this feedback gap with AI-driven resume analysis and career 
 
 ```
 Resume-Buddy/
-├── client/
+├── client/analyzer-frontend
 │   ├── assets/
 │   ├── components/
 │   ├── hooks/
@@ -256,12 +256,6 @@ Resume-Buddy/
     ├── utils/
     └── app.js
 ```
-
-### Show Case ✓ Frontend Folder & Backend Folder 
-
-![alt text](image-1.png)![alt text](image-2.png)
-
----
 
 ## Tech Stack
 
