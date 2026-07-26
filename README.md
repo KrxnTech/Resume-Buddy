@@ -1,82 +1,346 @@
-```md
-# 🤖 AI Resume Analyzer (MERN + AI)
+# AI Resume Analyzer
 
-An AI-powered web application that analyzes resumes against job descriptions to provide skill-gap insights, improvement suggestions, and AI-generated feedback.  
-Built using the MERN stack with a focus on clean architecture and AI-assisted development.
+A production-ready AI-powered Resume Analyzer built with the MERN Stack that intelligently evaluates resumes against job descriptions using Large Language Models.
 
----
+The application extracts resume information, compares candidate profiles with job requirements, calculates ATS compatibility scores, identifies missing skills, highlights strengths, and generates actionable recommendations to improve interview readiness.
 
-## 🚀 Project Status
-
-🟢 **Active Development**  
-- Day 1 completed: Frontend ↔ Backend integration  
-- Resume upload & job description input working  
-- Backend API running successfully  
-
-> AI integration and resume parsing are under development.
+Designed with a scalable architecture, modern UI, and AI-assisted analysis, this project demonstrates the integration of full-stack development with practical Generative AI workflows.
 
 ---
 
-## 🧠 Key Features (Planned & Implemented)
+# Project Overview
 
-### ✅ Implemented
-- Resume upload (PDF)
-- Job description input
-- React frontend with controlled state
-- Node.js + Express backend
-- API communication between frontend and backend
+The goal of this project is to automate resume screening by simulating how Applicant Tracking Systems (ATS) and recruiters evaluate resumes.
 
-### 🔜 Upcoming (Next Phases)
-- PDF resume text extraction
-- AI-based resume analysis
-- Resume vs job description matching
-- Skill gap identification
-- AI-generated resume improvement suggestions
-- AI-generated cover letter
-- Match score (0–100)
+Instead of simply extracting text from PDFs, the system performs intelligent analysis by understanding:
+
+- Candidate profile
+- Technical skills
+- Soft skills
+- Experience
+- Achievements
+- Resume quality
+- Job requirements
+- Skill gaps
+- ATS compatibility
+- Improvement suggestions
+
+This allows candidates to identify weaknesses before applying for jobs.
 
 ---
 
-## 🛠️ Tech Stack
+# Features
 
-### Frontend
-- React (Vite)
+## Resume Processing
+
+- Upload Resume (PDF)
+- Automatic PDF Parsing
+- Resume Text Extraction
+- Resume Metadata Extraction
+- AI Resume Understanding
+
+## Job Description Analysis
+
+- Custom Job Description Input
+- Requirement Extraction
+- Skill Requirement Identification
+- Experience Requirement Detection
+- Responsibility Analysis
+
+## AI Resume Analysis
+
+- Resume vs Job Description Matching
+- ATS Compatibility Score
+- AI Generated Resume Summary
+- Candidate Profile Extraction
+- Resume Quality Evaluation
+
+## Resume Insights
+
+- Hard Skills Detection
+- Soft Skills Detection
+- Achievement Extraction
+- Professional Links Detection
+- Experience Overview
+
+## ATS Analysis
+
+- Overall ATS Match Score
+- Skills Score
+- Experience Score
+- Education Score
+- Formatting Score
+- Contact Information Score
+
+## AI Recommendations
+
+- Resume Strengths
+- Missing Skills
+- Improvement Suggestions
+- Resume Optimization Tips
+
+---
+
+# Current Project Capabilities
+
+The application currently performs the following workflow:
+
+1. Upload Resume PDF
+
+2. Parse Resume Content
+
+3. Extract Candidate Information
+
+4. Analyze Job Description
+
+5. Compare Resume with JD
+
+6. Generate ATS Match Percentage
+
+7. Detect Missing Skills
+
+8. Identify Candidate Strengths
+
+9. Suggest Resume Improvements
+
+10. Display Complete AI Analysis Dashboard
+
+---
+
+# Technology Stack
+
+## Frontend
+
+- React
+- Vite
 - JavaScript
-- Fetch API
+- CSS
+- Responsive UI
 
-### Backend
+## Backend
+
 - Node.js
 - Express.js
-- Multer (file uploads)
-- pdf-parse (resume text extraction)
+- Multer
+- pdf-parse
 
-### AI (Planned)
-- Large Language Model API (LLM)
-- Prompt-based analysis
+## AI
 
-````
+- Groq API
+- Large Language Models
+- Prompt Engineering
+
+## Database
+
+- MongoDB (Upcoming)
 
 ---
 
-## ⚙️ Setup Instructions
+# System Architecture
 
-### 1️⃣ Clone the Repository
+```
+                Resume PDF
+                     │
+                     ▼
+             PDF Text Extraction
+                     │
+                     ▼
+          Resume Information Parser
+                     │
+                     ▼
+        Candidate Profile Generation
+                     │
+                     │
+                     ▼
+           Job Description Parser
+                     │
+                     ▼
+         Resume ↔ JD AI Comparison
+                     │
+                     ▼
+        ATS Score Generation Engine
+                     │
+                     ▼
+        AI Recommendation Generator
+                     │
+                     ▼
+          Interactive Dashboard UI
+```
+
+---
+
+# Application Workflow
+
+```
+User
+
+│
+
+├── Upload Resume
+
+│
+
+├── Enter Job Description
+
+│
+
+├── Submit Analysis
+
+│
+
+▼
+
+Backend
+
+│
+
+├── Receive PDF
+
+├── Extract Text
+
+├── Parse Resume
+
+├── Process Job Description
+
+├── Send Data to AI
+
+├── Compare Resume & JD
+
+├── Calculate ATS Scores
+
+├── Generate Suggestions
+
+│
+
+▼
+
+Frontend
+
+│
+
+├── Resume Profile
+
+├── ATS Match Score
+
+├── Section Breakdown
+
+├── Skills
+
+├── Missing Skills
+
+├── Strengths
+
+└── Improvement Suggestions
+```
+
+---
+
+# Project Structure
+
+```
+AI-Resume-Analyzer
+
+│
+
+├── client/
+
+│   ├── public/
+
+│   ├── src/
+
+│   │   ├── components/
+
+│   │   ├── pages/
+
+│   │   ├── hooks/
+
+│   │   ├── utils/
+
+│   │   ├── services/
+
+│   │   └── assets/
+
+│
+
+├── server/
+
+│   ├── controllers/
+
+│   ├── routes/
+
+│   ├── middleware/
+
+│   ├── services/
+
+│   ├── utils/
+
+│   ├── uploads/
+
+│   └── app.js
+
+│
+
+└── README.md
+```
+
+---
+
+# Screenshots
+
+## Home Page
+
+<img width="1640" height="351" alt="image" src="https://github.com/user-attachments/assets/7fea4677-4fb3-4343-976e-82c1d0cc5fb6" />
+
+---
+
+## Resume Upload
+
+<img width="1585" height="830" alt="image" src="https://github.com/user-attachments/assets/cfb9a513-3f0c-4115-a7fb-b64760da1d61" />
+
+---
+
+## AI Resume Profile
+
+<img width="1568" height="620" alt="image" src="https://github.com/user-attachments/assets/36d059ac-1300-4c32-9ee7-099c56ea939a" />
+
+---
+
+## ATS Match Analysis
+
+<img width="1567" height="770" alt="image" src="https://github.com/user-attachments/assets/648b69e5-2ac1-4ebb-a6d6-4bad027e7549" />
+
+---
+
+## Resume Strengths & Missing Skills
+
+<img width="1545" height="412" alt="image" src="https://github.com/user-attachments/assets/f7f05040-70d8-4895-bdf9-f8ac46976378" />
+<img width="1510" height="232" alt="image" src="https://github.com/user-attachments/assets/a08f5759-8004-4a87-a3d8-960d3fbb5697" />
+
+---
+
+# Installation
+
+## Clone Repository
+
 ```bash
-git clone https://github.com/your-username/ai-resume-analyzer.git
-cd ai-resume-analyzer
-````
+git clone https://github.com/yourusername/AI-Resume-Analyzer.git
+
+cd AI-Resume-Analyzer
+```
 
 ---
 
-### 2️⃣ Backend Setup
+## Backend
 
 ```bash
 cd server
+
 npm install
+
 npm run dev
 ```
 
-Backend will run at:
+Runs on
 
 ```
 http://localhost:5000
@@ -84,15 +348,17 @@ http://localhost:5000
 
 ---
 
-### 3️⃣ Frontend Setup
+## Frontend
 
 ```bash
 cd client
+
 npm install
+
 npm run dev
 ```
 
-Frontend will run at:
+Runs on
 
 ```
 http://localhost:5173
@@ -100,86 +366,83 @@ http://localhost:5173
 
 ---
 
-## 🔄 Application Flow
+# Environment Variables
 
-1. User uploads resume (PDF)
-2. User enters job description
-3. Frontend sends data to backend API
-4. Backend processes request
-5. Response is returned and displayed on UI
+Create a `.env` file inside the server folder.
 
----
+```
+PORT=5000
 
-## 🖼️ Screenshots Project Working 
-
-### Frontend UI
-
-<img width="720" height="505" alt="image" src="https://github.com/user-attachments/assets/b6475024-8527-4d06-bf4a-f0a6a65645e5" />
-
-### Resume Upload & Analysis
-
-<img width="775" height="612" alt="image" src="https://github.com/user-attachments/assets/274d3475-b235-44dd-bb2e-8ec9927ac6f1" />
-
-### Backend API Running
-
-<img width="354" height="287" alt="image" src="https://github.com/user-attachments/assets/939c2248-f514-4842-834d-17773e764374" />
+GROQ_API_KEY=YOUR_API_KEY
+```
 
 ---
 
-## 🎯 Learning Goals Behind This Project
+# AI Analysis Output
 
-* Build a real-world MERN application from scratch
-* Understand frontend ↔ backend communication
-* Learn file upload handling in Node.js
-* Integrate AI APIs in a meaningful way
-* Practice clean project structuring and scalability
+The analyzer currently provides:
 
----
-
-## 🔮 Future Improvements
-
-* User authentication
-* Resume analysis history
-* GitHub & LinkedIn profile analyzer
-* Mock interview chatbot
-* Chrome extension for JD analysis
-* Database integration (MongoDB)
+- Resume Profile
+- Hard Skills
+- Soft Skills
+- Achievements
+- ATS Match Score
+- Resume Summary
+- Resume Strengths
+- Missing Skills
+- Resume Improvements
+- Section-wise ATS Breakdown
 
 ---
 
-## 🧑‍💻 Author
+# Upcoming Features
 
-**Krishna**
-Computer Science Student | MERN Developer
-Focused on building practical, AI-powered applications.
+- User Authentication
+- Resume History
+- Resume Version Comparison
+- AI Resume Rewriter
+- AI Cover Letter Generator
+- Interview Question Generator
+- GitHub Profile Analyzer
+- LinkedIn Profile Analyzer
+- Portfolio Analyzer
+- Resume Templates
+- Export Optimized Resume
+- Dashboard Analytics
+- Recruiter Portal
+- MongoDB Persistence
 
 ---
 
-## 📜 License
+# Learning Objectives
+
+This project was built to explore:
+
+- MERN Stack Architecture
+- File Upload Handling
+- PDF Parsing
+- AI Integration
+- Prompt Engineering
+- REST API Design
+- Resume Intelligence
+- ATS Evaluation Systems
+- Clean Project Structure
+- Production Ready Frontend Development
+
+---
+
+# Author
+
+Krishna
+
+Computer Science Engineering Student
+
+MERN Stack Developer
+
+AI Application Developer
+
+---
+
+# License
 
 This project is licensed under the MIT License.
-
-```
-
----
-
-## Why this README works (quick reality check)
-
-- Recruiter-friendly  
-- Clear progress visibility  
-- Honest about what’s done vs planned  
-- Space left for screenshots  
-- Doesn’t scream “tutorial project”
-
-This README will **age well** as your project grows, instead of becoming embarrassing in two weeks.
-
-Commit this as:
-```
-
-docs: add initial project README
-
-```
-
-Day-1 closed properly.  
-When you’re ready, we move to **Phase-3 backend: PDF parsing**.
-```
