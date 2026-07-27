@@ -19,7 +19,7 @@ Understand how ATS systems and recruiters actually evaluate your resume — Befo
 
 ## Table of Contents 🔥
 
-- [Overview](#overview)
+- [✓ Overview](#overview)
 - [Problem Statement](#problem-statement)
 - [Why ResumeOS](#why-resumeos)
 - [Key Features](#key-features)
