@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAnalysis } from "../hooks/useAnalysis";
+import { useAuth } from "../hooks/useAuth";
+import ThemeToggle from "./ThemeToggle";
 
 const MENU_GROUPS = [
   {
@@ -25,7 +27,7 @@ const MENU_GROUPS = [
     title: "Career Utilities",
     items: [
       { path: "/dashboard/health", label: "Resume Health", icon: "•", badge: "Beta" },
-      { path: "/dashboard/interview", label: "Interview Prep", icon: "•" },
+      { path: "/dashboard/interview", label: "🎙️ Mock Interview", icon: "•", badge: "AI" },
       { path: "/dashboard/roadmap", label: "Career Roadmap", icon: "•" },
       { path: "/dashboard/export", label: "Export Report", icon: "•" },
     ]
@@ -33,13 +35,24 @@ const MENU_GROUPS = [
   {
     title: "System",
     items: [
-      { path: "/dashboard/settings", label: "Settings", icon: "•" }
+      { path: "/dashboard/settings", label: "Account & Settings", icon: "•" }
     ]
   }
 ];
 
 function Sidebar({ isOpen, toggleOpen, isMobile, closeMobile }) {
   const { hasAnalysis } = useAnalysis();
+  const { user, isAuthenticated, openAuthModal, logout } = useAuth();
+
+  const getInitials = (name) => {
+    if (!name) return "U";
+    return name
+      .split(" ")
+      .map((n) => n[0])
+      .slice(0, 2)
+      .join("")
+      .toUpperCase();
+  };
 
   // If no analysis is done, we disable dashboard detail links to prevent errors (they will redirect to upload)
   return (
@@ -65,7 +78,7 @@ function Sidebar({ isOpen, toggleOpen, isMobile, closeMobile }) {
         {/* Sidebar Header */}
         <div className="sidebar-header">
           <div className="sidebar-logo">
-            {isOpen && <span className="logo-text">Analyzer Buddy <i class="fa-solid fa-shield-cat"></i> </span>}
+            {isOpen && <span className="logo-text">Analyzer Buddy <i className="fa-solid fa-shield-cat"></i> </span>}
           </div>
           {!isMobile && (
             <button className="sidebar-toggle" onClick={toggleOpen} title={isOpen ? "Collapse Sidebar" : "Expand Sidebar"}>
@@ -119,10 +132,28 @@ function Sidebar({ isOpen, toggleOpen, isMobile, closeMobile }) {
         {/* Sidebar Footer */}
         {isOpen && (
           <div className="sidebar-footer">
-            <div className="sidebar-user-avatar">AD</div>
-            <div className="sidebar-user-info">
-              <div className="user-name">Premium Pro</div>
-              <div className="user-plan">SaaS User</div>
+            {isAuthenticated && user ? (
+              <>
+                <div className="sidebar-user-avatar">{getInitials(user.name)}</div>
+                <div className="sidebar-user-info">
+                  <div className="user-name" title={user.name}>{user.name}</div>
+                  <div className="user-plan">{user.role || "Pro Member"}</div>
+                </div>
+              </>
+            ) : (
+              <div
+                style={{ cursor: "pointer", display: "flex", alignItems: "center", gap: "0.5rem" }}
+                onClick={() => openAuthModal("login")}
+              >
+                <div className="sidebar-user-avatar" style={{ background: "var(--clr-accent)", color: "#000" }}>👤</div>
+                <div className="sidebar-user-info">
+                  <div className="user-name" style={{ color: "var(--clr-accent)" }}>Sign In</div>
+                  <div className="user-plan">Guest Mode</div>
+                </div>
+              </div>
+            )}
+            <div style={{ marginLeft: "auto" }}>
+              <ThemeToggle compact={true} />
             </div>
           </div>
         )}

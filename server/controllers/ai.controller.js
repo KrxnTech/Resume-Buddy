@@ -16,7 +16,7 @@ export const analyzeResume = async (req, res) => {
         }
 
         const { jobDescription } = req.body;
-        if (!jobDescription) {
+        if (!jobDescription || !jobDescription.trim()) {
             return res.status(400).json({
                 error: "Job description is required"
             });
@@ -30,6 +30,12 @@ export const analyzeResume = async (req, res) => {
             .replace(/\s+/g, " ")
             .trim();
 
+        if (!resumeText || resumeText.length < 20) {
+            return res.status(400).json({
+                error: "Could not extract readable text from the uploaded PDF. Please make sure it is not a scanned image PDF."
+            });
+        }
+
         // 2️⃣ AI ANALYSIS
         const analysis = await analyzeWithAI(resumeText, jobDescription);
 
@@ -42,7 +48,7 @@ export const analyzeResume = async (req, res) => {
     } catch (error) {
         console.error("AI ANALYSIS ERROR:", error);
         res.status(500).json({
-            error: "Failed to analyze resume"
+            error: error.message || "Failed to analyze resume"
         });
     }
 };

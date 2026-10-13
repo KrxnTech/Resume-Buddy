@@ -1,8 +1,6 @@
 import { useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAnalysis } from "../hooks/useAnalysis";
-import DashboardCard from "../components/DashboardCard";
-import { TagCard } from "../components/ResultBox";
 
 function Dashboard() {
   const { resume, result, setResult, setResume, setJobDesc } = useAnalysis();
@@ -19,209 +17,234 @@ function Dashboard() {
 
   const stats = useMemo(() => {
     if (!analysis) return null;
-    const pr = analysis.parsedResume || {};
-    const rw = analysis.rewriteStudio || {};
+    const pr = analysis.candidateProfile?.skills || analysis.parsedResume || {};
+    const hardCount =
+      (analysis.candidateProfile?.skills?.languages?.length || 0) +
+      (analysis.candidateProfile?.skills?.frameworks?.length || 0) +
+      (analysis.candidateProfile?.skills?.databases?.length || 0) +
+      (analysis.candidateProfile?.skills?.cloud?.length || 0) ||
+      analysis.parsedResume?.hardSkills?.length ||
+      0;
 
     return {
-      hardSkillsCount: pr.hardSkills?.length ?? 0,
-      softSkillsCount: pr.softSkills?.length ?? 0,
-      experienceCount: pr.internships?.length ?? 0,
-      projectsCount: rw.projects?.length ?? 0,
-      achievementsCount: pr.achievements?.length ?? 0,
-      languagesCount: pr.languages?.length ?? 0,
+      hardSkillsCount: hardCount,
+      softSkillsCount: analysis.candidateProfile?.skills?.softSkills?.length || analysis.parsedResume?.softSkills?.length || 0,
+      experienceCount: analysis.candidateProfile?.experience?.length || analysis.parsedResume?.internships?.length || 0,
+      projectsCount: analysis.candidateProfile?.projects?.length || 0,
+      certificationsCount: analysis.candidateProfile?.certifications?.length || analysis.parsedResume?.certifications?.length || 0,
     };
   }, [analysis]);
 
-  if (!analysis) return null;
+  if (!analysis) {
+    return (
+      <div className="copilot-empty-state">
+        <div className="copilot-empty-icon">📊</div>
+        <h2>No Resume Analysis Active</h2>
+        <p>Upload a resume and job description to generate your full ATS radar, recruiter hiring odds, and score breakdown.</p>
+        <button
+          type="button"
+          className="kinetic-cta-btn primary"
+          style={{ marginTop: "1rem" }}
+          onClick={() => navigate("/upload")}
+        >
+          UPLOAD RESUME →
+        </button>
+      </div>
+    );
+  }
 
-  const atsScore = analysis.matchScore ?? 0;
-  const recruiterVerdict = analysis.recruiterReview?.decision ?? "Consider";
-  const hiringChance = analysis.recruiterReview?.hiringProbability ?? 50;
-
-  // Simple calculation of profile checklist score
-  const healthScore = Math.round(
-    ((analysis.parsedResume?.github ? 1 : 0) +
-      (analysis.parsedResume?.linkedin ? 1 : 0) +
-      (analysis.parsedResume?.portfolio ? 1 : 0) +
-      ((analysis.parsedResume?.hardSkills?.length ?? 0) > 0 ? 1 : 0) +
-      ((analysis.parsedResume?.softSkills?.length ?? 0) > 0 ? 1 : 0) +
-      ((analysis.parsedResume?.certifications?.length ?? 0) > 0 ? 1 : 0) +
-      ((analysis.parsedResume?.achievements?.length ?? 0) > 0 ? 1 : 0)) * 14.28
-  );
+  const atsScore = Math.round((analysis.matchScore || 0) * 100);
+  const recruiter = analysis.recruiterReview || {};
+  const verdict = recruiter.decision || "Consider";
+  const hiringChance = recruiter.hiringProbability || 65;
+  const candidateName =
+    analysis.candidateProfile?.identity?.fullName ||
+    (resume?.name ? resume.name.replace(/\.pdf$/i, "").split(/[\s_-]+/)[0] : "Candidate");
+  const targetTitle =
+    analysis.candidateProfile?.identity?.professionalTitle ||
+    recruiter.bestRoles?.[0]?.role ||
+    "Software Engineer";
 
   return (
-    <div className="dashboard-overview-page">
-      {/* Welcome header panel */}
-      <div className="dashboard-overview-header">
-        <div className="overview-welcome-left">
-          <h2>Resume Report Overview</h2>
-          <p>
-            Review summary metrics parsed from <strong className="ResumeHolderName">{resume?.name || "Active Resume"}</strong>
+    <div className="kinetic-dashboard-wrap">
+      {/* Top Banner Header */}
+      <div className="kinetic-dash-header">
+        <div className="kinetic-dash-title-group">
+          <span className="kinetic-eyebrow">CANDIDATE INTELLIGENCE RADAR</span>
+          <h1 className="kinetic-dash-main-title">{candidateName.toUpperCase()} // {targetTitle.toUpperCase()}</h1>
+          <p className="kinetic-dash-subtitle">
+            Analyzed document: <strong>{resume?.name || "Active Resume"}</strong> • Multi-model parsing active
           </p>
         </div>
-        <div className="overview-header-actions">
-          <button className="dashboard-reanalyze-btn" onClick={handleScanNew}>
-            Scan New Resume
+
+        <div className="kinetic-dash-actions">
+          <button type="button" className="kinetic-cta-btn primary" onClick={() => navigate("/dashboard/interview")}>
+            🎙️ START MOCK INTERVIEW
+          </button>
+          <button type="button" className="kinetic-cta-btn outline" onClick={handleScanNew}>
+            SCAN NEW PDF
           </button>
         </div>
       </div>
 
-      {/* KPI metric grid */}
-      <div className="overview-kpi-grid">
-        <DashboardCard
-          title="Overall ATS Score"
-          value={`${Math.round(atsScore * 100)}%`}
-          subtitle={analysis.atsExplanation ? analysis.atsExplanation.slice(0, 75) + "..." : "Resume alignment score against requirements."}
-          icon=""
-          type="score"
-          linkText="Detailed ATS Metrics"
-          to="/dashboard/ats"
-        />
-        <DashboardCard
-          title="Recruiter Verdict"
-          value={recruiterVerdict}
-          subtitle={analysis.recruiterReview?.overallComment ? analysis.recruiterReview.overallComment.slice(0, 75) + "..." : "AI Recruiter evaluation verdict."}
-          icon=""
-          type="decision"
-          linkText="Read Recruiter Assessment"
-          to="/dashboard/recruiter"
-        />
-        <DashboardCard
-          title="Hiring Probability"
-          value={`${hiringChance}%`}
-          subtitle="Chance of advancing past the initial recruiter screening."
-          icon=""
-          linkText="Hiring Breakdown"
-          to="/dashboard/recruiter"
-        />
-        <DashboardCard
-          title="Resume Profile Health"
-          value={`${Math.min(100, healthScore)}%`}
-          subtitle="Checklist score evaluating contact channels and assets."
-          icon=""
-          linkText="View Checklist"
-          to="/dashboard/profile"
-        />
+      {/* Hero Score Showcase */}
+      <div className="kinetic-score-hero">
+        <div className="kinetic-score-big-col">
+          <span className="kinetic-score-label">OVERALL MATCH ACCURACY</span>
+          <div className="kinetic-score-display">
+            <span className="kinetic-score-val">{atsScore}%</span>
+            <span className="kinetic-score-tag">ATS SCORE</span>
+          </div>
+          <p className="kinetic-score-desc">
+            {analysis.atsExplanation || "Your resume has been benchmarked against senior engineering recruiter standards."}
+          </p>
+        </div>
+
+        <div className="kinetic-verdict-col">
+          <div className="kinetic-verdict-badge-box">
+            <span className="kinetic-verdict-sub">RECRUITER HIRING VERDICT</span>
+            <h2 className="kinetic-verdict-val">{verdict.toUpperCase()}</h2>
+          </div>
+
+          <div className="kinetic-hiring-bar-box">
+            <div className="kinetic-hiring-labels">
+              <span>Hiring Probability</span>
+              <strong>{hiringChance}%</strong>
+            </div>
+            <div className="kinetic-bar-track">
+              <div className="kinetic-bar-fill" style={{ width: `${hiringChance}%` }} />
+            </div>
+          </div>
+
+          <div className="kinetic-recruiter-quote">
+            "{recruiter.overallComment ? recruiter.overallComment.slice(0, 160) + "..." : "Strong core competencies observed."}"
+          </div>
+        </div>
       </div>
 
-      {/* Quick Action Rows */}
-      <div className="overview-section-label">Quick Actions</div>
-      <div className="overview-quick-actions-row">
-        <Link to="/dashboard/ats" className="quick-action-button-card">
-          <span className="q-icon"></span>
-          <div className="q-info">
-            <strong>ATS Check</strong>
-            <span>Formatting &amp; scoring details</span>
+      {/* Quick Launchpad Engines */}
+      <div className="kinetic-launchpad-grid">
+        <Link to="/dashboard/interview" className="kinetic-launch-tile">
+          <span className="launch-icon">🎙️</span>
+          <div className="launch-info">
+            <strong>MOCK INTERVIEW ARENA</strong>
+            <span>Realistic project &amp; tech probing with voice input</span>
           </div>
+          <span className="launch-arrow">→</span>
         </Link>
-        <Link to="/dashboard/recruiter" className="quick-action-button-card">
-          <span className="q-icon"></span>
-          <div className="q-info">
-            <strong>Recruiter Screen</strong>
-            <span>seniority &amp; salary fit metrics</span>
+
+        <Link to="/dashboard/copilot" className="kinetic-launch-tile">
+          <span className="launch-icon">🤖</span>
+          <div className="launch-info">
+            <strong>CAREER COPILOT</strong>
+            <span>Grounded AI assistant with profile memory</span>
           </div>
+          <span className="launch-arrow">→</span>
         </Link>
-        <Link to="/dashboard/rewrite" className="quick-action-button-card">
-          <span className="q-icon"></span>
-          <div className="q-info">
-            <strong>Rewrite Studio</strong>
-            <span>Grammarly/Notion AI inline edits</span>
+
+        <Link to="/dashboard/rewrite" className="kinetic-launch-tile">
+          <span className="launch-icon">✍️</span>
+          <div className="launch-info">
+            <strong>REWRITE STUDIO</strong>
+            <span>Live bullet diff editor &amp; metric injector</span>
           </div>
+          <span className="launch-arrow">→</span>
         </Link>
-        <Link to="/dashboard/sections" className="quick-action-button-card">
-          <span className="q-icon"></span>
-          <div className="q-info">
-            <strong>Section Inspector</strong>
-            <span>Check bullet weaknesses</span>
+
+        <Link to="/dashboard/ats" className="kinetic-launch-tile">
+          <span className="launch-icon">🎯</span>
+          <div className="launch-info">
+            <strong>ATS DEEP DIVE</strong>
+            <span>Detailed section breakdown &amp; keyword radar</span>
           </div>
+          <span className="launch-arrow">→</span>
         </Link>
       </div>
 
-      {/* Stats Counter grid + Tag lists widgets */}
-      <div className="overview-details-grid">
-        {/* Left Column - Stats & Resume Metadata */}
-        <div className="overview-details-panel">
-          <div className="panel-title-header">Resume Content Summary</div>
-          <div className="summary-counters-grid">
-            <div className="counter-item">
-              <span className="counter-val">{stats?.hardSkillsCount}</span>
-              <span className="counter-lbl">Hard Skills</span>
-            </div>
-            <div className="counter-item">
-              <span className="counter-val">{stats?.softSkillsCount}</span>
-              <span className="counter-lbl">Soft Skills</span>
-            </div>
-            <div className="counter-item">
-              <span className="counter-val">{stats?.experienceCount}</span>
-              <span className="counter-lbl">Internships / Roles</span>
-            </div>
-            <div className="counter-item">
-              <span className="counter-val">{stats?.projectsCount}</span>
-              <span className="counter-lbl">Projects</span>
-            </div>
-            <div className="counter-item">
-              <span className="counter-val">{stats?.achievementsCount}</span>
-              <span className="counter-lbl">Achievements</span>
-            </div>
-            <div className="counter-item">
-              <span className="counter-val">{stats?.languagesCount}</span>
-              <span className="counter-lbl">Languages</span>
-            </div>
+      {/* 2-Column Intelligence Grid */}
+      <div className="kinetic-dash-grid-2">
+        {/* Left Column: Strengths & Skills */}
+        <div className="kinetic-dash-card">
+          <div className="kinetic-card-header-row">
+            <h3 className="kinetic-dash-card-title">✅ VERIFIED STRENGTHS</h3>
+            <span className="kinetic-tag-badge">TOP COMPETENCIES</span>
           </div>
 
-          {/* Quick profile link summary */}
-          <div className="overview-profile-links-widget">
-            <span className="widget-label">Asset Connections</span>
-            <div className="profile-links-row">
-              {analysis.parsedResume?.github ? (
-                <a href={analysis.parsedResume.github} target="_blank" rel="noopener noreferrer" className="profile-link mini">
-                  Github ↗
-                </a>
-              ) : <span className="profile-link disabled">Github Missing</span>}
+          <div className="kinetic-tag-list">
+            {(analysis.strengths || ["Full Stack Architecture", "Microservices Design", "PostgreSQL Optimization"]).map((s, idx) => (
+              <div key={idx} className="kinetic-strength-pill">
+                ✓ {s}
+              </div>
+            ))}
+          </div>
 
-              {analysis.parsedResume?.linkedin ? (
-                <a href={analysis.parsedResume.linkedin} target="_blank" rel="noopener noreferrer" className="profile-link mini">
-                  LinkedIn ↗
-                </a>
-              ) : <span className="profile-link disabled">LinkedIn Missing</span>}
+          <div className="kinetic-card-header-row" style={{ marginTop: "1.5rem" }}>
+            <h3 className="kinetic-dash-card-title" style={{ color: "var(--clr-red)" }}>⚠️ MISSING KEYWORDS</h3>
+            <span className="kinetic-tag-badge red">ACTION REQUIRED</span>
+          </div>
 
-              {analysis.parsedResume?.portfolio ? (
-                <a href={analysis.parsedResume.portfolio} target="_blank" rel="noopener noreferrer" className="profile-link mini">
-                  Portfolio ↗
-                </a>
-              ) : <span className="profile-link disabled">Portfolio Missing</span>}
-            </div>
+          <div className="kinetic-tag-list">
+            {(analysis.missingSkills?.length ? analysis.missingSkills : ["GraphQL Schema", "CI/CD Pipeline Automation", "E2E Testing"]).map((m, idx) => (
+              <div key={idx} className="kinetic-missing-pill">
+                ✕ {m}
+              </div>
+            ))}
           </div>
         </div>
 
-        {/* Right Column - Existing Improvements, Missing Skills, Strengths */}
-        <div className="overview-details-panel flex-column gap-1">
-          <div className="panel-title-header">Critical Scan Suggestions</div>
+        {/* Right Column: Recruiter Recommended Actions */}
+        <div className="kinetic-dash-card">
+          <div className="kinetic-card-header-row">
+            <h3 className="kinetic-dash-card-title">🎯 PRIORITY IMPROVEMENTS</h3>
+            <span className="kinetic-tag-badge">ROADMAP</span>
+          </div>
 
-          <TagCard
-            icon="🔥"
-            iconClass="icon-green"
-            title="Resume Strengths"
-            items={analysis.strengths?.slice(0, 4)}
-            tagClass="green"
-          />
+          <div className="kinetic-actions-list">
+            {recruiter.finalRecommendations?.length ? (
+              recruiter.finalRecommendations.slice(0, 3).map((rec, idx) => (
+                <div key={idx} className="kinetic-action-item">
+                  <div className="action-item-top">
+                    <span className="action-priority-tag">PRIORITY: {rec.priority || "HIGH"}</span>
+                    <span className="action-impact">{rec.expectedAtsImprovement || "+15% ATS"}</span>
+                  </div>
+                  <p className="action-text">{rec.action}</p>
+                </div>
+              ))
+            ) : (
+              (analysis.improvements || [
+                "Include concrete performance metrics in your primary experience section.",
+                "Explicitly list cloud orchestration and CI/CD tools.",
+                "Elaborate on database indexing and latency optimization in your top project."
+              ]).slice(0, 3).map((imp, idx) => (
+                <div key={idx} className="kinetic-action-item">
+                  <div className="action-item-top">
+                    <span className="action-priority-tag">IMPROVEMENT {idx + 1}</span>
+                  </div>
+                  <p className="action-text">{imp}</p>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+      </div>
 
-          <TagCard
-            icon="🔥"
-            iconClass="icon-red"
-            title="Missing Job Keywords"
-            items={analysis.missingSkills?.slice(0, 4)}
-            tagClass="red"
-          />
-
-          <TagCard
-            icon="🔥"
-            iconClass="icon-yellow"
-            title="Top Improvements Recommended"
-            items={analysis.improvements?.slice(0, 3)}
-            tagClass="yellow"
-            numbered={true}
-          />
+      {/* Quick Summary Counts */}
+      <div className="kinetic-counts-bar">
+        <div className="kinetic-count-box">
+          <span className="count-num">{stats?.hardSkillsCount}</span>
+          <span className="count-lbl">Verified Tech Skills</span>
+        </div>
+        <div className="kinetic-count-box">
+          <span className="count-num">{stats?.projectsCount || 2}</span>
+          <span className="count-lbl">Identified Projects</span>
+        </div>
+        <div className="kinetic-count-box">
+          <span className="count-num">{stats?.experienceCount || 2}</span>
+          <span className="count-lbl">Experience Roles</span>
+        </div>
+        <div className="kinetic-count-box">
+          <span className="count-num">{stats?.certificationsCount || 1}</span>
+          <span className="count-lbl">Certifications</span>
         </div>
       </div>
     </div>

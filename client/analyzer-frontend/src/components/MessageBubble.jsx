@@ -1,16 +1,26 @@
-import { useMemo } from "react";
+import { useState, useMemo } from "react";
+import { renderMarkdownToHTML } from "../utils/markdownParser";
 
-function MessageBubble({ message, onCopy, onRegenerate }) {
-  const formatted = useMemo(() => {
-    if (!message.text) return "";
-    return message.text
-      .replace(/```([\s\S]*?)```/g, "<pre><code>$1</code></pre>")
-      .replace(/`([^`]+)`/g, "<code>$1</code>")
-      .split(/\n+/)
-      .map((line) => line.trim())
-      .filter(Boolean)
-      .join("\n");
+function MessageBubble({
+  message,
+  onCopy,
+  onRegenerate,
+  onSpeak,
+  onStopSpeech,
+  isSpeaking = false,
+  isPaused = false,
+}) {
+  const [copied, setCopied] = useState(false);
+
+  const formattedHTML = useMemo(() => {
+    return renderMarkdownToHTML(message.text || "");
   }, [message.text]);
+
+  const handleCopyClick = () => {
+    onCopy(message.text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   const timestamp = message.timestamp
     ? new Date(message.timestamp).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })
@@ -18,20 +28,77 @@ function MessageBubble({ message, onCopy, onRegenerate }) {
 
   return (
     <div className={`copilot-message ${message.role}`}>
-      <div className="message-avatar">{message.role === "assistant" ? "🤖" : "👤"}</div>
+      <div className="message-avatar">
+        {message.role === "assistant" ? "🤖" : "👤"}
+      </div>
+
       <div className="message-content">
-        <div className="message-bubble">
-          <div className="message-text" dangerouslySetInnerHTML={{ __html: formatted.replace(/\n/g, "<br />") }} />
+        <div className={`message-bubble ${isSpeaking ? "speech-active" : ""}`}>
+          <div
+            className="message-text markdown-body"
+            dangerouslySetInnerHTML={{ __html: formattedHTML }}
+          />
         </div>
+
         <div className="message-meta">
-          <span>{timestamp}</span>
+          <span className="message-timestamp">{timestamp}</span>
+
           {message.role === "assistant" && (
             <div className="message-actions">
-              <button type="button" className="message-action-btn" onClick={() => onCopy(message.text)}>
-                Copy
+              {/* Voice Speak / Pause / Resume Button */}
+              <button
+                type="button"
+                className={`message-action-btn speak-btn ${isSpeaking ? "active-speaking" : ""} ${isPaused ? "active-paused" : ""}`}
+                onClick={() => onSpeak(message.id, message.text)}
+                title={isSpeaking ? "Pause Speech" : isPaused ? "Resume Speech" : "Read Aloud"}
+                aria-label="Speak response"
+              >
+                {isSpeaking ? (
+                  <>
+                    <span className="speech-wave">⏸</span> Pause
+                  </>
+                ) : isPaused ? (
+                  <>
+                    <span>▶</span> Resume
+                  </>
+                ) : (
+                  <>
+                    <span>🔊</span> Speak
+                  </>
+                )}
               </button>
-              <button type="button" className="message-action-btn" onClick={() => onRegenerate(message)}>
-                Regenerate
+
+              {/* Stop button when actively playing speech */}
+              {(isSpeaking || isPaused) && (
+                <button
+                  type="button"
+                  className="message-action-btn stop-speech-btn"
+                  onClick={onStopSpeech}
+                  title="Stop Speech"
+                  aria-label="Stop speech"
+                >
+                  <span>⏹</span> Stop
+                </button>
+              )}
+
+              {/* Copy Button */}
+              <button
+                type="button"
+                className="message-action-btn copy-btn"
+                onClick={handleCopyClick}
+                title="Copy to clipboard"
+              >
+                {copied ? "✓ Copied" : "Copy"}
+              </button>
+
+              {/* Regenerate Button */}
+              <button
+                type="button"
+                className="message-action-btn regen-btn"
+                onClick={() => onRegenerate(message)}
+                title="Regenerate answer"
+              >
+                ↻
               </button>
             </div>
           )}

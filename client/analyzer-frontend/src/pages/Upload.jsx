@@ -1,9 +1,10 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useAnalysis } from "../hooks/useAnalysis";
 import ResumeUpload from "../components/ResumeUpload";
 import JobDescription from "../components/JobDescription";
 import AnalyzeButton from "../components/AnalyzeButton";
+import ThemeToggle from "../components/ThemeToggle";
 
 function Upload() {
   const { resume, setResume, jobDesc, setJobDesc, result, setResult, loading, setLoading, error, setError, hasAnalysis } = useAnalysis();
@@ -18,9 +19,19 @@ function Upload() {
 
   return (
     <div className="upload-page-wrap">
+      {/* Top action bar */}
+      <div style={{ width: "100%", maxWidth: "1100px", display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.5rem" }}>
+        <Link to="/" style={{ textDecoration: "none", color: "var(--clr-text-2)", fontSize: "0.9rem", display: "flex", alignItems: "center", gap: "0.35rem", fontWeight: 500 }}>
+          ← Back to Home
+        </Link>
+        <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+          <ThemeToggle compact={true} />
+        </div>
+      </div>
+
       <div className="upload-container-header">
-        <h2>Resume Optimizer Scan <i class="fa-solid fa-qrcode"></i></h2>
-        <p>Upload your resume in "PDF Format" and Paste a target Job Description - Our Resume AI Parser checks Formatting - Compatibility and Suggests Rewrites OverAll Resume Optimization Using Analyzer Buddy</p>
+        <h2>Resume Optimizer Scan <i className="fa-solid fa-qrcode"></i></h2>
+        <p>Upload your resume in "PDF Format" and Paste a target Job Description - Our Resume AI Parser checks Formatting, Compatibility, and Suggests Rewrites for OverAll Resume Optimization.</p>
       </div>
 
       <div className="upload-card-layout">
@@ -36,9 +47,9 @@ function Upload() {
           <div className="upload-tip-box">
             <h4>Optimizer Tips</h4>
             <ul>
-              <li>Upload standard text PDFs - Please Avoid Scans/Images <i class="fa-solid fa-ban"></i></li>
+              <li>Upload standard text PDFs - Please Avoid Scans/Images <i className="fa-solid fa-ban"></i></li>
               <li>Provide Full Job Description Texts for "Comprehensive key term Coverage"</li>
-              <li>Calculations evaluate Skills - Project Descriptions Formatting Rules and Profile Presence</li>
+              <li>Calculations evaluate Skills, Project Descriptions, Formatting Rules, and Profile Presence</li>
             </ul>
           </div>
 
@@ -62,7 +73,7 @@ function Upload() {
             <div className="upload-loading-overlay">
               <div className="spinner-glow" />
               <h3>Analyzing Resume Content ...</h3>
-              <p>Groq Llama-3.3-70B is Evaluating ATS alignment and parsing profile entries ... </p>
+              <p>AI is evaluating ATS alignment and parsing profile entries ... </p>
             </div>
           )}
         </div>

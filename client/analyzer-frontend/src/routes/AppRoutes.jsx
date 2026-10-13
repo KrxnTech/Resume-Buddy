@@ -11,7 +11,12 @@ const PageLoader = () => (
 
 // Lazy Loaded Pages
 const Landing = lazy(() => import("../pages/Landing"));
+const AboutUs = lazy(() => import("../pages/AboutUs"));
+const Features = lazy(() => import("../pages/Features"));
+const Help = lazy(() => import("../pages/Help"));
 const Upload = lazy(() => import("../pages/Upload"));
+const Login = lazy(() => import("../pages/Login"));
+const Register = lazy(() => import("../pages/Register"));
 const DashboardLayout = lazy(() => import("../layouts/DashboardLayout"));
 const Dashboard = lazy(() => import("../pages/Dashboard"));
 const ATS = lazy(() => import("../pages/ATS"));
@@ -20,7 +25,7 @@ const ResumeProfile = lazy(() => import("../pages/ResumeProfile"));
 const SectionAnalyzer = lazy(() => import("../pages/SectionAnalyzer"));
 const RewriteStudio = lazy(() => import("../pages/RewriteStudio"));
 
-// Placeholders
+// SaaS Utilities
 const ResumeHealth = lazy(() => import("../pages/ResumeHealth"));
 const InterviewPrep = lazy(() => import("../pages/InterviewPrep"));
 const CareerRoadmap = lazy(() => import("../pages/CareerRoadmap"));
@@ -32,8 +37,13 @@ function AppRoutes() {
   return (
     <Suspense fallback={<PageLoader />}>
       <Routes>
-        {/* Public landing splash route */}
+        {/* Public routes */}
         <Route path="/" element={<Landing />} />
+        <Route path="/about" element={<AboutUs />} />
+        <Route path="/features" element={<Features />} />
+        <Route path="/help" element={<Help />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
 
         {/* Upload scanner portal route */}
         <Route path="/upload" element={<Upload />} />

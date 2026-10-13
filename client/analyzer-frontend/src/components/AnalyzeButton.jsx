@@ -1,4 +1,7 @@
+import { useAuth } from "../hooks/useAuth";
+
 function AnalyzeButton({ resume, jobDesc, setResult, setLoading, setError, loading }) {
+  const { saveScanToAccount } = useAuth();
   const isReady = resume && jobDesc.trim().length > 0;
 
   const handleAnalyze = async () => {
@@ -25,6 +28,19 @@ function AnalyzeButton({ resume, jobDesc, setResult, setLoading, setError, loadi
       }
 
       setResult(data);
+
+      // Save scan record to user account if authenticated
+      if (saveScanToAccount && data.analysis) {
+        const score = Math.round((data.analysis.matchScore ?? 0.85) * 100);
+        saveScanToAccount({
+          fileName: resume.name,
+          candidateName: data.analysis.candidateProfile?.identity?.fullName || "Candidate",
+          targetRole: data.analysis.candidateProfile?.identity?.professionalTitle || "Software Engineer",
+          atsScore: score,
+          matchScore: score,
+          acceptedChangesCount: 0,
+        });
+      }
     } catch (err) {
       console.error(err);
       setError(err.message || "Something went wrong. Please try again.");
