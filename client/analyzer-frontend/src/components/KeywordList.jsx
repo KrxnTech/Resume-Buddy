@@ -11,17 +11,17 @@ function KeywordList({ title, items, emptyText }) {
   const isMissing = title?.toLowerCase().includes("missing");
 
   return (
-    <div style={{ marginBottom: "1rem" }}>
-      <div style={{ fontSize: "0.82rem", fontWeight: 600, color: "var(--color-heading)", marginBottom: "0.5rem" }}>
+    <div style={{ marginBottom: "1.25rem", padding: "4px 0" }}>
+      <div style={{ fontSize: "0.85rem", fontWeight: 600, color: "var(--color-heading)", marginBottom: "0.65rem" }}>
         {title}
       </div>
       {safeItems.length > 0 ? (
-        <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
           {safeItems.map((item, index) => (
             <span
               key={`${item}-${index}`}
               className={isMissing ? "chip chip-amber" : "chip chip-blue"}
-              style={{ fontSize: "12px", padding: "3px 8px" }}
+              style={{ fontSize: "12.5px", padding: "5px 12px", borderRadius: "3px" }}
             >
               {item}
             </span>

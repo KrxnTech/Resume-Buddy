@@ -282,21 +282,21 @@ function Landing() {
           </div>
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "24px" }}>
-            <div className="card">
-              <h4 style={{ fontSize: "16px", marginBottom: "8px", color: "var(--clr-heading)" }}>Dual-Perspective Scoring</h4>
-              <p style={{ fontSize: "14px", color: "var(--clr-muted)" }}>
+            <div className="card" style={{ padding: "28px 24px" }}>
+              <h4 style={{ fontSize: "16px", fontWeight: 600, marginBottom: "10px", color: "var(--color-heading, #222222)" }}>Dual-Perspective Scoring</h4>
+              <p style={{ fontSize: "14px", color: "var(--color-text-secondary, #666666)", lineHeight: 1.6, margin: 0 }}>
                 Evaluates your document from both an algorithmic ATS compatibility standpoint and an experienced hiring manager perspective.
               </p>
             </div>
-            <div className="card">
-              <h4 style={{ fontSize: "16px", marginBottom: "8px", color: "var(--clr-heading)" }}>Actionable Recommendations</h4>
-              <p style={{ fontSize: "14px", color: "var(--clr-muted)" }}>
+            <div className="card" style={{ padding: "28px 24px" }}>
+              <h4 style={{ fontSize: "16px", fontWeight: 600, marginBottom: "10px", color: "var(--color-heading, #222222)" }}>Actionable Recommendations</h4>
+              <p style={{ fontSize: "14px", color: "var(--color-text-secondary, #666666)", lineHeight: 1.6, margin: 0 }}>
                 Provides prioritized feedback explaining what skills are missing, why they matter, and how to address gaps effectively.
               </p>
             </div>
-            <div className="card">
-              <h4 style={{ fontSize: "16px", marginBottom: "8px", color: "var(--clr-heading)" }}>Grounded &amp; Honest</h4>
-              <p style={{ fontSize: "14px", color: "var(--clr-muted)" }}>
+            <div className="card" style={{ padding: "28px 24px" }}>
+              <h4 style={{ fontSize: "16px", fontWeight: 600, marginBottom: "10px", color: "var(--color-heading, #222222)" }}>Grounded &amp; Honest</h4>
+              <p style={{ fontSize: "14px", color: "var(--color-text-secondary, #666666)", lineHeight: 1.6, margin: 0 }}>
                 No inflated metrics or false hiring guarantees. You receive clear, objective feedback to present your real strengths accurately.
               </p>
             </div>
