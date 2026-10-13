@@ -1,8 +1,13 @@
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
 
-// pdf-parse v1.1.1 (CommonJS)
-const pdfParse = require("pdf-parse");
+// pdf-parse (CommonJS) - load lib/pdf-parse to avoid debug test file execution in index.js
+let pdfParse;
+try {
+    pdfParse = require("pdf-parse/lib/pdf-parse.js");
+} catch {
+    pdfParse = require("pdf-parse");
+}
 
 import { analyzeWithAI } from "../services/ai.service.js";
 
