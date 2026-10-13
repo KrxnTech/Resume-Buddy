@@ -142,11 +142,11 @@ function Dashboard() {
           <span className="launch-arrow">→</span>
         </Link>
 
-        <Link to="/dashboard/rewrite" className="kinetic-launch-tile">
-          <span className="launch-icon">✍️</span>
+        <Link to="/dashboard/sections" className="kinetic-launch-tile">
+          <span className="launch-icon">🔍</span>
           <div className="launch-info">
-            <strong>REWRITE STUDIO</strong>
-            <span>Live bullet diff editor &amp; metric injector</span>
+            <strong>SECTION ANALYZER</strong>
+            <span>Granular breakdown of skills, experience &amp; impact</span>
           </div>
           <span className="launch-arrow">→</span>
         </Link>

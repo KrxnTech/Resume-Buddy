@@ -14,7 +14,6 @@ const MENU_GROUPS = [
       { path: "/dashboard/ats", label: "ATS Analysis", icon: "•" },
       { path: "/dashboard/recruiter", label: "Recruiter Review", icon: "•" },
       { path: "/dashboard/sections", label: "Section Analyzer", icon: "•" },
-      { path: "/dashboard/rewrite", label: "Rewrite Studio", icon: "•" },
     ]
   },
   {

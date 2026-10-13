@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import InteractiveSectionAnalyzer from "./InteractiveSectionAnalyzer";
 import RecruiterDashboard from "./RecruiterDashboard";
-import ResumeRewriteStudio from "./ResumeRewriteStudio";
 
 /* Helper: pick color class based on score */
 function scoreColor(score) {
@@ -295,7 +294,6 @@ function ResultBox({ result }) {
 
       <RecruiterDashboard analysis={analysis} />
 
-      <ResumeRewriteStudio analysis={analysis} />
 
       <TagCard
         icon=" "

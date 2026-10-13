@@ -36,13 +36,13 @@ function Features() {
       points: ["6 Modes: Tech, Project, Claims, Behavioral, Mixed, Job-Specific", "Adaptive difficulty adjustment", "Web Speech TTS voice questions & STT microphone answers", "Comprehensive post-interview score report & transcript"],
     },
     {
-      id: "rewrite",
+      id: "sections",
       num: "04",
-      category: "generation",
-      title: "AI REWRITE STUDIO",
-      tagline: "Instant before/after bullet optimization",
-      desc: "Transforms weak bullet points into high-impact, quantifiable accomplishment statements. Provides before/after side-by-side diff comparisons with copy tools.",
-      points: ["Summary, Experience, and Project rewrites", "Strong action verbs injection", "Quantified metric suggestions", "Live side-by-side diff comparison"],
+      category: "analysis",
+      title: "SECTION DEEP-DIVE ANALYZER",
+      tagline: "Granular breakdown of resume sections",
+      desc: "Performs granular assessment across Experience, Skills, Education, Projects, and Formatting with targeted recommendations to elevate individual sections.",
+      points: ["Experience impact metrics check", "Technical skills alignment scan", "Education & certification verification", "Direct recruiter scoring weights"],
     },
     {
       id: "copilot",
@@ -108,7 +108,7 @@ function Features() {
           <span className="kinetic-ticker-item">ATS OPTIMIZER ///</span>
           <span className="kinetic-ticker-item">RECRUITER REVIEW ///</span>
           <span className="kinetic-ticker-item">MOCK INTERVIEW ARENA ///</span>
-          <span className="kinetic-ticker-item">REWRITE STUDIO ///</span>
+          <span className="kinetic-ticker-item">SECTION ANALYZER ///</span>
           <span className="kinetic-ticker-item">CAREER COPILOT ///</span>
           <span className="kinetic-ticker-item">HEALTH AUDITOR ///</span>
         </Marquee>

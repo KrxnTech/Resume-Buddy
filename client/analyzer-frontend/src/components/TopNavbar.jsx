@@ -26,7 +26,6 @@ function TopNavbar({ toggleMobileSidebar, isMobile }) {
     if (path === "/dashboard/ats") return "ATS PRECISION SCORING";
     if (path === "/dashboard/recruiter") return "RECRUITER REVIEW MATRIX";
     if (path === "/dashboard/sections") return "SECTION DEEP-DIVE";
-    if (path === "/dashboard/rewrite") return "AI REWRITE STUDIO";
     if (path === "/dashboard/health") return "RESUME HEALTH AUDIT";
     if (path === "/dashboard/interview") return "AI MOCK INTERVIEW ARENA";
     if (path === "/dashboard/roadmap") return "CAREER ROADMAP";

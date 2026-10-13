@@ -7,7 +7,21 @@ import AnalyzeButton from "../components/AnalyzeButton";
 import ThemeToggle from "../components/ThemeToggle";
 
 function Upload() {
-  const { resume, setResume, jobDesc, setJobDesc, result, setResult, loading, setLoading, error, setError, hasAnalysis } = useAnalysis();
+  const {
+    resume,
+    setResume,
+    resumeText,
+    setResumeText,
+    jobDesc,
+    setJobDesc,
+    result,
+    setResult,
+    loading,
+    setLoading,
+    error,
+    setError,
+    hasAnalysis,
+  } = useAnalysis();
   const navigate = useNavigate();
 
   // If result becomes available, navigate immediately to dashboard overview
@@ -31,13 +45,18 @@ function Upload() {
 
       <div className="upload-container-header">
         <h2>Resume Optimizer Scan <i className="fa-solid fa-qrcode"></i></h2>
-        <p>Upload your resume in "PDF Format" and Paste a target Job Description - Our Resume AI Parser checks Formatting, Compatibility, and Suggests Rewrites for OverAll Resume Optimization.</p>
+        <p>Provide your resume and target Job Description — Our Resume AI Engine evaluates ATS Compatibility, Recruiter Scoring, and Actionable Gap Analysis.</p>
       </div>
 
       <div className="upload-card-layout">
         {/* Upload Column */}
         <div className="upload-input-section">
-          <ResumeUpload resume={resume} setResume={setResume} />
+          <ResumeUpload
+            resume={resume}
+            setResume={setResume}
+            resumeText={resumeText}
+            setResumeText={setResumeText}
+          />
           <hr className="divider" style={{ margin: "1.25rem 0" }} />
           <JobDescription jobDesc={jobDesc} setJobDesc={setJobDesc} />
         </div>
@@ -47,14 +66,15 @@ function Upload() {
           <div className="upload-tip-box">
             <h4>Optimizer Tips</h4>
             <ul>
-              <li>Upload standard text PDFs - Please Avoid Scans/Images <i className="fa-solid fa-ban"></i></li>
-              <li>Provide Full Job Description Texts for "Comprehensive key term Coverage"</li>
+              <li>Paste resume text directly or upload your resume file for instant evaluation</li>
+              <li>Provide Full Job Description Texts for comprehensive keyword coverage</li>
               <li>Calculations evaluate Skills, Project Descriptions, Formatting Rules, and Profile Presence</li>
             </ul>
           </div>
 
           <AnalyzeButton
             resume={resume}
+            resumeText={resumeText}
             jobDesc={jobDesc}
             setResult={setResult}
             setLoading={setLoading}

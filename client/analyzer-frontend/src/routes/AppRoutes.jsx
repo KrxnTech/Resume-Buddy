@@ -23,7 +23,6 @@ const ATS = lazy(() => import("../pages/ATS"));
 const Recruiter = lazy(() => import("../pages/Recruiter"));
 const ResumeProfile = lazy(() => import("../pages/ResumeProfile"));
 const SectionAnalyzer = lazy(() => import("../pages/SectionAnalyzer"));
-const RewriteStudio = lazy(() => import("../pages/RewriteStudio"));
 
 // SaaS Utilities
 const ResumeHealth = lazy(() => import("../pages/ResumeHealth"));
@@ -55,7 +54,6 @@ function AppRoutes() {
           <Route path="ats" element={<ATS />} />
           <Route path="recruiter" element={<Recruiter />} />
           <Route path="sections" element={<SectionAnalyzer />} />
-          <Route path="rewrite" element={<RewriteStudio />} />
 
           {/* SaaS Utilities */}
           <Route path="health" element={<ResumeHealth />} />

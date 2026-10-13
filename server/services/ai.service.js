@@ -35,10 +35,9 @@ export async function analyzeWithAI(resumeText, jobDescription) {
   const prompt = `
 You are an expert technical recruiter and resume analyzer.
 
-Do THREE things simultaneously using the resume text and job description below:
+Do TWO things simultaneously using the resume text and job description below:
 1. Analyze the resume against the job description (scoring + feedback).
 2. Extract a complete, highly structured Candidate Profile from the resume.
-3. Generate professional AI rewrites for each resume section.
 
 Return ONLY valid JSON in this exact format (no markdown, no code fences, just raw JSON):
 {
@@ -165,86 +164,6 @@ Return ONLY valid JSON in this exact format (no markdown, no code fences, just r
         "difficulty": "Easy" | "Medium" | "Hard"
       }
     ]
-  },
-  "rewriteStudio": {
-    "summary": {
-      "original": string,
-      "improved": string,
-      "improvementScore": number,
-      "confidence": number,
-      "whyImproved": string,
-      "actionVerbs": string[],
-      "estimatedAtsImprovement": string,
-      "recruiterImpact": string
-    } | null,
-    "experience": [
-      {
-        "original": string,
-        "improved": string,
-        "improvementScore": number,
-        "confidence": number,
-        "whyImproved": string,
-        "actionVerbs": string[],
-        "estimatedAtsImprovement": string,
-        "recruiterImpact": string
-      }
-    ],
-    "projects": [
-      {
-        "original": string,
-        "improved": string,
-        "improvementScore": number,
-        "confidence": number,
-        "whyImproved": string,
-        "actionVerbs": string[],
-        "estimatedAtsImprovement": string,
-        "recruiterImpact": string
-      }
-    ],
-    "skills": {
-      "original": string[],
-      "reorganized": {
-        "Frontend": string[],
-        "Backend": string[],
-        "Database": string[],
-        "DevOps": string[],
-        "Other": string[]
-      },
-      "improvementScore": number,
-      "whyImproved": string
-    } | null,
-    "achievements": [
-      {
-        "original": string,
-        "improved": string,
-        "improvementScore": number,
-        "confidence": number,
-        "whyImproved": string,
-        "actionVerbs": string[],
-        "estimatedAtsImprovement": string,
-        "recruiterImpact": string
-      }
-    ],
-    "careerObjective": {
-      "original": string,
-      "improved": string,
-      "improvementScore": number,
-      "confidence": number,
-      "whyImproved": string,
-      "actionVerbs": string[],
-      "estimatedAtsImprovement": string,
-      "recruiterImpact": string
-    } | null,
-    "certifications": {
-      "original": string,
-      "improved": string,
-      "improvementScore": number,
-      "confidence": number,
-      "whyImproved": string,
-      "actionVerbs": string[],
-      "estimatedAtsImprovement": string,
-      "recruiterImpact": string
-    } | null
   }
 }
 

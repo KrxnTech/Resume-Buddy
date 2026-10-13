@@ -1,8 +1,9 @@
 import { useAuth } from "../hooks/useAuth";
 
-function AnalyzeButton({ resume, jobDesc, setResult, setLoading, setError, loading }) {
+function AnalyzeButton({ resume, resumeText, jobDesc, setResult, setLoading, setError, loading }) {
   const { saveScanToAccount } = useAuth();
-  const isReady = resume && jobDesc.trim().length > 0;
+  const hasResume = (resume instanceof File) || (typeof resumeText === "string" && resumeText.trim().length >= 20);
+  const isReady = hasResume && jobDesc && jobDesc.trim().length > 0;
 
   const handleAnalyze = async () => {
     if (!isReady || loading) return;
@@ -12,7 +13,12 @@ function AnalyzeButton({ resume, jobDesc, setResult, setLoading, setError, loadi
     setLoading(true);
 
     const formData = new FormData();
-    formData.append("resume", resume);
+    if (resume instanceof File) {
+      formData.append("resume", resume);
+    }
+    if (resumeText && resumeText.trim()) {
+      formData.append("resumeText", resumeText.trim());
+    }
     formData.append("jobDescription", jobDesc);
 
     try {
@@ -33,7 +39,7 @@ function AnalyzeButton({ resume, jobDesc, setResult, setLoading, setError, loadi
       if (saveScanToAccount && data.analysis) {
         const score = Math.round((data.analysis.matchScore ?? 0.85) * 100);
         saveScanToAccount({
-          fileName: resume.name,
+          fileName: resume?.name || "Pasted Resume Text",
           candidateName: data.analysis.candidateProfile?.identity?.fullName || "Candidate",
           targetRole: data.analysis.candidateProfile?.identity?.professionalTitle || "Software Engineer",
           atsScore: score,

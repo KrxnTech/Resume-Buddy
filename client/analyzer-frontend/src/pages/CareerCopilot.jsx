@@ -77,7 +77,6 @@ function CareerCopilot() {
       atsExplanation: analysis.atsExplanation || "",
       recruiterReview: analysis.recruiterReview || {},
       summary: analysis.summary || "",
-      rewriteStudio: analysis.rewriteStudio || {},
       strengths: analysis.strengths || [],
       missingSkills: analysis.missingSkills || [],
       improvements: analysis.improvements || [],

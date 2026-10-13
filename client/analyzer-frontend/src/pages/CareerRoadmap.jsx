@@ -7,7 +7,7 @@ function CareerRoadmap() {
 
   const steps = [
     { title: "Bridge Core Skill Gaps", desc: `Focus on acquiring key missing keywords: ${analysis?.missingSkills?.slice(0, 3)?.join(", ") || "target job skills"}.`, label: "Step 1" },
-    { title: "Optimize Resume Bullets", desc: "Use Action Verbs from the Rewrite Studio to rewrite weak achievements in your Experience sections.", label: "Step 2" },
+    { title: "Optimize Resume Bullets", desc: "Use active power verbs and quantifiable impact metrics to strengthen achievements in your Experience sections.", label: "Step 2" },
     { title: "Acquire Certifications", desc: "Gain certifications or update your portfolio projects to validate technical competencies.", label: "Step 3" },
     { title: "Target Strategic Roles", desc: `Apply for positions matches like: ${analysis?.recruiterReview?.bestRoles?.slice(0, 2)?.map(r => r.role)?.join(" or ") || "Hiring Roles"}.`, label: "Step 4" }
   ];

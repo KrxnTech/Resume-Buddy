@@ -40,7 +40,7 @@ Understand how ATS systems and recruiters actually evaluate your resume — Befo
 
 ## ✓ Overview
 
-**Resume Buddy** is an AI-powered Career Intelligence Platform that helps candidates optimize their resumes for Applicant Tracking Systems (ATS), improve recruiter visibility, identify skill gaps, rewrite resume sections with AI, prepare for interviews, and receive personalized career insights.
+**Resume Buddy** is an AI-powered Career Intelligence Platform that helps candidates optimize their resumes for Applicant Tracking Systems (ATS), improve recruiter visibility, identify skill gaps, prepare for interviews, and receive personalized career insights.
 
 Unlike traditional resume analyzers that just extract raw text from a PDF, Resume Buddy performs **contextual resume analysis using Large Language Models**. It compares your resume against a real job description, simulates how a recruiter would evaluate your profile, calculates ATS compatibility, highlights weaknesses, recommends concrete improvements, and presents everything through a modern SaaS dashboard.
 
@@ -67,7 +67,7 @@ Resume Buddy closes this feedback gap with AI-driven resume analysis and career 
 
 - **Context-aware, not keyword-matching.** Resume Buddy uses an LLM to actually understand resume content in relation to a job description, rather than doing naive text/PDF extraction.
 - **Dual-lens evaluation.** Every resume is scored from both an ATS-compatibility perspective and a recruiter-judgment perspective.
-- **Actionable, not just descriptive.** Beyond scores, Resume Buddy produces rewrite suggestions, keyword recommendations, and section-level feedback you can act on immediately.
+- **Actionable, not just descriptive.** Beyond scores, Resume Buddy produces targeted recommendations, keyword additions, and section-level feedback you can act on immediately.
 - **Built like a real product.** Structured JSON contracts between AI and backend, a clean service-oriented Express API, and a component-driven React dashboard — not a script wrapped in a UI.
 
 ---
@@ -130,16 +130,6 @@ Resume Buddy closes this feedback gap with AI-driven resume analysis and career 
 - Best matching roles
 - Salary readiness indicator
 - Recruiter notes
-
-### ✓ AI Rewrite Studio
----
-- AI-powered resume rewriter
-- Before vs. after comparison
-- ATS improvement estimate
-- Recruiter impact preview
-- Action verb suggestions
-- Copy, accept, or undo rewrites
-- Version history
 
 ### ✓ Resume Insights
 ---
@@ -230,7 +220,7 @@ Resume Buddy closes this feedback gap with AI-driven resume analysis and career 
 7. The AI generates a structured JSON response.
 8. Backend processes the AI response.
 9. Frontend renders an interactive dashboard.
-10. User receives an ATS score, recruiter analysis, rewrite suggestions, and career recommendations.
+10. User receives an ATS score, recruiter analysis, skill recommendations, and career insights.
 
 ---
 
@@ -271,7 +261,6 @@ Resume-Buddy/
 - Node.js
 - Express.js
 - Multer
-- pdf-parse
 
 **Artificial Intelligence**
 - Groq API

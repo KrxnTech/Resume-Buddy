@@ -37,9 +37,9 @@ function Landing() {
     },
     {
       num: "04",
-      title: "AI REWRITE STUDIO",
-      desc: "Transforms weak, passive bullet points into high-impact, quantifiable accomplishment statements with live side-by-side diff editing.",
-      action: "REWRITE BULLETS",
+      title: "CAREER COPILOT",
+      desc: "An intelligent career advisor with full memory of your background that answers questions, simulates pivots, and guides job search strategies.",
+      action: "CHAT WITH COPILOT",
     },
   ];
 
@@ -196,8 +196,8 @@ function Landing() {
       {/* Interactive Code / Bullet Diff Preview */}
       <section className="kinetic-section">
         <div className="kinetic-section-header">
-          <span className="kinetic-section-num">02 / REWRITE ENGINE</span>
-          <h2 className="kinetic-section-heading">BEFORE VS AFTER AI REWRITE</h2>
+          <span className="kinetic-section-num">02 / IMPACT ENHANCEMENT</span>
+          <h2 className="kinetic-section-heading">BEFORE VS AFTER IMPACT ALIGNMENT</h2>
         </div>
 
         <div className="kinetic-diff-container">
@@ -210,7 +210,7 @@ function Landing() {
           </div>
 
           <div className="kinetic-diff-col improved">
-            <span className="kinetic-diff-label green">AI REWRITE STUDIO OPTIMIZED</span>
+            <span className="kinetic-diff-label green">OPTIMIZED IMPACT STATEMENT</span>
             <p className="kinetic-diff-text">
               "Architected high-throughput microservices using Node.js, Express, and Redis; optimized PostgreSQL query execution plans, reducing p95 database latency by 45% under 20k req/sec load."
             </p>
@@ -231,7 +231,7 @@ function Landing() {
             <span>— Full Stack Lead, Coinbase</span>
           </div>
           <div className="kinetic-quote-box">
-            <p>"Brutal, honest, and actionable feedback. The rewrite studio is unmatched."</p>
+            <p>"Brutal, honest, and actionable feedback. The recruiter review matrix is unmatched."</p>
             <span>— Staff DevOps Architect, AWS</span>
           </div>
         </Marquee>
@@ -297,7 +297,7 @@ function Landing() {
               <button type="button" onClick={() => navigate("/upload")}>ATS Scanner</button>
               <button type="button" onClick={() => navigate("/upload")}>Recruiter Review</button>
               <button type="button" onClick={() => navigate("/upload")}>Mock Interview</button>
-              <button type="button" onClick={() => navigate("/upload")}>Rewrite Studio</button>
+              <button type="button" onClick={() => navigate("/upload")}>Career Copilot</button>
             </div>
           </div>
         </div>
