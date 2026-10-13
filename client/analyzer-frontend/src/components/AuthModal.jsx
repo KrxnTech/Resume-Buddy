@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Lock, X, ArrowRight, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
 
 function AuthModal() {
@@ -49,101 +50,96 @@ function AuthModal() {
 
   return (
     <AnimatePresence>
-      <div className="interview-modal-backdrop" onClick={closeAuthModal} style={{ zIndex: 9999 }}>
+      <div
+        className="interview-modal-backdrop"
+        onClick={closeAuthModal}
+        style={{
+          position: "fixed",
+          inset: 0,
+          background: "rgba(0, 0, 0, 0.45)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          zIndex: 9999,
+          padding: "1rem",
+        }}
+      >
         <motion.div
-          className="interview-modal-box auth-modal-container"
           onClick={(e) => e.stopPropagation()}
-          initial={{ opacity: 0, scale: 0.92, y: 20 }}
+          initial={{ opacity: 0, scale: 0.96, y: 15 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.92, y: 20 }}
+          exit={{ opacity: 0, scale: 0.96, y: 15 }}
           transition={{ duration: 0.2 }}
-          style={{ maxWidth: "460px", width: "92%", padding: "2rem" }}
+          style={{
+            maxWidth: "440px",
+            width: "100%",
+            background: "var(--color-bg-primary)",
+            borderRadius: "var(--radius-md)",
+            border: "1px solid var(--color-border)",
+            boxShadow: "var(--shadow-md)",
+            padding: "2rem",
+          }}
         >
           {/* Header Row */}
-          <div className="modal-top-row" style={{ marginBottom: "1.25rem" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
-              <div
-                style={{
-                  width: "36px",
-                  height: "36px",
-                  borderRadius: "10px",
-                  background: "var(--clr-accent-dim, rgba(230, 254, 83, 0.15))",
-                  border: "1px solid var(--clr-accent)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: "1.1rem",
-                }}
-              >
-                🔐
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "1.5rem" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+              <div style={{ width: "36px", height: "36px", borderRadius: "50%", background: "var(--color-info)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--color-primary)" }}>
+                <Lock size={18} />
               </div>
               <div>
-                <h3 style={{ margin: 0, fontSize: "1.25rem", color: "var(--clr-text)" }}>
-                  {isLogin ? "Sign In to Resume Buddy" : "Create Member Account"}
+                <h3 style={{ margin: 0, fontSize: "1.15rem", fontWeight: 700, color: "var(--color-heading)" }}>
+                  {isLogin ? "Sign In" : "Create Account"}
                 </h3>
-                <p style={{ margin: 0, fontSize: "0.8rem", color: "var(--clr-text-2)" }}>
-                  {isLogin
-                    ? "Access your saved resumes, audit scores, and rewrites."
-                    : "Join professionals elevating their career with AI intelligence."}
+                <p style={{ margin: "2px 0 0", fontSize: "0.82rem", color: "var(--color-text-muted)" }}>
+                  {isLogin ? "Access your saved resume analysis reports." : "Join professionals tracking career readiness."}
                 </p>
               </div>
             </div>
             <button
               type="button"
-              className="modal-close-icon"
               onClick={closeAuthModal}
-              aria-label="Close Modal"
-              style={{ background: "none", border: "none", color: "var(--clr-text-2)", fontSize: "1.2rem", cursor: "pointer" }}
+              style={{ background: "none", border: "none", color: "var(--color-text-muted)", cursor: "pointer", padding: "4px" }}
+              aria-label="Close"
             >
-              ✕
+              <X size={18} />
             </button>
           </div>
 
-          {/* Mode Switch Tabs */}
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              background: "rgba(255, 255, 255, 0.04)",
-              padding: "4px",
-              borderRadius: "10px",
-              marginBottom: "1.5rem",
-              border: "1px solid var(--clr-border)",
-            }}
-          >
+          {/* Mode Tabs */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", background: "var(--color-bg-secondary)", padding: "3px", borderRadius: "var(--radius-sm)", border: "1px solid var(--color-border)", marginBottom: "1.5rem" }}>
             <button
               type="button"
               onClick={() => switchMode("login")}
               style={{
-                padding: "0.6rem 0",
+                padding: "8px",
                 border: "none",
-                borderRadius: "8px",
-                background: isLogin ? "var(--clr-accent)" : "transparent",
-                color: isLogin ? "#000" : "var(--clr-text-2)",
-                fontWeight: isLogin ? 700 : 500,
+                borderRadius: "4px",
+                background: isLogin ? "var(--color-bg-primary)" : "transparent",
+                color: isLogin ? "var(--color-primary)" : "var(--color-text-muted)",
+                fontWeight: isLogin ? 600 : 500,
                 fontSize: "0.85rem",
                 cursor: "pointer",
-                transition: "all 0.2s ease",
+                boxShadow: isLogin ? "var(--shadow-sm)" : "none",
               }}
             >
-              SIGN IN
+              Sign In
             </button>
             <button
               type="button"
               onClick={() => switchMode("register")}
               style={{
-                padding: "0.6rem 0",
+                padding: "8px",
                 border: "none",
-                borderRadius: "8px",
-                background: !isLogin ? "var(--clr-accent)" : "transparent",
-                color: !isLogin ? "#000" : "var(--clr-text-2)",
-                fontWeight: !isLogin ? 700 : 500,
+                borderRadius: "4px",
+                background: !isLogin ? "var(--color-bg-primary)" : "transparent",
+                color: !isLogin ? "var(--color-primary)" : "var(--color-text-muted)",
+                fontWeight: !isLogin ? 600 : 500,
                 fontSize: "0.85rem",
                 cursor: "pointer",
-                transition: "all 0.2s ease",
+                boxShadow: !isLogin ? "var(--shadow-sm)" : "none",
               }}
             >
-              CREATE ACCOUNT
+              Register
             </button>
           </div>
 
@@ -151,133 +147,66 @@ function AuthModal() {
           <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
             {!isLogin && (
               <>
-                <div style={{ display: "flex", flexDirection: "column", gap: "0.35rem" }}>
-                  <label style={{ fontSize: "0.78rem", fontWeight: 600, color: "var(--clr-text-2)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
-                    Full Name *
-                  </label>
+                <div>
+                  <label className="form-label">Full Name</label>
                   <input
                     type="text"
                     required
+                    className="form-input"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="e.g. Alex Mercer"
-                    style={{
-                      padding: "0.7rem 0.9rem",
-                      borderRadius: "8px",
-                      background: "rgba(255, 255, 255, 0.03)",
-                      border: "1px solid var(--clr-border)",
-                      color: "var(--clr-text)",
-                      fontSize: "0.9rem",
-                      outline: "none",
-                    }}
                   />
                 </div>
 
-                <div style={{ display: "flex", flexDirection: "column", gap: "0.35rem" }}>
-                  <label style={{ fontSize: "0.78rem", fontWeight: 600, color: "var(--clr-text-2)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
-                    Professional Title / Focus
-                  </label>
+                <div>
+                  <label className="form-label">Target Role</label>
                   <input
                     type="text"
+                    className="form-input"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     placeholder="e.g. Senior Backend Engineer"
-                    style={{
-                      padding: "0.7rem 0.9rem",
-                      borderRadius: "8px",
-                      background: "rgba(255, 255, 255, 0.03)",
-                      border: "1px solid var(--clr-border)",
-                      color: "var(--clr-text)",
-                      fontSize: "0.9rem",
-                      outline: "none",
-                    }}
                   />
                 </div>
               </>
             )}
 
-            <div style={{ display: "flex", flexDirection: "column", gap: "0.35rem" }}>
-              <label style={{ fontSize: "0.78rem", fontWeight: 600, color: "var(--clr-text-2)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
-                Email Address *
-              </label>
+            <div>
+              <label className="form-label">Email Address</label>
               <input
                 type="email"
                 required
+                className="form-input"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="name@company.com"
-                style={{
-                  padding: "0.7rem 0.9rem",
-                  borderRadius: "8px",
-                  background: "rgba(255, 255, 255, 0.03)",
-                  border: "1px solid var(--clr-border)",
-                  color: "var(--clr-text)",
-                  fontSize: "0.9rem",
-                  outline: "none",
-                }}
+                placeholder="name@example.com"
               />
             </div>
 
-            <div style={{ display: "flex", flexDirection: "column", gap: "0.35rem" }}>
-              <label style={{ fontSize: "0.78rem", fontWeight: 600, color: "var(--clr-text-2)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
-                Password *
-              </label>
+            <div>
+              <label className="form-label">Password</label>
               <input
                 type="password"
                 required
                 minLength={6}
+                className="form-input"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••••••"
-                style={{
-                  padding: "0.7rem 0.9rem",
-                  borderRadius: "8px",
-                  background: "rgba(255, 255, 255, 0.03)",
-                  border: "1px solid var(--clr-border)",
-                  color: "var(--clr-text)",
-                  fontSize: "0.9rem",
-                  outline: "none",
-                }}
+                placeholder="••••••••"
               />
-              <span style={{ fontSize: "0.72rem", color: "var(--clr-text-3)" }}>
-                Minimum 6 characters.
-              </span>
             </div>
 
             {errorMsg && (
-              <div
-                style={{
-                  padding: "0.7rem 1rem",
-                  borderRadius: "8px",
-                  background: "rgba(255, 75, 75, 0.12)",
-                  border: "1px solid rgba(255, 75, 75, 0.4)",
-                  color: "#ff6b6b",
-                  fontSize: "0.85rem",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "0.5rem",
-                }}
-              >
-                <span>⚠️</span>
+              <div style={{ padding: "0.75rem", borderRadius: "var(--radius-sm)", background: "#FEE2E2", color: "var(--color-error)", fontSize: "0.82rem", display: "flex", alignItems: "center", gap: "6px" }}>
+                <AlertCircle size={15} style={{ flexShrink: 0 }} />
                 <span>{errorMsg}</span>
               </div>
             )}
 
             {successMsg && (
-              <div
-                style={{
-                  padding: "0.7rem 1rem",
-                  borderRadius: "8px",
-                  background: "rgba(39, 201, 63, 0.12)",
-                  border: "1px solid rgba(39, 201, 63, 0.4)",
-                  color: "var(--clr-green, #4ade80)",
-                  fontSize: "0.85rem",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "0.5rem",
-                }}
-              >
-                <span>✓</span>
+              <div style={{ padding: "0.75rem", borderRadius: "var(--radius-sm)", background: "#E8F5E9", color: "var(--color-success)", fontSize: "0.82rem", display: "flex", alignItems: "center", gap: "6px" }}>
+                <CheckCircle2 size={15} style={{ flexShrink: 0 }} />
                 <span>{successMsg}</span>
               </div>
             )}
@@ -285,44 +214,25 @@ function AuthModal() {
             <button
               type="submit"
               disabled={loading}
-              className="kinetic-cta-btn primary"
-              style={{
-                width: "100%",
-                padding: "0.85rem",
-                marginTop: "0.5rem",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                gap: "0.5rem",
-              }}
+              className="btn btn-primary btn-lg"
+              style={{ width: "100%", justifyContent: "center", marginTop: "0.5rem" }}
             >
               {loading ? (
                 <>
-                  <span className="btn-spinner" style={{ width: "18px", height: "18px" }} />
-                  {isLogin ? "Signing in..." : "Creating account..."}
+                  <Loader2 size={16} className="animate-spin" style={{ animation: "spin 1s linear infinite" }} />
+                  Processing...
                 </>
               ) : (
-                <>{isLogin ? "SIGN IN →" : "CREATE ACCOUNT →"}</>
+                <>
+                  {isLogin ? "Sign In" : "Create Account"} <ArrowRight size={16} />
+                </>
               )}
             </button>
           </form>
 
-          {/* Quick Demo Credentials Tip */}
-          <div
-            style={{
-              marginTop: "1.25rem",
-              padding: "0.6rem 0.85rem",
-              borderRadius: "8px",
-              background: "rgba(255, 255, 255, 0.02)",
-              border: "1px dashed var(--clr-border)",
-              fontSize: "0.75rem",
-              color: "var(--clr-text-3)",
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <span>💡 Quick test account:</span>
+          {/* Demo account helper */}
+          <div style={{ marginTop: "1.25rem", paddingTop: "1rem", borderTop: "1px solid var(--color-border)", display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "0.78rem", color: "var(--color-text-muted)" }}>
+            <span>Quick test account:</span>
             <button
               type="button"
               onClick={() => {
@@ -330,15 +240,8 @@ function AuthModal() {
                 setPassword("secret123");
                 if (!isLogin) switchMode("login");
               }}
-              style={{
-                background: "none",
-                border: "none",
-                color: "var(--clr-accent)",
-                cursor: "pointer",
-                fontWeight: 600,
-                fontSize: "0.75rem",
-                textDecoration: "underline",
-              }}
+              className="btn-link"
+              style={{ color: "var(--color-primary)", fontSize: "0.78rem" }}
             >
               Fill Demo Login
             </button>

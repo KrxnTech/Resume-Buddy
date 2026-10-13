@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Mic, Square } from "lucide-react";
 
 function ChatInput({
   onSend,
@@ -61,9 +62,9 @@ function ChatInput({
           aria-label={isRecording ? "Stop voice input" : "Start voice input"}
         >
           {isRecording ? (
-            <span className="recording-pulse-icon">🔴</span>
+            <Square size={14} style={{ color: "var(--clr-error, #D9534F)" }} />
           ) : (
-            <span className="mic-icon">🎙️</span>
+            <Mic size={15} />
           )}
         </button>
       )}

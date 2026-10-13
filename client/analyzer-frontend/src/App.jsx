@@ -4,6 +4,7 @@ import { AuthProvider } from "./context/AuthContext";
 import { AnalysisProvider } from "./context/AnalysisContext";
 import AuthModal from "./components/AuthModal";
 import AppRoutes from "./routes/AppRoutes";
+import "./index.css";
 import "./App.css";
 
 function App() {

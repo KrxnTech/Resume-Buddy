@@ -1,11 +1,9 @@
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
-import { useTheme } from "../hooks/useTheme";
+import { Link } from "react-router-dom";
+import { User, ShieldCheck, CheckCircle2, ArrowRight } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
-import ThemeToggle from "../components/ThemeToggle";
 
 function Settings() {
-  const { theme, setTheme, isDark } = useTheme();
   const { user, isAuthenticated, updateProfile, logout, openAuthModal } = useAuth();
 
   const [name, setName] = useState(user?.name || "");
@@ -26,7 +24,7 @@ function Settings() {
     setSaving(true);
     try {
       await updateProfile({ name, title });
-      setToastMsg("Profile changes saved successfully!");
+      setToastMsg("Profile changes saved successfully.");
       setTimeout(() => setToastMsg(null), 3000);
     } catch (err) {
       alert(err.message || "Failed to update profile");
@@ -36,229 +34,139 @@ function Settings() {
   };
 
   return (
-    <motion.div
-      className="page-detail-wrapper"
-      initial={{ opacity: 0, y: 15 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
-    >
-      <div className="detail-header-desc">
-        <h3>Account &amp; System Settings</h3>
-        <p>Manage your user account credentials, membership profile, interface theme mode, and workspace preferences.</p>
+    <div style={{ paddingBottom: "3rem" }}>
+      {/* Page Header */}
+      <div style={{ marginBottom: "2rem", paddingBottom: "1.25rem", borderBottom: "1px solid var(--color-border)" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", fontSize: "0.82rem", color: "var(--color-text-muted)", marginBottom: "0.5rem" }}>
+          <Link to="/dashboard" style={{ color: "var(--color-text-muted)", textDecoration: "none" }}>Dashboard</Link>
+          <span>/</span>
+          <span style={{ color: "var(--color-primary)", fontWeight: 500 }}>Settings</span>
+        </div>
+        <h1 style={{ fontSize: "1.75rem", fontWeight: 700, color: "var(--color-heading)", margin: "0 0 0.4rem" }}>
+          Account &amp; System Preferences
+        </h1>
+        <p style={{ color: "var(--color-text-muted)", fontSize: "0.92rem", margin: 0, maxWidth: "720px", lineHeight: 1.5 }}>
+          Manage your profile details, session authentication, and theme preferences.
+        </p>
       </div>
 
       {/* Account Profile Card */}
-      <div className="dashboard-widget-card" style={{ width: "100%", marginBottom: "1.5rem" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "1.25rem", flexWrap: "wrap", gap: "1rem" }}>
-          <div>
-            <h4 style={{ margin: "0 0 0.25rem 0", color: "var(--clr-text)" }}>User Profile &amp; Authentication</h4>
-            <p style={{ margin: 0, fontSize: "0.8rem", color: "var(--clr-text-2)" }}>
-              {isAuthenticated
-                ? "Your active member profile and synchronized account details."
-                : "Sign in to save scan histories, track ATS scores, and sync rewrites across devices."}
-            </p>
+      <div className="card" style={{ padding: "1.75rem", marginBottom: "2rem" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "1.5rem", flexWrap: "wrap", gap: "1rem" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+            <div style={{ width: "42px", height: "42px", borderRadius: "50%", background: "var(--color-info)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--color-primary)" }}>
+              <User size={22} />
+            </div>
+            <div>
+              <h3 style={{ fontSize: "1.1rem", fontWeight: 600, color: "var(--color-heading)", margin: 0 }}>
+                User Profile
+              </h3>
+              <p style={{ margin: "2px 0 0", fontSize: "0.85rem", color: "var(--color-text-muted)" }}>
+                {isAuthenticated ? "Authenticated account information." : "Guest mode. Sign in to sync your scans across devices."}
+              </p>
+            </div>
           </div>
 
           {isAuthenticated ? (
-            <span
-              style={{
-                fontSize: "0.75rem",
-                padding: "0.3rem 0.75rem",
-                borderRadius: "20px",
-                background: "rgba(230, 254, 83, 0.15)",
-                border: "1px solid var(--clr-accent)",
-                color: "var(--clr-accent)",
-                fontWeight: 600,
-              }}
-            >
-              ● {user?.role || "Pro Member"}
+            <span className="badge badge-success">
+              ● {user?.role || "Active Member"}
             </span>
           ) : (
             <button
               type="button"
-              className="kinetic-cta-btn mini primary"
+              className="btn btn-primary btn-sm"
               onClick={() => openAuthModal("login")}
             >
-              SIGN IN / REGISTER
+              Sign In / Register
             </button>
           )}
         </div>
 
         {isAuthenticated && user ? (
           <form onSubmit={handleSaveProfile} style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "1.25rem" }}>
-              {/* Full Name */}
-              <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem" }}>
-                <label style={{ fontSize: "0.75rem", fontWeight: 600, color: "var(--clr-text-2)", textTransform: "uppercase", letterSpacing: "0.08em" }}>
-                  Full Name
-                </label>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "1.25rem" }}>
+              <div>
+                <label className="form-label">Full Name</label>
                 <input
                   type="text"
                   required
+                  className="form-input"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  style={{
-                    padding: "0.65rem 0.85rem",
-                    background: "rgba(255,255,255,0.03)",
-                    border: "1px solid var(--clr-border)",
-                    borderRadius: "8px",
-                    color: "var(--clr-text)",
-                    fontSize: "0.85rem",
-                  }}
                 />
               </div>
 
-              {/* Professional Title */}
-              <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem" }}>
-                <label style={{ fontSize: "0.75rem", fontWeight: 600, color: "var(--clr-text-2)", textTransform: "uppercase", letterSpacing: "0.08em" }}>
-                  Professional Role / Focus
-                </label>
+              <div>
+                <label className="form-label">Target Role / Focus</label>
                 <input
                   type="text"
+                  className="form-input"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="e.g. Lead Software Engineer"
-                  style={{
-                    padding: "0.65rem 0.85rem",
-                    background: "rgba(255,255,255,0.03)",
-                    border: "1px solid var(--clr-border)",
-                    borderRadius: "8px",
-                    color: "var(--clr-text)",
-                    fontSize: "0.85rem",
-                  }}
                 />
               </div>
 
-              {/* Email (Read only) */}
-              <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem" }}>
-                <label style={{ fontSize: "0.75rem", fontWeight: 600, color: "var(--clr-text-2)", textTransform: "uppercase", letterSpacing: "0.08em" }}>
-                  Email Address (Verified)
-                </label>
+              <div>
+                <label className="form-label">Email Address</label>
                 <input
                   type="email"
                   disabled
+                  className="form-input"
                   value={user.email}
-                  style={{
-                    padding: "0.65rem 0.85rem",
-                    background: "rgba(255,255,255,0.02)",
-                    border: "1px solid var(--clr-border)",
-                    borderRadius: "8px",
-                    color: "var(--clr-text-3)",
-                    fontSize: "0.85rem",
-                    cursor: "not-allowed",
-                  }}
+                  style={{ background: "var(--color-bg-secondary)", cursor: "not-allowed" }}
                 />
               </div>
 
-              {/* Account Status */}
-              <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem" }}>
-                <label style={{ fontSize: "0.75rem", fontWeight: 600, color: "var(--clr-text-2)", textTransform: "uppercase", letterSpacing: "0.08em" }}>
-                  Session Security
-                </label>
-                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", padding: "0.65rem 0.85rem", background: "rgba(255,255,255,0.02)", border: "1px solid var(--clr-border)", borderRadius: "8px", fontSize: "0.85rem", color: "var(--clr-text-2)" }}>
-                  <span>🔒 JWT Protected • 256-bit Encrypted</span>
+              <div>
+                <label className="form-label">Account Security</label>
+                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", height: "40px", padding: "0 0.85rem", background: "var(--color-bg-secondary)", border: "1px solid var(--color-border)", borderRadius: "var(--radius-sm)", fontSize: "0.85rem", color: "var(--color-text-muted)" }}>
+                  <ShieldCheck size={16} style={{ color: "var(--color-success)" }} />
+                  <span>Encrypted JWT Session</span>
                 </div>
               </div>
             </div>
 
             {toastMsg && (
-              <div style={{ padding: "0.6rem 1rem", borderRadius: "8px", background: "rgba(39, 201, 63, 0.12)", color: "var(--clr-green)", fontSize: "0.85rem" }}>
-                ✓ {toastMsg}
+              <div style={{ padding: "0.75rem 1rem", borderRadius: "var(--radius-sm)", background: "#E8F5E9", color: "var(--color-success)", fontSize: "0.85rem", display: "flex", alignItems: "center", gap: "6px" }}>
+                <CheckCircle2 size={16} /> {toastMsg}
               </div>
             )}
 
-            <div style={{ display: "flex", gap: "1rem", marginTop: "0.5rem", flexWrap: "wrap" }}>
+            <div style={{ display: "flex", gap: "0.75rem", marginTop: "0.5rem" }}>
               <button
                 type="submit"
                 disabled={saving}
-                className="landing-primary-btn"
-                style={{ padding: "0.6rem 1.5rem", fontSize: "0.85rem" }}
+                className="btn btn-primary"
               >
-                {saving ? "Saving Changes..." : "Save Profile Changes"}
+                {saving ? "Saving Changes..." : "Save Profile"}
               </button>
-
               <button
                 type="button"
                 onClick={logout}
-                style={{
-                  padding: "0.6rem 1.25rem",
-                  fontSize: "0.85rem",
-                  background: "transparent",
-                  border: "1px solid rgba(255, 75, 75, 0.4)",
-                  color: "#ff6b6b",
-                  borderRadius: "8px",
-                  cursor: "pointer",
-                  fontWeight: 600,
-                }}
+                className="btn btn-secondary"
+                style={{ color: "var(--color-error)" }}
               >
                 Sign Out
               </button>
             </div>
           </form>
         ) : (
-          <div style={{ padding: "1.5rem", background: "rgba(255,255,255,0.02)", borderRadius: "8px", border: "1px dashed var(--clr-border)", textAlign: "center" }}>
-            <p style={{ margin: "0 0 1rem 0", color: "var(--clr-text-2)", fontSize: "0.9rem" }}>
-              You are currently using Resume Buddy in Guest Mode. Create an account or sign in to persist your resume scans and accepted rewrites.
+          <div style={{ padding: "1.5rem", background: "var(--color-bg-secondary)", borderRadius: "var(--radius-sm)", border: "1px dashed var(--color-border)", textAlign: "center" }}>
+            <p style={{ margin: "0 0 1rem", color: "var(--color-text-muted)", fontSize: "0.9rem" }}>
+              You are currently using Resume Buddy in Guest Mode. Sign in to save past scans, track improvements, and manage multiple resumes.
             </p>
             <button
               type="button"
-              className="kinetic-cta-btn primary"
+              className="btn btn-primary"
               onClick={() => openAuthModal("register")}
-              style={{ display: "inline-block" }}
             >
-              CREATE ACCOUNT NOW →
+              Create Account <ArrowRight size={15} />
             </button>
           </div>
         )}
       </div>
-
-      {/* Theme & Appearance Section */}
-      <div className="dashboard-widget-card" style={{ width: "100%", marginBottom: "1.5rem" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
-          <div>
-            <h4 style={{ margin: "0 0 0.25rem 0", color: "var(--clr-text)" }}>Theme &amp; Appearance</h4>
-            <p style={{ margin: 0, fontSize: "0.8rem", color: "var(--clr-text-2)" }}>Choose between Dark Mode (deep contrast) and Light Mode (clean &amp; crisp).</p>
-          </div>
-          <ThemeToggle showLabel={true} />
-        </div>
-
-        <div className="theme-selection-grid">
-          {/* Dark Mode Card */}
-          <div
-            className={`theme-option-card ${isDark ? "active" : ""}`}
-            onClick={() => setTheme("dark")}
-            role="button"
-            tabIndex={0}
-          >
-            <div className="theme-card-icon-wrap">🌙</div>
-            <div className="theme-card-content">
-              <div className="theme-card-title">Dark Mode</div>
-              <p className="theme-card-desc">Deep slate black with vibrant electric blue accents.</p>
-            </div>
-            <div className="theme-card-radio">
-              {isDark && <div className="theme-card-radio-inner" />}
-            </div>
-          </div>
-
-          {/* Light Mode Card */}
-          <div
-            className={`theme-option-card ${!isDark ? "active" : ""}`}
-            onClick={() => setTheme("light")}
-            role="button"
-            tabIndex={0}
-          >
-            <div className="theme-card-icon-wrap">☀️</div>
-            <div className="theme-card-content">
-              <div className="theme-card-title">Light Mode</div>
-              <p className="theme-card-desc">Clean white surfaces with high contrast text.</p>
-            </div>
-            <div className="theme-card-radio">
-              {!isDark && <div className="theme-card-radio-inner" />}
-            </div>
-          </div>
-        </div>
-      </div>
-    </motion.div>
+    </div>
   );
 }
 

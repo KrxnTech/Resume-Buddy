@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { Bot, AlertTriangle, X } from "lucide-react";
 import { useAnalysis } from "../hooks/useAnalysis";
 import { useSpeech } from "../hooks/useSpeech";
 import ChatInput from "../components/ChatInput";
@@ -103,7 +104,7 @@ function CareerCopilot() {
         {
           id: "welcome-message",
           role: "assistant",
-          text: `Hello **${candidateName}** 👋\n\nI have loaded and analyzed your full resume profile.\n\n- **ATS Match:** ${atsScore}%\n- **Recruiter Verdict:** ${recruiterDecision}\n- **Verified Skills:** ${topStrengthsCount} tech skills identified\n\nAsk me anything about your projects, skills, interview readiness, or resume enhancements.`,
+          text: `Hello **${candidateName}**\n\nI have loaded and analyzed your full resume profile.\n\n- **ATS Match:** ${atsScore}%\n- **Recruiter Verdict:** ${recruiterDecision}\n- **Verified Skills:** ${topStrengthsCount} tech skills identified\n\nAsk me anything about your projects, skills, interview readiness, or resume enhancements.`,
           timestamp: Date.now(),
         },
       ]);
@@ -233,7 +234,9 @@ function CareerCopilot() {
   if (!isReady) {
     return (
       <div className="copilot-empty-state">
-        <div className="copilot-empty-icon">🤖</div>
+        <div className="copilot-empty-icon" style={{ display: "flex", justifyContent: "center", color: "var(--color-primary)" }}>
+          <Bot size={36} />
+        </div>
         <h2>No Resume Profile Loaded</h2>
         <p>Upload and analyze a resume first to chat with your personal AI Career Copilot.</p>
       </div>
@@ -262,7 +265,7 @@ function CareerCopilot() {
         <div className="copilot-surface">
           {messages.length === 0 ? (
             <div className="copilot-empty-chat">
-              <h3>Hello there 👋</h3>
+              <h3>Welcome to Career Copilot</h3>
               <p>Ask me anything about your skills, projects, ATS score, or career recommendations.</p>
               <SuggestedQuestions suggestions={DEFAULT_SUGGESTIONS} onSelect={handleSend} />
             </div>
@@ -289,8 +292,12 @@ function CareerCopilot() {
 
         {errorBanner && (
           <div className="copilot-error-banner" role="alert">
-            <span>⚠️ {errorBanner}</span>
-            <button type="button" onClick={() => setErrorBanner(null)}>✕</button>
+            <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+              <AlertTriangle size={15} /> {errorBanner}
+            </span>
+            <button type="button" onClick={() => setErrorBanner(null)} aria-label="Dismiss">
+              <X size={14} />
+            </button>
           </div>
         )}
 

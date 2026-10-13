@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { Copy, Check, AlertTriangle } from "lucide-react";
 
 /**
  * Normalizes question turn evaluation into complete structured evaluation fields
@@ -157,8 +158,16 @@ export function InterviewQuestionCard({ turn, index }) {
       <div className="audit-section-block">
         <div className="audit-label-row">
           <span className="audit-section-label">YOUR ANSWER</span>
-          <button type="button" className="audit-copy-btn" onClick={handleCopy}>
-            {copied ? "✓ Copied" : "📋 Copy"}
+          <button type="button" className="audit-copy-btn" onClick={handleCopy} style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>
+            {copied ? (
+              <>
+                <Check size={12} /> Copied
+              </>
+            ) : (
+              <>
+                <Copy size={12} /> Copy
+              </>
+            )}
           </button>
         </div>
         <div className="audit-answer-box">
@@ -185,13 +194,13 @@ export function InterviewQuestionCard({ turn, index }) {
         {/* Strong Points */}
         <div className="audit-feedback-panel strong">
           <div className="panel-title-row">
-            <span className="panel-icon">✓</span>
+            <span className="panel-icon" style={{ display: "inline-flex", alignItems: "center" }}><Check size={14} /></span>
             <span className="panel-title-text">STRONG POINTS</span>
           </div>
           <ul className="audit-bullet-list green">
             {item.strongPoints.map((pt, i) => (
               <li key={i}>
-                <span className="bullet-mark">✓</span>
+                <span className="bullet-mark" style={{ display: "inline-flex", alignItems: "center" }}><Check size={12} /></span>
                 <span>{pt}</span>
               </li>
             ))}
@@ -201,13 +210,13 @@ export function InterviewQuestionCard({ turn, index }) {
         {/* Areas To Improve */}
         <div className="audit-feedback-panel improve">
           <div className="panel-title-row">
-            <span className="panel-icon">⚠</span>
+            <span className="panel-icon" style={{ display: "inline-flex", alignItems: "center" }}><AlertTriangle size={14} /></span>
             <span className="panel-title-text">AREAS TO IMPROVE</span>
           </div>
           <ul className="audit-bullet-list yellow">
             {item.areasToImprove.map((pt, i) => (
               <li key={i}>
-                <span className="bullet-mark">⚠</span>
+                <span className="bullet-mark" style={{ display: "inline-flex", alignItems: "center" }}><AlertTriangle size={12} /></span>
                 <span>{pt}</span>
               </li>
             ))}

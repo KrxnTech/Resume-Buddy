@@ -1,7 +1,19 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import Marquee from "react-fast-marquee";
-import ThemeToggle from "../components/ThemeToggle";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  Target,
+  Briefcase,
+  Layers,
+  Award,
+  Sparkles,
+  HeartPulse,
+  Download,
+  ArrowRight,
+  ShieldCheck,
+  CheckCircle2
+} from "lucide-react";
+import TopNavbar from "../components/TopNavbar";
+import Footer from "../components/Footer";
 
 function Features() {
   const navigate = useNavigate();
@@ -10,156 +22,179 @@ function Features() {
   const featureList = [
     {
       id: "ats",
-      num: "01",
       category: "analysis",
-      title: "ATS PRECISION SCORING",
-      tagline: "Break through automated keyword filters",
-      desc: "Scores your resume against standard parsing schemas. Highlights missing keywords, hard skills, soft skills, formatting flaws, and gives a direct 0-100% match breakdown.",
-      points: ["Real-time keyword gap analysis", "Section-by-section score weighting", "Parsing error detection", "Format compliance checks"],
+      icon: <Target size={22} style={{ color: "var(--color-primary)" }} />,
+      title: "ATS Compatibility Analysis",
+      tagline: "Break through automated screening filters",
+      desc: "Evaluates your resume against applicant tracking standards. Identifies missing keywords, analyzes formatting compatibility, and computes a mathematical 0–100% alignment score.",
+      points: [
+        "Real-time keyword gap detection",
+        "Section-by-section weighting and scoring",
+        "Document formatting and hierarchy validation",
+        "Role-specific keyword density checks"
+      ],
     },
     {
       id: "recruiter",
-      num: "02",
       category: "analysis",
-      title: "RECRUITER REVIEW MATRIX",
-      tagline: "Honest hiring decisions before you apply",
-      desc: "Simulates senior engineering hiring managers. Delivers hiring probability percentages, interview round odds, salary readiness fit, and identified risks.",
-      points: ["Decision: Strong Hire / Hire / Consider / Reject", "Top strengths & identified candidate risks", "Best-fit role recommendations", "Prioritized action checklist"],
+      icon: <Briefcase size={22} style={{ color: "var(--color-primary)" }} />,
+      title: "Recruiter Perspective & Insights",
+      tagline: "Honest hiring manager assessments before you apply",
+      desc: "Simulates senior engineering hiring managers. Delivers hiring alignment indicators, technical round pass probability estimates, and seniority fit notes.",
+      points: [
+        "Executive hiring manager commentary",
+        "Identified candidate strengths and potential concerns",
+        "Best-fit role recommendations",
+        "Prioritized resume enhancement checklist"
+      ],
     },
     {
       id: "interview",
-      num: "03",
       category: "interactive",
-      title: "AI MOCK INTERVIEW ARENA",
-      tagline: "Realistic technical & project probing",
-      desc: "Simulates live 5, 10, or 15-question technical interviews. The interviewer inspects your real projects, challenges claims, evaluates every answer, and adjusts difficulty dynamically.",
-      points: ["6 Modes: Tech, Project, Claims, Behavioral, Mixed, Job-Specific", "Adaptive difficulty adjustment", "Web Speech TTS voice questions & STT microphone answers", "Comprehensive post-interview score report & transcript"],
+      icon: <Award size={22} style={{ color: "var(--color-primary)" }} />,
+      title: "AI Interview Preparation Arena",
+      tagline: "Realistic technical and project probing",
+      desc: "Simulates interactive technical interviews based directly on your verified projects, technical stack, and target job description with dynamic audio and AI feedback.",
+      points: [
+        "Technical, Project Deep-Dive, and Behavioral modes",
+        "Adaptive difficulty that scales with answer quality",
+        "Voice audio playback and microphone answer capture",
+        "Comprehensive post-interview evaluation report and full transcript"
+      ],
     },
     {
       id: "sections",
-      num: "04",
       category: "analysis",
-      title: "SECTION DEEP-DIVE ANALYZER",
-      tagline: "Granular breakdown of resume sections",
-      desc: "Performs granular assessment across Experience, Skills, Education, Projects, and Formatting with targeted recommendations to elevate individual sections.",
-      points: ["Experience impact metrics check", "Technical skills alignment scan", "Education & certification verification", "Direct recruiter scoring weights"],
+      icon: <Layers size={22} style={{ color: "var(--color-primary)" }} />,
+      title: "Interactive Section Analyzer",
+      tagline: "Detailed audit of each resume component",
+      desc: "Inspects individual sections—Professional Summary, Skills, Work History, Projects, Education, and Contact Details—with targeted suggestions.",
+      points: [
+        "Impact metrics and action verb audit",
+        "Technical skills grouping and categorization",
+        "Project complexity and contribution depth",
+        "Concrete bullet point refinement tips"
+      ],
     },
     {
       id: "copilot",
-      num: "05",
       category: "interactive",
-      title: "CAREER COPILOT CHATBOT",
-      tagline: "Your grounded personal career advisor",
-      desc: "An AI career assistant that already knows your complete parsed profile. Answers questions about your background, career pivot, or ATS score without asking you to repeat yourself.",
-      points: ["Strict anti-hallucination grounding", "Full conversational history memory", "Voice read-aloud on every response", "Zero bulky filler essays"],
+      icon: <Sparkles size={22} style={{ color: "var(--color-primary)" }} />,
+      title: "Career Copilot",
+      tagline: "Grounded AI career advisor with profile memory",
+      desc: "An intelligent career assistant that holds your full analyzed resume in memory. Ask questions about your qualifications, career pivots, or target role requirements without repeating context.",
+      points: [
+        "Strictly grounded in your actual uploaded profile",
+        "Full conversation history retention",
+        "Voice synthesis read-aloud option",
+        "Direct advice on framing complex experience"
+      ],
     },
     {
-      id: "health",
-      num: "06",
+      id: "export",
       category: "utilities",
-      title: "RESUME HEALTH AUDIT",
-      tagline: "Complete profile structural integrity",
-      desc: "Verifies contact links, GitHub repositories, LinkedIn profile presence, education completeness, section balance, and portfolio readiness.",
-      points: ["Social & Portfolio link verification", "Skill balance checker", "Certification & awards scanner", "Overall health percentage score"],
+      icon: <Download size={22} style={{ color: "var(--color-primary)" }} />,
+      title: "Standardized PDF Export",
+      tagline: "Clean, machine-readable document generation",
+      desc: "Reconstructs your profile into a clean, single-column machine-readable format tested for optimal parsing across major ATS engines.",
+      points: [
+        "Standardized ATS typographic layout",
+        "Printable executive recruiter dossier",
+        "Raw structured JSON profile export",
+        "Client-side secure PDF compilation"
+      ],
     },
   ];
 
   const filteredFeatures = activeTab === "all" ? featureList : featureList.filter((f) => f.category === activeTab);
 
   return (
-    <div className="kinetic-page-container">
-      {/* Top Navbar */}
-      <nav className="kinetic-navbar">
-        <div className="kinetic-logo" onClick={() => navigate("/")}>
-          <span>RESUME BUDDY</span>
-          <span className="kinetic-logo-tag">AI/26</span>
-        </div>
+    <div style={{ background: "var(--color-bg-primary)", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+      <TopNavbar />
 
-        <div className="kinetic-nav-links">
-          <button type="button" className="kinetic-nav-link" onClick={() => navigate("/")}>HOME</button>
-          <button type="button" className="kinetic-nav-link" onClick={() => navigate("/about")}>ABOUT</button>
-          <button type="button" className="kinetic-nav-link active" onClick={() => navigate("/features")}>FEATURES</button>
-          <button type="button" className="kinetic-nav-link" onClick={() => navigate("/help")}>HELP</button>
-        </div>
+      <main style={{ flex: 1, padding: "3rem 1.5rem 5rem" }}>
+        <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
+          {/* Header */}
+          <div style={{ textAlign: "center", marginBottom: "3rem" }}>
+            <span style={{ fontSize: "0.82rem", fontWeight: 600, color: "var(--color-primary)", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+              Platform Features
+            </span>
+            <h1 style={{ fontSize: "2.4rem", fontWeight: 700, color: "var(--color-heading)", margin: "0.5rem 0 1rem" }}>
+              Comprehensive Career Intelligence
+            </h1>
+            <p style={{ color: "var(--color-text-muted)", fontSize: "1.05rem", maxWidth: "680px", margin: "0 auto", lineHeight: 1.6 }}>
+              Explore the specialized modules built to analyze your resume, measure ATS compatibility, run mock interviews, and optimize your job applications.
+            </p>
+          </div>
 
-        <div className="kinetic-nav-actions">
-          <button type="button" className="kinetic-cta-btn mini" onClick={() => navigate("/upload")}>
-            UPLOAD RESUME
-          </button>
-          <ThemeToggle compact={true} />
-        </div>
-      </nav>
+          {/* Filter Tabs */}
+          <div style={{ display: "flex", justifyContent: "center", gap: "0.5rem", marginBottom: "2.5rem", flexWrap: "wrap" }}>
+            {[
+              { id: "all", label: `All Features (${featureList.length})` },
+              { id: "analysis", label: "Analysis Engines" },
+              { id: "interactive", label: "Interactive Tools" },
+              { id: "utilities", label: "Export & Utilities" },
+            ].map((tab) => (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => setActiveTab(tab.id)}
+                className={`btn btn-sm ${activeTab === tab.id ? "btn-primary" : "btn-secondary"}`}
+                style={{ padding: "8px 16px" }}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
 
-      {/* Hero Header */}
-      <header className="kinetic-hero-section">
-        <span className="kinetic-eyebrow">SYSTEM CAPABILITIES</span>
-        <h1 className="kinetic-hero-title">
-          SIX ENGINES.<br />
-          <span className="kinetic-highlight">ZERO GUESSWORK.</span>
-        </h1>
-        <p className="kinetic-hero-lead">
-          Every tool inside Resume Buddy is built for high-conviction engineering careers. Explore how our pipeline turns raw PDFs into hireable portfolios.
-        </p>
-      </header>
+          {/* Features Grid */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "1.75rem", marginBottom: "4rem" }}>
+            {filteredFeatures.map((f) => (
+              <div key={f.id} className="card" style={{ padding: "1.75rem", display: "flex", flexDirection: "column" }}>
+                <div style={{ width: "44px", height: "44px", borderRadius: "50%", background: "var(--color-info)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1rem" }}>
+                  {f.icon}
+                </div>
+                <h3 style={{ fontSize: "1.2rem", fontWeight: 600, color: "var(--color-heading)", margin: "0 0 0.35rem" }}>
+                  {f.title}
+                </h3>
+                <div style={{ fontSize: "0.85rem", color: "var(--color-primary)", fontWeight: 500, marginBottom: "0.75rem" }}>
+                  {f.tagline}
+                </div>
+                <p style={{ fontSize: "0.9rem", color: "var(--color-text-muted)", lineHeight: 1.5, margin: "0 0 1.25rem", flex: 1 }}>
+                  {f.desc}
+                </p>
 
-      {/* Ticker */}
-      <div className="kinetic-marquee-bar">
-        <Marquee speed={75} gradient={false} autoFill={true}>
-          <span className="kinetic-ticker-item">ATS OPTIMIZER ///</span>
-          <span className="kinetic-ticker-item">RECRUITER REVIEW ///</span>
-          <span className="kinetic-ticker-item">MOCK INTERVIEW ARENA ///</span>
-          <span className="kinetic-ticker-item">SECTION ANALYZER ///</span>
-          <span className="kinetic-ticker-item">CAREER COPILOT ///</span>
-          <span className="kinetic-ticker-item">HEALTH AUDITOR ///</span>
-        </Marquee>
-      </div>
-
-      {/* Feature Filter Tabs */}
-      <section className="kinetic-section">
-        <div className="kinetic-tabs-bar">
-          <button type="button" className={`kinetic-tab-btn ${activeTab === "all" ? "active" : ""}`} onClick={() => setActiveTab("all")}>
-            ALL ENGINES ({featureList.length})
-          </button>
-          <button type="button" className={`kinetic-tab-btn ${activeTab === "analysis" ? "active" : ""}`} onClick={() => setActiveTab("analysis")}>
-            ANALYSIS
-          </button>
-          <button type="button" className={`kinetic-tab-btn ${activeTab === "interactive" ? "active" : ""}`} onClick={() => setActiveTab("interactive")}>
-            INTERACTIVE
-          </button>
-          <button type="button" className={`kinetic-tab-btn ${activeTab === "generation" ? "active" : ""}`} onClick={() => setActiveTab("generation")}>
-            REWRITING
-          </button>
-        </div>
-
-        {/* Feature Cards Grid */}
-        <div className="kinetic-grid-2">
-          {filteredFeatures.map((f) => (
-            <div key={f.id} className="kinetic-feature-card">
-              <div className="kinetic-card-top-row">
-                <span className="kinetic-card-num">{f.num}</span>
-                <span className="kinetic-tag-badge">{f.category.toUpperCase()}</span>
+                <div style={{ borderTop: "1px solid var(--color-border)", paddingTop: "1rem" }}>
+                  <ul style={{ paddingLeft: "1.2rem", margin: 0, fontSize: "0.82rem", color: "var(--color-text)", lineHeight: 1.6 }}>
+                    {f.points.map((pt, i) => (
+                      <li key={i}>{pt}</li>
+                    ))}
+                  </ul>
+                </div>
               </div>
-              <h3 className="kinetic-card-title lg">{f.title}</h3>
-              <p className="kinetic-card-tagline">{f.tagline}</p>
-              <p className="kinetic-card-body">{f.desc}</p>
-              <ul className="kinetic-card-bullet-list">
-                {f.points.map((pt, i) => (
-                  <li key={i}>— {pt}</li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-      </section>
+            ))}
+          </div>
 
-      {/* Bottom CTA */}
-      <section className="kinetic-cta-banner">
-        <h2 className="kinetic-cta-title">TEST YOUR RESUME ON ALL 6 ENGINES</h2>
-        <p className="kinetic-cta-subtitle">Upload your PDF and get instant ATS, recruiter, and interview feedback.</p>
-        <button type="button" className="kinetic-cta-btn primary lg" onClick={() => navigate("/upload")}>
-          START SCANNING NOW →
-        </button>
-      </section>
+          {/* CTA Box */}
+          <div style={{ background: "var(--color-bg-secondary)", border: "1px solid var(--color-border)", borderRadius: "var(--radius-md)", padding: "3rem 2rem", textAlign: "center" }}>
+            <h2 style={{ fontSize: "1.6rem", fontWeight: 700, color: "var(--color-heading)", marginBottom: "0.75rem" }}>
+              Ready to evaluate your resume?
+            </h2>
+            <p style={{ color: "var(--color-text-muted)", fontSize: "0.95rem", maxWidth: "520px", margin: "0 auto 1.5rem", lineHeight: 1.6 }}>
+              Upload your document and get detailed ATS scores, recruiter evaluation, and interview practice questions in seconds.
+            </p>
+            <button
+              type="button"
+              className="btn btn-primary btn-lg"
+              onClick={() => navigate("/upload")}
+            >
+              Analyze My Resume <ArrowRight size={16} />
+            </button>
+          </div>
+        </div>
+      </main>
+
+      <Footer />
     </div>
   );
 }

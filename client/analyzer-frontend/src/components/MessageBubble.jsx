@@ -1,4 +1,15 @@
 import { useState, useMemo } from "react";
+import {
+  Bot,
+  User,
+  Pause,
+  Play,
+  Volume2,
+  Square,
+  Copy,
+  Check,
+  RotateCcw,
+} from "lucide-react";
 import { renderMarkdownToHTML } from "../utils/markdownParser";
 
 function MessageBubble({
@@ -29,7 +40,7 @@ function MessageBubble({
   return (
     <div className={`copilot-message ${message.role}`}>
       <div className="message-avatar">
-        {message.role === "assistant" ? "🤖" : "👤"}
+        {message.role === "assistant" ? <Bot size={15} /> : <User size={15} />}
       </div>
 
       <div className="message-content">
@@ -55,15 +66,15 @@ function MessageBubble({
               >
                 {isSpeaking ? (
                   <>
-                    <span className="speech-wave">⏸</span> Pause
+                    <Pause size={12} /> Pause
                   </>
                 ) : isPaused ? (
                   <>
-                    <span>▶</span> Resume
+                    <Play size={12} /> Resume
                   </>
                 ) : (
                   <>
-                    <span>🔊</span> Speak
+                    <Volume2 size={12} /> Speak
                   </>
                 )}
               </button>
@@ -77,7 +88,7 @@ function MessageBubble({
                   title="Stop Speech"
                   aria-label="Stop speech"
                 >
-                  <span>⏹</span> Stop
+                  <Square size={12} /> Stop
                 </button>
               )}
 
@@ -88,7 +99,15 @@ function MessageBubble({
                 onClick={handleCopyClick}
                 title="Copy to clipboard"
               >
-                {copied ? "✓ Copied" : "Copy"}
+                {copied ? (
+                  <>
+                    <Check size={12} /> Copied
+                  </>
+                ) : (
+                  <>
+                    <Copy size={12} /> Copy
+                  </>
+                )}
               </button>
 
               {/* Regenerate Button */}
@@ -97,8 +116,9 @@ function MessageBubble({
                 className="message-action-btn regen-btn"
                 onClick={() => onRegenerate(message)}
                 title="Regenerate answer"
+                aria-label="Regenerate response"
               >
-                ↻
+                <RotateCcw size={12} />
               </button>
             </div>
           )}

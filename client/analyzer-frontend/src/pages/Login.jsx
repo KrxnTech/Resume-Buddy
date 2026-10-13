@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
+import { Lock, ArrowRight, AlertCircle, Loader2 } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
 
 function Login() {
@@ -25,101 +25,91 @@ function Login() {
       await login(email, password);
       navigate("/dashboard");
     } catch (err) {
-      setErrorMsg(err.message || "Failed to log in");
+      setErrorMsg(err.message || "Failed to log in. Please check your credentials.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="upload-page-wrap" style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: "2rem 1rem" }}>
-      <motion.div
-        className="dashboard-widget-card"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }}
-        style={{ maxWidth: "440px", width: "100%", padding: "2.5rem 2rem" }}
-      >
-        <div style={{ textAlign: "center", marginBottom: "1.75rem" }}>
-          <span style={{ fontSize: "2rem" }}>🔐</span>
-          <h2 style={{ fontSize: "1.6rem", margin: "0.5rem 0 0.25rem", color: "var(--clr-text)" }}>Sign In</h2>
-          <p style={{ fontSize: "0.85rem", color: "var(--clr-text-2)", margin: 0 }}>
-            Resume Buddy • AI Career Intelligence
+    <div style={{ background: "var(--color-bg-secondary)", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: "2rem 1.5rem" }}>
+      <div className="card" style={{ maxWidth: "420px", width: "100%", padding: "2.5rem 2rem", background: "var(--color-bg-primary)" }}>
+        <div style={{ textAlign: "center", marginBottom: "2rem" }}>
+          <div style={{ width: "44px", height: "44px", borderRadius: "50%", background: "var(--color-info)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 1rem", color: "var(--color-primary)" }}>
+            <Lock size={22} />
+          </div>
+          <h1 style={{ fontSize: "1.5rem", fontWeight: 700, color: "var(--color-heading)", margin: "0 0 0.35rem" }}>
+            Sign In to Resume Buddy
+          </h1>
+          <p style={{ fontSize: "0.88rem", color: "var(--color-text-muted)", margin: 0 }}>
+            Enter your credentials to access your saved resume evaluations.
           </p>
         </div>
 
         <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "1.1rem" }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: "0.35rem" }}>
-            <label style={{ fontSize: "0.78rem", fontWeight: 600, color: "var(--clr-text-2)", textTransform: "uppercase" }}>
-              Email Address
-            </label>
+          <div>
+            <label className="form-label">Email Address</label>
             <input
               type="email"
               required
+              className="form-input"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="alex@example.com"
-              style={{
-                padding: "0.75rem 1rem",
-                borderRadius: "8px",
-                background: "rgba(255, 255, 255, 0.03)",
-                border: "1px solid var(--clr-border)",
-                color: "var(--clr-text)",
-                fontSize: "0.9rem",
-              }}
             />
           </div>
 
-          <div style={{ display: "flex", flexDirection: "column", gap: "0.35rem" }}>
-            <label style={{ fontSize: "0.78rem", fontWeight: 600, color: "var(--clr-text-2)", textTransform: "uppercase" }}>
-              Password
-            </label>
+          <div>
+            <label className="form-label">Password</label>
             <input
               type="password"
               required
+              className="form-input"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••••••"
-              style={{
-                padding: "0.75rem 1rem",
-                borderRadius: "8px",
-                background: "rgba(255, 255, 255, 0.03)",
-                border: "1px solid var(--clr-border)",
-                color: "var(--clr-text)",
-                fontSize: "0.9rem",
-              }}
             />
           </div>
 
           {errorMsg && (
-            <div style={{ padding: "0.7rem", borderRadius: "8px", background: "rgba(255, 75, 75, 0.12)", color: "#ff6b6b", fontSize: "0.85rem" }}>
-              ⚠️ {errorMsg}
+            <div style={{ padding: "0.75rem", borderRadius: "var(--radius-sm)", background: "#FEE2E2", color: "var(--color-error)", fontSize: "0.85rem", display: "flex", alignItems: "center", gap: "6px" }}>
+              <AlertCircle size={15} style={{ flexShrink: 0 }} />
+              <span>{errorMsg}</span>
             </div>
           )}
 
           <button
             type="submit"
             disabled={loading}
-            className="kinetic-cta-btn primary"
-            style={{ padding: "0.85rem", marginTop: "0.5rem" }}
+            className="btn btn-primary btn-lg"
+            style={{ width: "100%", justifyContent: "center", marginTop: "0.5rem" }}
           >
-            {loading ? "Signing in..." : "SIGN IN →"}
+            {loading ? (
+              <>
+                <Loader2 size={16} className="animate-spin" style={{ animation: "spin 1s linear infinite" }} />
+                Signing in...
+              </>
+            ) : (
+              <>
+                Sign In <ArrowRight size={16} />
+              </>
+            )}
           </button>
 
-          <div style={{ textAlign: "center", fontSize: "0.85rem", color: "var(--clr-text-2)", marginTop: "0.5rem" }}>
+          <div style={{ textAlign: "center", fontSize: "0.88rem", color: "var(--color-text-muted)", marginTop: "0.75rem" }}>
             Don't have an account?{" "}
-            <Link to="/register" style={{ color: "var(--clr-accent)", fontWeight: 600 }}>
+            <Link to="/register" style={{ color: "var(--color-primary)", fontWeight: 600, textDecoration: "none" }}>
               Create Account
             </Link>
           </div>
 
           <div style={{ textAlign: "center", marginTop: "0.5rem" }}>
-            <Link to="/" style={{ fontSize: "0.8rem", color: "var(--clr-text-3)", textDecoration: "none" }}>
+            <Link to="/" style={{ fontSize: "0.82rem", color: "var(--color-text-muted)", textDecoration: "none" }}>
               ← Back to Homepage
             </Link>
           </div>
         </form>
-      </motion.div>
+      </div>
     </div>
   );
 }

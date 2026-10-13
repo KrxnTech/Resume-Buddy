@@ -1,5 +1,30 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import {
+  Mic,
+  ArrowRight,
+  Code2,
+  FolderGit2,
+  FileText,
+  Users,
+  SlidersHorizontal,
+  Target,
+  User,
+  Briefcase,
+  Award,
+  AlertTriangle,
+  X,
+  Clock,
+  Volume2,
+  Square,
+  Lightbulb,
+  Lock,
+  Copy,
+  Check,
+  CheckCircle2,
+  RotateCcw,
+} from "lucide-react";
 import { useAnalysis } from "../hooks/useAnalysis";
 import { useSpeech } from "../hooks/useSpeech";
 import InterviewerRobot from "../components/InterviewerRobot";
@@ -9,46 +34,46 @@ const INTERVIEW_MODES = [
   {
     id: "technical",
     title: "Technical Interview",
-    icon: "💻",
+    icon: Code2,
     desc: "Core stack, API architecture, data structures, databases, and system performance.",
   },
   {
     id: "project",
     title: "Project Deep-Dive",
-    icon: "🚀",
+    icon: FolderGit2,
     desc: "Progressive architectural questions based directly on your verified resume projects.",
   },
   {
     id: "resume",
     title: "Resume & Claims Audit",
-    icon: "📄",
+    icon: FileText,
     desc: "Targeted drill-down into your metrics, achievements, responsibilities, and claims.",
   },
   {
     id: "behavioral",
     title: "HR & Behavioral",
-    icon: "🤝",
+    icon: Users,
     desc: "STAR-method behavioral questions personalized with your real career experiences.",
   },
   {
     id: "mixed",
     title: "Mixed Simulation",
-    icon: "🔀",
+    icon: SlidersHorizontal,
     desc: "A balanced real-world blend of technical, project architecture, and behavioral questions.",
   },
   {
     id: "job_specific",
     title: "Job-Specific Interview",
-    icon: "🎯",
+    icon: Target,
     desc: "Tailored to the active target job description and specific role competencies.",
   },
 ];
 
 const DIFFICULTIES = [
-  { id: "easy", label: "Easy", icon: "🟢", desc: "Foundations & straightforward explanations" },
-  { id: "medium", label: "Medium", icon: "🟡", desc: "Industry standard mid-level rigor" },
-  { id: "hard", label: "Hard", icon: "🔴", desc: "Senior depth, edge-cases & scaling" },
-  { id: "adaptive", label: "Adaptive", icon: "⚡", desc: "Dynamically scales based on your answers" },
+  { id: "easy", label: "Easy", desc: "Foundations & straightforward explanations" },
+  { id: "medium", label: "Medium", desc: "Industry standard mid-level rigor" },
+  { id: "hard", label: "Hard", desc: "Senior depth, edge-cases & scaling" },
+  { id: "adaptive", label: "Adaptive", desc: "Dynamically scales based on your answers" },
 ];
 
 const LENGTH_OPTIONS = [
@@ -58,6 +83,7 @@ const LENGTH_OPTIONS = [
 ];
 
 function InterviewPrep() {
+  const navigate = useNavigate();
   const { result, setResult, resume, jobDesc } = useAnalysis();
   const analysis = result?.analysis;
 
@@ -460,10 +486,24 @@ function InterviewPrep() {
   // If no resume uploaded
   if (!analysis) {
     return (
-      <div className="copilot-empty-state">
-        <div className="copilot-empty-icon">🎙️</div>
-        <h2>No Resume Profile Loaded</h2>
-        <p>Upload and analyze a resume first to launch the AI Mock Interview system.</p>
+      <div className="card" style={{ padding: "3rem 2rem", textAlign: "center", maxWidth: "600px", margin: "2rem auto" }}>
+        <div style={{ width: "48px", height: "48px", borderRadius: "50%", backgroundColor: "var(--clr-brand-subtle)", color: "var(--color-primary)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 1.25rem" }}>
+          <Mic size={24} />
+        </div>
+        <h2 style={{ fontSize: "1.25rem", fontWeight: 600, color: "var(--color-heading)", marginBottom: "0.5rem" }}>
+          No Resume Profile Loaded
+        </h2>
+        <p style={{ color: "var(--color-text-secondary)", fontSize: "0.95rem", lineHeight: 1.5, marginBottom: "1.5rem" }}>
+          Upload and analyze a resume first to launch the AI Mock Interview system with questions customized to your real project experience.
+        </p>
+        <button
+          type="button"
+          className="btn btn-primary"
+          onClick={() => navigate("/upload")}
+        >
+          <span>Upload Resume to Start</span>
+          <ArrowRight size={16} />
+        </button>
       </div>
     );
   }
@@ -494,13 +534,13 @@ function InterviewPrep() {
           </p>
 
           <div className="interview-candidate-pill-bar">
-            <span className="interview-pill">👤 {candidateName}</span>
-            <span className="interview-pill">💼 {targetRole || "Software Engineer"}</span>
+            <span className="interview-pill"><User size={13} /> {candidateName}</span>
+            <span className="interview-pill"><Briefcase size={13} /> {targetRole || "Software Engineer"}</span>
             <span className="interview-pill">
-              ⭐ {candidateProfile.skills?.languages?.slice(0, 3).join(", ") || "Full Stack"}
+              <Award size={13} /> {candidateProfile.skills?.languages?.slice(0, 3).join(", ") || "Full Stack"}
             </span>
             <span className="interview-pill">
-              🚀 {candidateProfile.projects?.[0]?.name || "Verified Projects"}
+              <FolderGit2 size={13} /> {candidateProfile.projects?.[0]?.name || "Verified Projects"}
             </span>
           </div>
         </div>
@@ -520,6 +560,7 @@ function InterviewPrep() {
               const isSelected = selectedMode === mode.id;
               const isJdMode = mode.id === "job_specific";
               const isJdAvailable = Boolean(jobDesc || analysis.jobDescription);
+              const ModeIcon = mode.icon;
 
               return (
                 <button
@@ -529,7 +570,9 @@ function InterviewPrep() {
                   onClick={() => setSelectedMode(mode.id)}
                 >
                   <div className="tile-top-row">
-                    <span className="tile-icon">{mode.icon}</span>
+                    <span className="tile-icon" style={{ color: isSelected ? "var(--color-primary)" : "var(--color-text-secondary)" }}>
+                      <ModeIcon size={20} />
+                    </span>
                     {isJdMode && (
                       <span className={`tile-tag ${isJdAvailable ? "available" : ""}`}>
                         {isJdAvailable ? "JD Loaded" : "Optional"}
@@ -544,65 +587,68 @@ function InterviewPrep() {
           </div>
         </div>
 
-        {/* Difficulty & Length Row */}
-        <div className="interview-two-col-grid">
-          {/* Difficulty Selector */}
-          <div className="interview-section-card">
-            <div className="interview-section-title">
-              <span className="section-step">2</span>
-              <div>
-                <h3>Select Difficulty</h3>
-                <p>Adaptive mode adjusts live based on your answer quality.</p>
-              </div>
-            </div>
-
-            <div className="interview-grid difficulties">
-              {DIFFICULTIES.map((diff) => {
-                const isSelected = selectedDifficulty === diff.id;
-                return (
-                  <button
-                    key={diff.id}
-                    type="button"
-                    className={`interview-card-tile compact ${isSelected ? "active" : ""}`}
-                    onClick={() => setSelectedDifficulty(diff.id)}
-                  >
-                    <div className="tile-inline-header">
-                      <span className="tile-icon mini">{diff.icon}</span>
-                      <h4 className="tile-title">{diff.label}</h4>
-                    </div>
-                    <p className="tile-desc">{diff.desc}</p>
-                  </button>
-                );
-              })}
+        {/* Section 2: Difficulty Selector */}
+        <div className="interview-section-card">
+          <div className="interview-section-title">
+            <span className="section-step">2</span>
+            <div>
+              <h3>Select Difficulty Level</h3>
+              <p>Choose standard interview rigor or allow adaptive AI to scale dynamically with your answers.</p>
             </div>
           </div>
 
-          {/* Questions Count & Target Role */}
-          <div className="interview-section-card">
-            <div className="interview-section-title">
-              <span className="section-step">3</span>
-              <div>
-                <h3>Interview Length &amp; Target Role</h3>
-                <p>Customize the question volume and specific target job title.</p>
+          <div className="interview-grid difficulties">
+            {DIFFICULTIES.map((diff) => {
+              const isSelected = selectedDifficulty === diff.id;
+              return (
+                <button
+                  key={diff.id}
+                  type="button"
+                  className={`interview-card-tile ${isSelected ? "active" : ""}`}
+                  onClick={() => setSelectedDifficulty(diff.id)}
+                >
+                  <div className="tile-inline-header">
+                    <h4 className="tile-title">{diff.label}</h4>
+                  </div>
+                  <p className="tile-desc">{diff.desc}</p>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Section 3: Session Configuration */}
+        <div className="interview-section-card">
+          <div className="interview-section-title">
+            <span className="section-step">3</span>
+            <div>
+              <h3>Session Configuration</h3>
+              <p>Configure question count, estimated interview duration, and target job title.</p>
+            </div>
+          </div>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
+            <div>
+              <label style={{ display: "block", fontSize: "13.5px", fontWeight: 500, color: "var(--color-heading)", marginBottom: "8px" }}>
+                Interview Volume &amp; Duration:
+              </label>
+              <div className="length-selection-row">
+                {LENGTH_OPTIONS.map((opt) => (
+                  <button
+                    key={opt.count}
+                    type="button"
+                    className={`length-btn ${totalQuestions === opt.count ? "active" : ""}`}
+                    onClick={() => setTotalQuestions(opt.count)}
+                  >
+                    <span className="length-count">{opt.count} Questions</span>
+                    <span className="length-time">{opt.time} ({opt.label})</span>
+                  </button>
+                ))}
               </div>
             </div>
 
-            <div className="length-selection-row">
-              {LENGTH_OPTIONS.map((opt) => (
-                <button
-                  key={opt.count}
-                  type="button"
-                  className={`length-btn ${totalQuestions === opt.count ? "active" : ""}`}
-                  onClick={() => setTotalQuestions(opt.count)}
-                >
-                  <span className="length-count">{opt.count} Questions</span>
-                  <span className="length-time">{opt.time} ({opt.label})</span>
-                </button>
-              ))}
-            </div>
-
             <div className="target-role-input-wrap">
-              <label htmlFor="target-role-input">Target Job Title / Specialization:</label>
+              <label htmlFor="target-role-input">Target Job Title / Specialization (Optional):</label>
               <input
                 id="target-role-input"
                 type="text"
@@ -617,13 +663,26 @@ function InterviewPrep() {
 
         {errorMsg && (
           <div className="copilot-error-banner" role="alert">
-            <span>⚠️ {errorMsg}</span>
-            <button type="button" onClick={() => setErrorMsg(null)}>✕</button>
+            <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+              <AlertTriangle size={15} /> {errorMsg}
+            </span>
+            <button type="button" onClick={() => setErrorMsg(null)} aria-label="Dismiss">
+              <X size={14} />
+            </button>
           </div>
         )}
 
-        {/* Start Action */}
-        <div className="interview-start-bar">
+        {/* Section 4: Start Interview Action */}
+        <div className="interview-section-card" style={{ padding: "20px 28px", display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "16px" }}>
+          <div>
+            <div style={{ fontSize: "12px", color: "var(--color-text-muted)", textTransform: "uppercase", letterSpacing: "0.04em" }}>
+              Ready to Practice
+            </div>
+            <div style={{ fontSize: "14.5px", color: "var(--color-heading)", fontWeight: 500, marginTop: "2px" }}>
+              {INTERVIEW_MODES.find((m) => m.id === selectedMode)?.title} • {DIFFICULTIES.find((d) => d.id === selectedDifficulty)?.label} Level • {totalQuestions} Questions
+            </div>
+          </div>
+
           <button
             type="button"
             className="interview-start-btn"
@@ -635,7 +694,9 @@ function InterviewPrep() {
                 <span className="btn-spinner mini" /> Initializing AI Interviewer...
               </>
             ) : (
-              <>Launch AI Mock Interview →</>
+              <>
+                Launch AI Mock Interview <ArrowRight size={15} />
+              </>
             )}
           </button>
         </div>
@@ -661,14 +722,19 @@ function InterviewPrep() {
         {/* Top Control Bar */}
         <div className="interview-arena-header">
           <div className="arena-header-left">
-            <span className="arena-badge mode-badge">
-              {INTERVIEW_MODES.find((m) => m.id === selectedMode)?.icon}{" "}
+            <span className="arena-badge mode-badge" style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+              {(() => {
+                const ModeIcon = INTERVIEW_MODES.find((m) => m.id === selectedMode)?.icon || Code2;
+                return <ModeIcon size={14} />;
+              })()}
               {INTERVIEW_MODES.find((m) => m.id === selectedMode)?.title}
             </span>
             <span className="arena-badge diff-badge">
-              ⚡ {currentDifficulty.toUpperCase()} LEVEL
+              {currentDifficulty.toUpperCase()} LEVEL
             </span>
-            <span className="arena-timer">⏱️ {formatTimer(elapsedSeconds)}</span>
+            <span className="arena-timer" style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>
+              <Clock size={13} /> {formatTimer(elapsedSeconds)}
+            </span>
           </div>
 
           <div className="arena-header-right">
@@ -677,8 +743,9 @@ function InterviewPrep() {
               className="arena-secondary-btn"
               onClick={() => setShowHistoryDrawer(!showHistoryDrawer)}
               title="View interview transcript so far"
+              style={{ display: "inline-flex", alignItems: "center", gap: 5 }}
             >
-              📜 Transcript ({history.length})
+              <FileText size={13} /> Transcript ({history.length})
             </button>
             <button
               type="button"
@@ -719,7 +786,15 @@ function InterviewPrep() {
             <div className="question-meta-wrap">
               <span className="question-topic-pill">QUESTION {currentQuestionIndex} // {totalQuestions}</span>
               <span className="interviewer-label">
-                {isSpeakingQuestion ? "🔊 AI Interviewer Speaking Question..." : "● Question Delivered"}
+                {isSpeakingQuestion ? (
+                  <span style={{ display: "inline-flex", alignItems: "center", gap: 5 }}>
+                    <Volume2 size={13} /> AI Interviewer Speaking Question...
+                  </span>
+                ) : (
+                  <span style={{ display: "inline-flex", alignItems: "center", gap: 5 }}>
+                    <Check size={13} /> Question Delivered
+                  </span>
+                )}
               </span>
             </div>
           </div>
@@ -735,9 +810,13 @@ function InterviewPrep() {
               aria-label="Replay interview question"
             >
               {isSpeakingQuestion ? (
-                <>⏹ Stop Speaking</>
+                <>
+                  <Square size={13} /> Stop Speaking
+                </>
               ) : (
-                <>🔊 Replay Question</>
+                <>
+                  <Volume2 size={13} /> Replay Question
+                </>
               )}
             </button>
 
@@ -747,7 +826,17 @@ function InterviewPrep() {
               onClick={handleRequestHint}
               disabled={hintLoading || Boolean(hint) || isSpeakingQuestion}
             >
-              {hintLoading ? "Thinking hint..." : hint ? "💡 Hint Provided" : "💡 Need a Hint?"}
+              {hintLoading ? (
+                "Thinking hint..."
+              ) : hint ? (
+                <>
+                  <Lightbulb size={13} /> Hint Provided
+                </>
+              ) : (
+                <>
+                  <Lightbulb size={13} /> Need a Hint?
+                </>
+              )}
             </button>
           </div>
 
@@ -764,9 +853,13 @@ function InterviewPrep() {
           <div className="answer-card-header">
             <div className="answer-header-meta">
               <span className="candidate-label">
-                {isSpeakingQuestion
-                  ? "🔒 Input locked while AI interviewer speaks..."
-                  : `Your Technical Response (${candidateName}):`}
+                {isSpeakingQuestion ? (
+                  <span style={{ display: "inline-flex", alignItems: "center", gap: 5 }}>
+                    <Lock size={13} /> Input locked while AI interviewer speaks...
+                  </span>
+                ) : (
+                  `Your Technical Response (${candidateName}):`
+                )}
               </span>
               <span className="word-counter">
                 {userAnswer.trim().split(/\s+/).filter(Boolean).length} words
@@ -783,7 +876,7 @@ function InterviewPrep() {
               isSpeakingQuestion
                 ? "Interviewer is speaking the question. Please listen..."
                 : isRecording
-                ? "🎙️ Listening to your voice... Speak naturally now..."
+                ? "Listening to your voice... Speak naturally now..."
                 : "Type or speak your technical explanation here. Mention trade-offs, architecture, design choices, or concrete examples..."
             }
             rows={6}
@@ -792,8 +885,12 @@ function InterviewPrep() {
 
           {errorMsg && (
             <div className="copilot-error-banner" style={{ margin: "0.5rem 0" }} role="alert">
-              <span>⚠️ {errorMsg}</span>
-              <button type="button" onClick={() => setErrorMsg(null)}>✕</button>
+              <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+                <AlertTriangle size={15} /> {errorMsg}
+              </span>
+              <button type="button" onClick={() => setErrorMsg(null)} aria-label="Dismiss">
+                <X size={14} />
+              </button>
             </div>
           )}
 
@@ -819,7 +916,15 @@ function InterviewPrep() {
                   title={isRecording ? "Stop microphone recording" : "Speak your answer"}
                   aria-label={isRecording ? "Stop voice recording" : "Start voice recording"}
                 >
-                  {isRecording ? "🔴 Stop Speaking" : "🎙️ Speak Answer"}
+                  {isRecording ? (
+                    <>
+                      <Square size={13} /> Stop Speaking
+                    </>
+                  ) : (
+                    <>
+                      <Mic size={13} /> Speak Answer
+                    </>
+                  )}
                 </button>
               )}
 
@@ -841,7 +946,7 @@ function InterviewPrep() {
                 disabled={loading || isSpeakingQuestion}
                 title="Skip this question and move to next topic"
               >
-                Skip Question ⏭
+                Skip Question
               </button>
             </div>
 
@@ -855,9 +960,11 @@ function InterviewPrep() {
                   <span className="btn-spinner mini" /> AI Evaluating Answer...
                 </>
               ) : currentQuestionIndex === totalQuestions ? (
-                <>Submit Final Answer &amp; View Report 🏁</>
+                <>Submit Final Answer &amp; View Report</>
               ) : (
-                <>Submit Answer →</>
+                <>
+                  Submit Answer <ArrowRight size={14} />
+                </>
               )}
             </button>
           </div>
@@ -897,9 +1004,19 @@ function InterviewPrep() {
                 <h4>Interview Transcript So Far ({history.length} Questions)</h4>
                 <div style={{ display: "flex", gap: "0.5rem" }}>
                   <button type="button" className="copy-transcript-btn" onClick={handleCopyTranscript}>
-                    {copiedTranscript ? "✓ Copied" : "📋 Copy All"}
+                    {copiedTranscript ? (
+                      <>
+                        <Check size={13} /> Copied
+                      </>
+                    ) : (
+                      <>
+                        <Copy size={13} /> Copy All
+                      </>
+                    )}
                   </button>
-                  <button type="button" onClick={() => setShowHistoryDrawer(false)}>✕</button>
+                  <button type="button" onClick={() => setShowHistoryDrawer(false)} aria-label="Close">
+                    <X size={15} />
+                  </button>
                 </div>
               </div>
 
@@ -959,10 +1076,18 @@ function InterviewPrep() {
           </div>
 
           <div className="report-meta-row">
-            <span>🎯 <strong>Mode:</strong> {INTERVIEW_MODES.find((m) => m.id === selectedMode)?.title}</span>
-            <span>⚡ <strong>Difficulty:</strong> {selectedDifficulty.toUpperCase()}</span>
-            <span>📝 <strong>Questions:</strong> {history.length} Answered</span>
-            <span>⏱️ <strong>Duration:</strong> {formatTimer(elapsedSeconds)}</span>
+            <span style={{ display: "inline-flex", alignItems: "center", gap: 5 }}>
+              <Target size={14} /> <strong>Mode:</strong> {INTERVIEW_MODES.find((m) => m.id === selectedMode)?.title}
+            </span>
+            <span style={{ display: "inline-flex", alignItems: "center", gap: 5 }}>
+              <SlidersHorizontal size={14} /> <strong>Difficulty:</strong> {selectedDifficulty.toUpperCase()}
+            </span>
+            <span style={{ display: "inline-flex", alignItems: "center", gap: 5 }}>
+              <FileText size={14} /> <strong>Questions:</strong> {history.length} Answered
+            </span>
+            <span style={{ display: "inline-flex", alignItems: "center", gap: 5 }}>
+              <Clock size={14} /> <strong>Duration:</strong> {formatTimer(elapsedSeconds)}
+            </span>
           </div>
         </div>
 
@@ -1001,7 +1126,9 @@ function InterviewPrep() {
         {/* Strengths & Weaknesses Grids */}
         <div className="report-feedback-grid">
           <div className="feedback-card strengths">
-            <h4>✅ Key Observed Strengths</h4>
+            <h4 style={{ display: "flex", alignItems: "center", gap: 6 }}>
+              <CheckCircle2 size={16} style={{ color: "var(--color-success)" }} /> Key Observed Strengths
+            </h4>
             <ul>
               {(finalReport.strengths || [
                 "Accurate technical explanation of backend patterns.",
@@ -1013,7 +1140,9 @@ function InterviewPrep() {
           </div>
 
           <div className="feedback-card weaknesses">
-            <h4>⚠️ Identified Growth Areas</h4>
+            <h4 style={{ display: "flex", alignItems: "center", gap: 6 }}>
+              <AlertTriangle size={16} style={{ color: "var(--color-warning)" }} /> Identified Growth Areas
+            </h4>
             <ul>
               {(finalReport.weaknesses || [
                 "Elaborate more on distributed scaling and caching trade-offs.",
@@ -1033,11 +1162,29 @@ function InterviewPrep() {
 
         {/* Report Action Buttons */}
         <div className="report-actions-footer">
-          <button type="button" className="report-action-btn primary" onClick={() => setStage("setup")}>
-            🔄 Start New Mock Interview
+          <button
+            type="button"
+            className="report-action-btn primary"
+            onClick={() => setStage("setup")}
+            style={{ display: "inline-flex", alignItems: "center", gap: 6 }}
+          >
+            <RotateCcw size={14} /> Start New Mock Interview
           </button>
-          <button type="button" className="report-action-btn secondary" onClick={handleCopyTranscript}>
-            {copiedTranscript ? "✓ Transcript Copied" : "📋 Copy Full Transcript"}
+          <button
+            type="button"
+            className="report-action-btn secondary"
+            onClick={handleCopyTranscript}
+            style={{ display: "inline-flex", alignItems: "center", gap: 6 }}
+          >
+            {copiedTranscript ? (
+              <>
+                <Check size={14} /> Transcript Copied
+              </>
+            ) : (
+              <>
+                <Copy size={14} /> Copy Full Transcript
+              </>
+            )}
           </button>
         </div>
       </motion.div>

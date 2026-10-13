@@ -1,33 +1,33 @@
-import { motion } from "framer-motion";
 import { useMemo } from "react";
+import { UserCheck, CheckCircle2, AlertTriangle, Briefcase, Award, TrendingUp, Info } from "lucide-react";
 
 function DecisionBadge({ decision }) {
-  const tone = {
-    "Strong Hire": "strong",
-    Hire: "hire",
-    Consider: "consider",
-    Borderline: "borderline",
-    Reject: "reject",
-  }[decision] || "consider";
+  const badgeMap = {
+    "Strong Hire": "badge-success",
+    Hire: "badge-success",
+    Consider: "badge-warning",
+    Borderline: "badge-warning",
+    Reject: "badge-error",
+  };
+  const badgeClass = badgeMap[decision] || "badge-neutral";
 
-  return <span className={`decision-badge ${tone}`}>{(decision || "Consider").toUpperCase()}</span>;
+  return (
+    <span className={`badge ${badgeClass}`} style={{ fontSize: "0.85rem", padding: "4px 10px", fontWeight: 600 }}>
+      {decision || "Consider"}
+    </span>
+  );
 }
 
 function ProgressBar({ value, label }) {
   const safeValue = Math.min(100, Math.max(0, value || 0));
   return (
-    <div className="progress-row">
-      <div className="progress-meta">
-        <span>{label}</span>
-        <strong>{safeValue}%</strong>
+    <div style={{ marginBottom: "0.85rem" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.82rem", marginBottom: "4px" }}>
+        <span style={{ color: "var(--color-heading)", fontWeight: 500 }}>{label}</span>
+        <span style={{ color: "var(--color-text-muted)", fontWeight: 600 }}>{safeValue}%</span>
       </div>
-      <div className="progress-track">
-        <motion.div
-          className="progress-fill"
-          initial={{ width: 0 }}
-          animate={{ width: `${safeValue}%` }}
-          transition={{ duration: 0.7, ease: "easeOut" }}
-        />
+      <div className="progress-bar">
+        <div className="progress-fill" style={{ width: `${safeValue}%`, backgroundColor: "var(--color-primary)" }} />
       </div>
     </div>
   );
@@ -43,8 +43,8 @@ function RecruiterDashboard({ analysis }) {
     const score = Math.round((analysis?.matchScore || 0.7) * 100);
     return {
       decision: score >= 80 ? "Strong Hire" : score >= 65 ? "Hire" : score >= 50 ? "Consider" : "Borderline",
-      confidence: 90,
-      overallComment: analysis?.summary || analysis?.atsExplanation || "The candidate demonstrates strong technical capabilities and relevant core experience.",
+      confidence: 85,
+      overallComment: analysis?.summary || analysis?.atsExplanation || "The candidate demonstrates solid technical capabilities and relevant core experience.",
       hiringProbability: Math.min(95, Math.max(40, score)),
       technicalRoundChance: Math.min(95, Math.max(45, score + 5)),
       hrRoundChance: 85,
@@ -77,127 +77,122 @@ function RecruiterDashboard({ analysis }) {
 
   const stats = useMemo(() => {
     return [
-      { label: "Hiring Probability", value: review.hiringProbability || 75 },
-      { label: "Technical Round Pass Odds", value: review.technicalRoundChance || 80 },
-      { label: "HR Screening Pass Odds", value: review.hrRoundChance || 85 },
-      { label: "Final Offer Chance", value: review.offerChance || 70 },
+      { label: "Overall Alignment", value: review.hiringProbability || 75 },
+      { label: "Technical Competence Fit", value: review.technicalRoundChance || 80 },
+      { label: "HR / Background Screening", value: review.hrRoundChance || 85 },
+      { label: "Candidate Offer Potential", value: review.offerChance || 70 },
     ];
   }, [review]);
 
   return (
-    <motion.section
-      className="recruiter-dashboard-card"
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.28 }}
-      aria-label="AI Recruiter Dashboard"
-    >
-      <div className="tag-card-header">
-        <span className="tag-card-title">AI Recruiter Hiring Decision</span>
-        <DecisionBadge decision={review.decision} />
-      </div>
-
-      <div className="dashboard-hero">
-        <div className="dashboard-hero-main">
-          <div className="dashboard-score-ring">
-            <div className="dashboard-score-value">{review.confidence || 90}%</div>
-            <div className="dashboard-score-label">Confidence</div>
-          </div>
-          <div style={{ flex: 1 }}>
-            <h3 style={{ margin: "0 0 0.4rem", fontSize: "1.15rem" }}>Hiring Manager Commentary</h3>
-            <p style={{ margin: 0, color: "var(--clr-text-2)", lineHeight: 1.55, fontSize: "0.92rem" }}>
-              {review.overallComment}
-            </p>
-          </div>
+    <div className="card" style={{ padding: "1.75rem", marginBottom: "2rem" }}>
+      {/* Header */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.25rem", flexWrap: "wrap", gap: "0.75rem" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+          <UserCheck size={20} style={{ color: "var(--color-primary)" }} />
+          <h3 style={{ fontSize: "1.15rem", fontWeight: 600, color: "var(--color-heading)", margin: 0 }}>
+            Recruiter Perspective &amp; Evaluation
+          </h3>
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+          <span style={{ fontSize: "0.8rem", color: "var(--color-text-muted)" }}>Assessment:</span>
+          <DecisionBadge decision={review.decision} />
         </div>
       </div>
 
-      <div className="dashboard-grid">
-        <div className="dashboard-panel">
-          <div className="dashboard-panel-title">Stage Advancement Probabilities</div>
+      {/* Hiring Manager Commentary */}
+      <div style={{ background: "var(--color-bg-secondary)", border: "1px solid var(--color-border)", borderRadius: "var(--radius-sm)", padding: "1.25rem", marginBottom: "1.5rem" }}>
+        <div style={{ fontSize: "0.78rem", fontWeight: 600, color: "var(--color-text-muted)", textTransform: "uppercase", marginBottom: "6px" }}>
+          Hiring Manager Assessment
+        </div>
+        <p style={{ margin: 0, fontSize: "0.92rem", color: "var(--color-heading)", lineHeight: 1.6 }}>
+          {review.overallComment}
+        </p>
+      </div>
+
+      {/* Grid: Probabilities & Strengths */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1.5rem", marginBottom: "1.5rem" }}>
+        <div>
+          <h4 style={{ fontSize: "0.92rem", fontWeight: 600, color: "var(--color-heading)", marginBottom: "1rem" }}>
+            Estimated Stage Advancement
+          </h4>
           {stats.map((item) => (
             <ProgressBar key={item.label} value={item.value} label={item.label} />
           ))}
         </div>
 
-        <div className="dashboard-panel">
-          <div className="dashboard-panel-title">Identified Strengths</div>
-          <div className="chip-list">
-            {(review.topStrengths?.length ? review.topStrengths : ["Solid Stack Breadth", "Clear Experience Narrative"]).map((strength, index) => (
-              <span key={`${strength}-${index}`} className="dashboard-chip green">✓ {strength}</span>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <div className="dashboard-grid">
-        <div className="dashboard-panel">
-          <div className="dashboard-panel-title">Identified Candidate Risks</div>
-          <div className="chip-list">
-            {(review.majorRisks?.length ? review.majorRisks : ["Quantifiable impact metrics could be expanded"]).map((risk, index) => (
-              <span key={`${risk}-${index}`} className="dashboard-chip red">✕ {risk}</span>
-            ))}
-          </div>
-        </div>
-
-        <div className="dashboard-panel">
-          <div className="dashboard-panel-title">Best-Fit Roles</div>
-          <div className="role-list">
-            {(review.bestRoles?.length ? review.bestRoles : [{ role: "Full Stack Engineer", compatibility: 85, reason: "Direct skill alignment" }]).map((role, index) => (
-              <div key={`${role.role}-${index}`} className="role-card">
-                <div className="role-header">
-                  <strong>{role.role}</strong>
-                  <span>{role.compatibility}% Match</span>
-                </div>
-                <p>{role.reason}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <div className="dashboard-grid">
-        <div className="dashboard-panel">
-          <div className="dashboard-panel-title">Seniority &amp; Salary Readiness</div>
-          <div className="salary-fit-list">
-            {Object.entries(review.salaryFit || { "Junior": 95, "Mid Level": 85, "Senior": 70 }).map(([level, value]) => (
-              <div key={level} className="salary-fit-item">
-                <span>{level}</span>
-                <strong>{value}%</strong>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="dashboard-panel">
-          <div className="dashboard-panel-title">Recruiter Notes</div>
-          <ul className="note-list">
-            {(review.recruiterNotes?.length ? review.recruiterNotes : ["Clear technical foundation demonstrated."]).map((note, index) => (
-              <li key={`${note}-${index}`}>{note}</li>
-            ))}
-          </ul>
-        </div>
-      </div>
-
-      <div className="dashboard-panel full-width">
-        <div className="dashboard-panel-title">Prioritized Recommendations</div>
-        <div className="recommendation-stack">
-          {(review.finalRecommendations?.length ? review.finalRecommendations : [{ priority: "High", action: "Add quantifiable metrics to top project", expectedAtsImprovement: "+15% ATS", expectedRecruiterImpact: "High Impact", difficulty: "Easy" }]).map((item, index) => (
-            <div key={`${item.action}-${index}`} className="recommendation-pill">
-              <div className="recommendation-pill-top">
-                <span className="recommendation-pill-priority">PRIORITY: {item.priority}</span>
-                <span className="recommendation-pill-difficulty">{item.difficulty}</span>
-              </div>
-              <strong className="rec-action-text">{item.action}</strong>
-              <div className="rec-impact-row">
-                <span>ATS: <strong>{item.expectedAtsImprovement}</strong></span>
-                <span>Recruiter: <strong>{item.expectedRecruiterImpact}</strong></span>
-              </div>
+        <div>
+          <h4 style={{ fontSize: "0.92rem", fontWeight: 600, color: "var(--color-heading)", marginBottom: "1rem" }}>
+            Candidate Strengths &amp; Potential Concerns
+          </h4>
+          <div style={{ marginBottom: "1rem" }}>
+            <div style={{ fontSize: "0.78rem", fontWeight: 600, color: "var(--color-success)", marginBottom: "0.5rem", display: "flex", alignItems: "center", gap: "4px" }}>
+              <CheckCircle2 size={14} /> Top Strengths
             </div>
-          ))}
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem" }}>
+              {(review.topStrengths || []).map((s, idx) => (
+                <span key={idx} className="badge badge-success" style={{ fontSize: "0.78rem" }}>
+                  {s}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <div style={{ fontSize: "0.78rem", fontWeight: 600, color: "var(--color-warning)", marginBottom: "0.5rem", display: "flex", alignItems: "center", gap: "4px" }}>
+              <AlertTriangle size={14} /> Potential Concerns
+            </div>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem" }}>
+              {(review.majorRisks || []).map((r, idx) => (
+                <span key={idx} className="badge badge-warning" style={{ fontSize: "0.78rem" }}>
+                  {r}
+                </span>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
-    </motion.section>
+
+      {/* Best Roles & Seniority Alignment */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1.5rem", marginBottom: "1.5rem" }}>
+        <div>
+          <h4 style={{ fontSize: "0.92rem", fontWeight: 600, color: "var(--color-heading)", marginBottom: "0.75rem" }}>
+            Role Compatibility
+          </h4>
+          <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+            {(review.bestRoles || []).map((role, idx) => (
+              <div key={idx} style={{ padding: "0.75rem", border: "1px solid var(--color-border)", borderRadius: "var(--radius-sm)", background: "var(--color-bg-primary)" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "4px" }}>
+                  <strong style={{ fontSize: "0.88rem", color: "var(--color-heading)" }}>{role.role}</strong>
+                  <span className="badge badge-neutral" style={{ fontSize: "0.78rem" }}>{role.compatibility}% Match</span>
+                </div>
+                <p style={{ margin: 0, fontSize: "0.8rem", color: "var(--color-text-muted)" }}>{role.reason}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <h4 style={{ fontSize: "0.92rem", fontWeight: 600, color: "var(--color-heading)", marginBottom: "0.75rem" }}>
+            Seniority Readiness
+          </h4>
+          <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+            {Object.entries(review.salaryFit || { Junior: 95, "Mid Level": 80, Senior: 60 }).map(([lvl, val]) => (
+              <div key={lvl} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "0.5rem 0.75rem", borderBottom: "1px solid var(--color-border)", fontSize: "0.85rem" }}>
+                <span style={{ color: "var(--color-heading)" }}>{lvl}</span>
+                <span style={{ fontWeight: 600, color: "var(--color-primary)" }}>{val}% Fit</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Recruiter Disclaimer */}
+      <div style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "0.78rem", color: "var(--color-text-muted)", paddingTop: "1rem", borderTop: "1px solid var(--color-border)" }}>
+        <Info size={14} />
+        <span>Recruiter evaluations are analytical estimates based on resume heuristics and do not guarantee actual interview invitations or job offers.</span>
+      </div>
+    </div>
   );
 }
 

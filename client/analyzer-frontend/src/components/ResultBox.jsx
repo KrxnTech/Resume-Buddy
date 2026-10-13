@@ -1,47 +1,45 @@
 import { useEffect, useRef, useState } from "react";
+import { CheckCircle2, AlertTriangle, TrendingUp, Target, FileText, ExternalLink, Sparkles, Check, X } from "lucide-react";
 import InteractiveSectionAnalyzer from "./InteractiveSectionAnalyzer";
 import RecruiterDashboard from "./RecruiterDashboard";
 
-/* Helper: pick color class based on score */
 function scoreColor(score) {
-  if (score >= 0.75) return { stroke: "#22c55e", text: "var(--clr-green)" };
-  if (score >= 0.5) return { stroke: "#fbbf24", text: "var(--clr-yellow)" };
-  return { stroke: "#f87171", text: "var(--clr-red)" };
+  if (score >= 0.75) return { stroke: "var(--color-success)", text: "var(--color-success)" };
+  if (score >= 0.5) return { stroke: "var(--color-warning)", text: "var(--color-warning)" };
+  return { stroke: "var(--color-error)", text: "var(--color-error)" };
 }
 
 function ScoreRing({ score }) {
-  const RADIUS = 54;
-  const CIRC = 2 * Math.PI * RADIUS; // ≈ 339.3
+  const RADIUS = 48;
+  const CIRC = 2 * Math.PI * RADIUS;
   const clamp = Math.min(Math.max(score, 0), 1);
   const offset = CIRC - clamp * CIRC;
   const color = scoreColor(clamp);
 
-  const fillRef = useRef(null);
-  const [animated, setAnimated] = useState(false);
-
-  useEffect(() => {
-    // tiny delay so transition fires after mount
-    const t = setTimeout(() => setAnimated(true), 80);
-    return () => clearTimeout(t);
-  }, []);
-
   return (
-    <div className="score-ring-wrap">
-      <svg className="score-ring-svg" viewBox="0 0 120 120">
-        <circle className="score-ring-bg" cx="60" cy="60" r={RADIUS} />
+    <div style={{ position: "relative", width: "110px", height: "110px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <svg width="110" height="110" viewBox="0 0 110 110" style={{ transform: "rotate(-90deg)" }}>
+        <circle cx="55" cy="55" r={RADIUS} fill="none" stroke="var(--color-border)" strokeWidth="8" />
         <circle
-          ref={fillRef}
-          className={`score-ring-fill ${animated ? "animate" : ""}`}
-          cx="60" cy="60" r={RADIUS}
+          cx="55"
+          cy="55"
+          r={RADIUS}
+          fill="none"
           stroke={color.stroke}
-          style={{ "--dash-offset": offset }}
+          strokeWidth="8"
+          strokeLinecap="round"
+          strokeDasharray={CIRC}
+          strokeDashoffset={offset}
+          style={{ transition: "stroke-dashoffset 0.8s ease" }}
         />
       </svg>
-      <div className="score-ring-text">
-        <span className="score-number" style={{ color: color.text }}>
+      <div style={{ position: "absolute", textAlign: "center" }}>
+        <div style={{ fontSize: "1.4rem", fontWeight: 700, color: color.text }}>
           {Math.round(clamp * 100)}%
-        </span>
-        <span className="score-label">Match</span>
+        </div>
+        <div style={{ fontSize: "0.72rem", color: "var(--color-text-muted)", textTransform: "uppercase" }}>
+          Match
+        </div>
       </div>
     </div>
   );
@@ -50,46 +48,51 @@ function ScoreRing({ score }) {
 function ScoreCard({ analysis }) {
   const score = analysis.matchScore ?? 0;
   const label =
-    score >= 0.75 ? "Strong Match " :
-      score >= 0.5 ? "Moderate Match " :
-        "Needs Work ";
+    score >= 0.75 ? "High ATS Alignment" :
+      score >= 0.5 ? "Moderate Alignment" :
+        "Action Required";
 
   return (
-    <div className="score-card">
+    <div className="card" style={{ padding: "1.5rem", display: "flex", alignItems: "center", gap: "1.5rem", marginBottom: "1.5rem" }}>
       <ScoreRing score={score} />
-      <div className="score-info">
-        <div className="score-title">{label}</div>
-        <p className="score-summary">{analysis.summary}</p>
+      <div>
+        <h3 style={{ fontSize: "1.15rem", fontWeight: 600, color: "var(--color-heading)", margin: "0 0 0.35rem" }}>
+          {label}
+        </h3>
+        <p style={{ margin: 0, fontSize: "0.9rem", color: "var(--color-text-muted)", lineHeight: 1.5 }}>
+          {analysis.summary}
+        </p>
       </div>
     </div>
   );
 }
 
-function TagCard({ icon, iconClass, title, items, tagClass, numbered }) {
+function TagCard({ icon, title, items, badgeType = "neutral", numbered = false }) {
   if (!items || items.length === 0) return null;
 
   return (
-    <div className="tag-card">
-      <div className="tag-card-header">
-        <div className={`tag-card-icon ${iconClass}`}>{icon}</div>
-        <span className="tag-card-title">{title}</span>
-        <span className="tag-card-count">{items.length}</span>
+    <div className="card" style={{ padding: "1.5rem", marginBottom: "1.5rem" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+          {icon}
+          <h4 style={{ fontSize: "1rem", fontWeight: 600, color: "var(--color-heading)", margin: 0 }}>
+            {title}
+          </h4>
+        </div>
+        <span className="badge badge-neutral">{items.length}</span>
       </div>
 
       {numbered ? (
-        <ol className="improve-list">
+        <ol style={{ paddingLeft: "1.2rem", margin: 0, fontSize: "0.9rem", color: "var(--color-text)", lineHeight: 1.6 }}>
           {items.map((item, i) => (
-            <li key={i} className="improve-item">
-              <span className="improve-num">{i + 1}</span>
-              <span>{item}</span>
-            </li>
+            <li key={i} style={{ marginBottom: "6px" }}>{item}</li>
           ))}
         </ol>
       ) : (
-        <div className="tags-wrap">
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
           {items.map((item, i) => (
-            <span key={i} className={`tag ${tagClass}`}>
-              <span className="tag-dot" />
+            <span key={i} className={`badge badge-${badgeType}`} style={{ fontSize: "0.82rem", padding: "5px 10px", display: "inline-flex", alignItems: "center", gap: 5 }}>
+              {badgeType === "success" ? <Check size={12} /> : badgeType === "warning" || badgeType === "error" ? <X size={12} /> : null}
               {item}
             </span>
           ))}
@@ -99,50 +102,14 @@ function TagCard({ icon, iconClass, title, items, tagClass, numbered }) {
   );
 }
 
-/* ---- ATS Breakdown ---- */
 const SECTION_META = [
-  { key: "skills", label: "Skills", icon: "-", RADIUS: 26 },
-  { key: "experience", label: "Experience", icon: "-", RADIUS: 26 },
-  { key: "education", label: "Education", icon: "-", RADIUS: 26 },
-  { key: "projects", label: "Projects", icon: "-", RADIUS: 26 },
-  { key: "formatting", label: "Formatting", icon: "-", RADIUS: 26 },
-  { key: "contact", label: "Contact", icon: "-", RADIUS: 26 },
+  { key: "skills", label: "Skills" },
+  { key: "experience", label: "Experience" },
+  { key: "education", label: "Education" },
+  { key: "projects", label: "Projects" },
+  { key: "formatting", label: "Formatting" },
+  { key: "contact", label: "Contact Details" },
 ];
-
-function MiniRing({ score, size = 68 }) {
-  const R = (size / 2) - 6;
-  const CIRC = 2 * Math.PI * R;
-  const clamp = Math.min(Math.max(score ?? 0, 0), 1);
-  const offset = CIRC - clamp * CIRC;
-  const color = scoreColor(clamp);
-  const [animated, setAnimated] = useState(false);
-
-  useEffect(() => {
-    const t = setTimeout(() => setAnimated(true), 120);
-    return () => clearTimeout(t);
-  }, []);
-
-  return (
-    <div className="mini-ring-wrap" style={{ width: size, height: size }}>
-      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ transform: "rotate(-90deg)" }}>
-        <circle fill="none" stroke="rgba(255,255,255,0.07)" strokeWidth="5" cx={size / 2} cy={size / 2} r={R} />
-        <circle
-          fill="none"
-          stroke={color.stroke}
-          strokeWidth="5"
-          strokeLinecap="round"
-          cx={size / 2} cy={size / 2} r={R}
-          strokeDasharray={CIRC}
-          strokeDashoffset={animated ? offset : CIRC}
-          style={{ transition: "stroke-dashoffset 1s cubic-bezier(0.4,0,0.2,1)" }}
-        />
-      </svg>
-      <div className="mini-ring-text">
-        <span className="mini-ring-pct" style={{ color: color.text }}>{Math.round(clamp * 100)}</span>
-      </div>
-    </div>
-  );
-}
 
 function ATSBreakdown({ analysis }) {
   const ss = analysis.sectionScores;
@@ -150,65 +117,53 @@ function ATSBreakdown({ analysis }) {
   if (!ss) return null;
 
   return (
-    <div className="ats-breakdown-card">
-      <div className="tag-card-header">
-        <span className="tag-card-title">ATS Section Breakdown</span>
+    <div className="card" style={{ padding: "1.5rem", marginBottom: "1.5rem" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1.25rem" }}>
+        <Target size={18} style={{ color: "var(--color-primary)" }} />
+        <h4 style={{ fontSize: "1rem", fontWeight: 600, color: "var(--color-heading)", margin: 0 }}>
+          ATS Section Breakdown
+        </h4>
       </div>
 
-      <div className="ats-grid">
-        {SECTION_META.map(({ key, label, icon }) => (
-          <div key={key} className="ats-section-cell">
-            <MiniRing score={ss[key]} />
-            <div className="ats-cell-label">
-              <span className="ats-cell-icon">{icon}</span>
-              {label}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "1rem", marginBottom: "1rem" }}>
+        {SECTION_META.map(({ key, label }) => {
+          const val = ss[key] ?? 0;
+          const pct = Math.round(val * 100);
+          return (
+            <div key={key} style={{ padding: "0.75rem", background: "var(--color-bg-secondary)", borderRadius: "var(--radius-sm)", border: "1px solid var(--color-border)" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.82rem", marginBottom: "4px" }}>
+                <span style={{ color: "var(--color-text-muted)" }}>{label}</span>
+                <span style={{ fontWeight: 600, color: scoreColor(val).text }}>{pct}%</span>
+              </div>
+              <div className="progress-bar" style={{ height: "6px" }}>
+                <div className="progress-fill" style={{ width: `${pct}%`, backgroundColor: scoreColor(val).stroke }} />
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {exp && (
-        <div className="ats-explanation">
-          <p>{exp}</p>
-        </div>
+        <p style={{ fontSize: "0.85rem", color: "var(--color-text-muted)", margin: 0, lineHeight: 1.5 }}>
+          {exp}
+        </p>
       )}
     </div>
   );
 }
 
-/* ============================================
-   RESUME PROFILE CARD  (parsed extraction)
-   ============================================ */
-
-const PROFILE_SECTIONS = [
-  { key: "certifications", label: "Certifications", icon: "-" },
-  { key: "awards", label: "Awards", icon: "-" },
-  { key: "languages", label: "Languages", icon: "-" },
-  { key: "publications", label: "Publications", icon: "-" },
-  { key: "internships", label: "Internships", icon: "-" },
-  { key: "achievements", label: "Achievements", icon: "-" },
-];
-
-function ProfileChips({ items, colorClass }) {
-  if (!items || items.length === 0) return <span className="profile-empty">—</span>;
-  return (
-    <div className="profile-chips">
-      {items.map((item, i) => (
-        <span key={i} className={`profile-chip ${colorClass}`}>{item}</span>
-      ))}
-    </div>
-  );
-}
-
-function ProfileLink({ url, icon, label }) {
+function ProfileLink({ url, label }) {
   if (!url) return null;
-  // Normalize: if URL doesn't start with http, prepend https://
   const href = url.startsWith("http") ? url : `https://${url}`;
   return (
-    <a href={href} target="_blank" rel="noopener noreferrer" className="profile-link">
-      <span className="profile-link-icon">{icon}</span>
-      {label}
-      <span className="profile-link-arrow">↗</span>
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="btn btn-secondary btn-sm"
+      style={{ display: "inline-flex", alignItems: "center", gap: "4px", fontSize: "0.8rem", textDecoration: "none" }}
+    >
+      {label} <ExternalLink size={12} />
     </a>
   );
 }
@@ -219,51 +174,36 @@ function ResumeProfile({ analysis }) {
 
   const hasLinks = pr.github || pr.linkedin || pr.portfolio;
   const hasSkills = (pr.hardSkills?.length > 0) || (pr.softSkills?.length > 0);
-  const extraSections = PROFILE_SECTIONS.filter(s => pr[s.key]?.length > 0);
 
-  // nothing to show — skip rendering entirely
-  if (!hasLinks && !hasSkills && extraSections.length === 0) return null;
+  if (!hasLinks && !hasSkills) return null;
 
   return (
-    <div className="profile-card">
-      <div className="tag-card-header">
-        <span className="tag-card-title">Resume Profile</span>
+    <div className="card" style={{ padding: "1.5rem", marginBottom: "1.5rem" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1rem" }}>
+        <FileText size={18} style={{ color: "var(--color-primary)" }} />
+        <h4 style={{ fontSize: "1rem", fontWeight: 600, color: "var(--color-heading)", margin: 0 }}>
+          Extracted Resume Information
+        </h4>
       </div>
 
-      {/* Links row */}
       {hasLinks && (
-        <div className="profile-links-row">
-          <ProfileLink url={pr.github} icon=" " label="GitHub" />
-          <ProfileLink url={pr.linkedin} icon=" " label="LinkedIn" />
-          <ProfileLink url={pr.portfolio} icon=" " label="Portfolio" />
+        <div style={{ display: "flex", gap: "0.5rem", marginBottom: "1rem", flexWrap: "wrap" }}>
+          <ProfileLink url={pr.github} label="GitHub" />
+          <ProfileLink url={pr.linkedin} label="LinkedIn" />
+          <ProfileLink url={pr.portfolio} label="Portfolio" />
         </div>
       )}
 
-      {/* Skills rows */}
       {pr.hardSkills?.length > 0 && (
-        <div className="profile-skill-row">
-          <div className="profile-skill-label">- Hard Skills</div>
-          <br />
-          <ProfileChips items={pr.hardSkills} colorClass="chip-blue" />
-        </div>
-      )}
-      {pr.softSkills?.length > 0 && (
-        <div className="profile-skill-row">
-          <div className="profile-skill-label">- Soft Skills</div>
-          <br />
-          <ProfileChips items={pr.softSkills} colorClass="chip-purple" />
-        </div>
-      )}
-
-      {/* Extra sections */}
-      {extraSections.length > 0 && (
-        <div className="profile-extras">
-          {extraSections.map(({ key, label, icon }) => (
-            <div key={key} className="profile-extra-row">
-              <div className="profile-skill-label">{icon} {label}</div>
-              <ProfileChips items={pr[key]} colorClass="chip-neutral" />
-            </div>
-          ))}
+        <div style={{ marginBottom: "0.75rem" }}>
+          <div style={{ fontSize: "0.78rem", fontWeight: 600, color: "var(--color-text-muted)", marginBottom: "4px" }}>
+            Technical Competencies
+          </div>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "4px" }}>
+            {pr.hardSkills.map((s, idx) => (
+              <span key={idx} className="badge badge-neutral" style={{ fontSize: "0.78rem" }}>{s}</span>
+            ))}
+          </div>
         </div>
       )}
     </div>
@@ -276,47 +216,40 @@ function ResultBox({ result }) {
   if (!analysis) return null;
 
   return (
-    <section className="results-section" aria-label="Analysis Results">
-      <br />
-      <div className="results-header">
-        <h2>🔥 AI Scanner Resume Data </h2>
-        <span className="results-badge">✓ Complete</span>
+    <section aria-label="Analysis Results">
+      <div style={{ marginBottom: "1.5rem" }}>
+        <h2 style={{ fontSize: "1.35rem", fontWeight: 700, color: "var(--color-heading)", margin: "0 0 0.35rem" }}>
+          Analysis Results Overview
+        </h2>
+        <p style={{ fontSize: "0.9rem", color: "var(--color-text-muted)", margin: 0 }}>
+          Detailed findings and recommendations computed by the career intelligence engine.
+        </p>
       </div>
 
-      <ResumeProfile analysis={analysis} />
-
       <ScoreCard analysis={analysis} />
-
-
+      <ResumeProfile analysis={analysis} />
       <ATSBreakdown analysis={analysis} />
-
       <InteractiveSectionAnalyzer analysis={analysis} />
-
       <RecruiterDashboard analysis={analysis} />
 
-
       <TagCard
-        icon=" "
-        iconClass="icon-green"
-        title="Strengths"
+        icon={<CheckCircle2 size={18} style={{ color: "var(--color-success)" }} />}
+        title="Matching Strengths"
         items={analysis.strengths}
-        tagClass="green"
+        badgeType="success"
       />
 
       <TagCard
-        icon=" "
-        iconClass="icon-red"
-        title="Missing Skills"
+        icon={<AlertTriangle size={18} style={{ color: "var(--color-error)" }} />}
+        title="Missing Skills & Keywords"
         items={analysis.missingSkills}
-        tagClass="red"
+        badgeType="error"
       />
 
       <TagCard
-        icon=" "
-        iconClass="icon-yellow"
-        title="Improvements"
+        icon={<TrendingUp size={18} style={{ color: "var(--color-primary)" }} />}
+        title="Prioritized Improvements"
         items={analysis.improvements}
-        tagClass="yellow"
         numbered={true}
       />
     </section>
@@ -325,4 +258,3 @@ function ResultBox({ result }) {
 
 export { ScoreCard, ATSBreakdown, ResumeProfile, TagCard };
 export default ResultBox;
-

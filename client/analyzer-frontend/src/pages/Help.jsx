@@ -1,37 +1,38 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Marquee from "react-fast-marquee";
-import ThemeToggle from "../components/ThemeToggle";
+import { Search, ChevronDown, ChevronUp, CheckCircle2, XCircle, ArrowRight, HelpCircle } from "lucide-react";
+import TopNavbar from "../components/TopNavbar";
+import Footer from "../components/Footer";
 
 function Help() {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
-  const [activeAccordion, setActiveAccordion] = useState(0);
+  const [openIndex, setOpenIndex] = useState(0);
 
   const faqs = [
     {
-      q: "HOW DOES RESUME BUDDY CALCULATE ATS MATCH PERCENTAGES?",
-      a: "Our engine maps your verified skills, experience bullet points, and section structures directly against standard parser requirements (Greenhouse, Lever, Workday) and target Job Descriptions. Scores are weighted: 40% skills alignment, 30% experience depth, 15% project validation, and 15% formatting compliance.",
+      q: "How does Resume Buddy calculate ATS match percentages?",
+      a: "Our engine maps your verified skills, experience bullet points, and section structures directly against standard parser requirements (Greenhouse, Lever, Workday) and target Job Descriptions. Scores are weighted across skills alignment (40%), experience depth (30%), project validation (15%), and formatting compliance (15%).",
     },
     {
-      q: "DOES RESUME BUDDY STORE OR LEAK MY RESUME DATA?",
-      a: "No. Resume PDFs are processed in-memory as temporary buffers. We do not sell, publicize, or train public models on your personal documents. All conversation histories and evaluations are stored in your private browser session.",
+      q: "Does Resume Buddy store or share my resume data?",
+      a: "No. Resume files and pasted text are parsed securely in-memory using Groq LLM inference without persistent retention. We do not sell or publicize your personal documents. Your analysis remains private to your active browser session.",
     },
     {
-      q: "HOW DOES THE AI MOCK INTERVIEWER GENERATE QUESTIONS?",
-      a: "Rather than asking generic textbook questions, our interviewer reviews your structured candidate profile and generates dynamic, contextual questions based on the specific technologies, claims, and metrics you documented in your projects.",
+      q: "How does the AI Mock Interviewer generate questions?",
+      a: "Rather than asking generic textbook questions, our interviewer reviews your structured candidate profile and generates dynamic, contextual questions based on the specific technologies, architectural claims, and metrics you documented in your projects.",
     },
     {
-      q: "WHAT FORMAT OF RESUMES WORK BEST?",
-      a: "Standard single or double-column PDF files generated from Google Docs, Word, LaTeX, or Figma with clean text layers work best. Avoid image-only scans without OCR.",
+      q: "What format of resume works best?",
+      a: "Standard single-column PDF files generated from Google Docs, Word, LaTeX, or Figma with clean selectable text work best. Avoid image-only scanned PDFs without OCR text layers.",
     },
     {
-      q: "CAN I USE RESUME BUDDY WITHOUT A JOB DESCRIPTION?",
-      a: "Yes! If you upload only a resume, Resume Buddy analyzes your profile against general industry standards for your target role and gives comprehensive health, recruiter, and interview feedback.",
+      q: "Can I use Resume Buddy without a target job description?",
+      a: "Yes. If you upload only a resume, Resume Buddy analyzes your profile against general industry benchmarks for your indicated role, evaluating ATS health, recruiter readiness, and interview preparation questions.",
     },
     {
-      q: "HOW DO I USE VOICE INPUT AND SPEECH SYNTHESIS?",
-      a: "Both Career Copilot and Mock Interview Mode feature native Web Speech integration. Click the 🔊 button to have questions read aloud, or click the 🎙️ microphone icon to dictate your answers naturally.",
+      q: "How does voice interaction work?",
+      a: "Both Career Copilot and Mock Interview Mode support native Web Speech browser APIs. You can listen to questions synthesized directly through your audio output, and dictate responses using your microphone.",
     },
   ];
 
@@ -42,142 +43,153 @@ function Help() {
   );
 
   return (
-    <div className="kinetic-page-container">
-      {/* Top Navbar */}
-      <nav className="kinetic-navbar">
-        <div className="kinetic-logo" onClick={() => navigate("/")}>
-          <span>RESUME BUDDY</span>
-          <span className="kinetic-logo-tag">AI/26</span>
-        </div>
+    <div style={{ background: "var(--color-bg-primary)", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+      <TopNavbar />
 
-        <div className="kinetic-nav-links">
-          <button type="button" className="kinetic-nav-link" onClick={() => navigate("/")}>HOME</button>
-          <button type="button" className="kinetic-nav-link" onClick={() => navigate("/about")}>ABOUT</button>
-          <button type="button" className="kinetic-nav-link" onClick={() => navigate("/features")}>FEATURES</button>
-          <button type="button" className="kinetic-nav-link active" onClick={() => navigate("/help")}>HELP</button>
-        </div>
+      <main style={{ flex: 1, padding: "3rem 1.5rem 5rem" }}>
+        <div style={{ maxWidth: "960px", margin: "0 auto" }}>
+          {/* Header */}
+          <div style={{ textAlign: "center", marginBottom: "3rem" }}>
+            <span style={{ fontSize: "0.82rem", fontWeight: 600, color: "var(--color-primary)", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+              Help &amp; Knowledge Base
+            </span>
+            <h1 style={{ fontSize: "2.4rem", fontWeight: 700, color: "var(--color-heading)", margin: "0.5rem 0 1rem" }}>
+              Frequently Asked Questions
+            </h1>
+            <p style={{ color: "var(--color-text-muted)", fontSize: "1.05rem", maxWidth: "620px", margin: "0 auto 2rem", lineHeight: 1.6 }}>
+              Find clear answers regarding ATS scoring mechanics, interview simulations, privacy, and formatting standards.
+            </p>
 
-        <div className="kinetic-nav-actions">
-          <button type="button" className="kinetic-cta-btn mini" onClick={() => navigate("/upload")}>
-            UPLOAD RESUME
-          </button>
-          <ThemeToggle compact={true} />
-        </div>
-      </nav>
-
-      {/* Hero Header */}
-      <header className="kinetic-hero-section">
-        <span className="kinetic-eyebrow">HELP & DOCUMENTATION</span>
-        <h1 className="kinetic-hero-title">
-          KNOWLEDGE BASE.<br />
-          <span className="kinetic-highlight">INSTANT CLARITY.</span>
-        </h1>
-        <p className="kinetic-hero-lead">
-          Find fast answers regarding ATS parser rules, AI interview workflows, security, and profile optimization.
-        </p>
-
-        {/* Brutalist Search Bar */}
-        <div className="kinetic-search-box">
-          <input
-            type="text"
-            className="kinetic-search-input"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="SEARCH ATS RULES, MOCK INTERVIEWS, REWRITES..."
-          />
-          {searchQuery && (
-            <button type="button" className="kinetic-search-clear" onClick={() => setSearchQuery("")}>
-              CLEAR
-            </button>
-          )}
-        </div>
-      </header>
-
-      {/* Marquee */}
-      <div className="kinetic-marquee-bar">
-        <Marquee speed={70} gradient={false} autoFill={true}>
-          <span className="kinetic-ticker-item">FREQUENTLY ASKED QUESTIONS ///</span>
-          <span className="kinetic-ticker-item">ATS COMPLIANCE CHECKLIST ///</span>
-          <span className="kinetic-ticker-item">LIVE SUPPORT & DOCUMENTATION ///</span>
-          <span className="kinetic-ticker-item">PRIVACY & DATA SAFETY ///</span>
-        </Marquee>
-      </div>
-
-      {/* FAQ Accordion Section */}
-      <section className="kinetic-section">
-        <div className="kinetic-section-header">
-          <span className="kinetic-section-num">01 / FAQ</span>
-          <h2 className="kinetic-section-heading">FREQUENTLY ASKED QUESTIONS</h2>
-        </div>
-
-        <div className="kinetic-accordion-list">
-          {filteredFaqs.length === 0 ? (
-            <div className="kinetic-empty-box">
-              <p>No results found for "{searchQuery}". Try searching for "ATS", "Interview", or "PDF".</p>
+            {/* Search Input */}
+            <div style={{ maxWidth: "540px", margin: "0 auto", position: "relative" }}>
+              <Search size={18} style={{ position: "absolute", left: "14px", top: "50%", transform: "translateY(-50%)", color: "var(--color-text-muted)" }} />
+              <input
+                type="text"
+                className="form-input"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search topics (e.g. ATS score, privacy, PDF format)..."
+                style={{ paddingLeft: "42px", height: "46px", fontSize: "0.95rem" }}
+              />
             </div>
-          ) : (
-            filteredFaqs.map((item, idx) => {
-              const isOpen = activeAccordion === idx;
-              return (
-                <div key={idx} className={`kinetic-accordion-item ${isOpen ? "open" : ""}`}>
-                  <button
-                    type="button"
-                    className="kinetic-accordion-trigger"
-                    onClick={() => setActiveAccordion(isOpen ? -1 : idx)}
-                  >
-                    <span className="kinetic-acc-title">{item.q}</span>
-                    <span className="kinetic-acc-icon">{isOpen ? "—" : "+"}</span>
-                  </button>
-                  {isOpen && (
-                    <div className="kinetic-accordion-content">
-                      <p>{item.a}</p>
-                    </div>
-                  )}
+          </div>
+
+          {/* FAQ Accordions */}
+          <div style={{ marginBottom: "4rem" }}>
+            <h2 style={{ fontSize: "1.35rem", fontWeight: 700, color: "var(--color-heading)", marginBottom: "1.25rem" }}>
+              General Questions
+            </h2>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+              {filteredFaqs.length === 0 ? (
+                <div className="card" style={{ padding: "2rem", textAlign: "center", color: "var(--color-text-muted)" }}>
+                  No matching questions found for "{searchQuery}".
                 </div>
-              );
-            })
-          )}
-        </div>
-      </section>
+              ) : (
+                filteredFaqs.map((faq, idx) => {
+                  const isOpen = openIndex === idx;
+                  return (
+                    <div key={idx} className="card" style={{ overflow: "hidden", transition: "border-color 0.2s" }}>
+                      <button
+                        type="button"
+                        onClick={() => setOpenIndex(isOpen ? -1 : idx)}
+                        style={{
+                          width: "100%",
+                          padding: "1.25rem 1.5rem",
+                          background: "none",
+                          border: "none",
+                          cursor: "pointer",
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          textAlign: "left",
+                        }}
+                      >
+                        <span style={{ fontSize: "1rem", fontWeight: 600, color: "var(--color-heading)" }}>
+                          {faq.q}
+                        </span>
+                        {isOpen ? (
+                          <ChevronUp size={18} style={{ color: "var(--color-primary)", flexShrink: 0 }} />
+                        ) : (
+                          <ChevronDown size={18} style={{ color: "var(--color-text-muted)", flexShrink: 0 }} />
+                        )}
+                      </button>
 
-      {/* Quick Best Practices Dos & Don'ts */}
-      <section className="kinetic-section">
-        <div className="kinetic-section-header">
-          <span className="kinetic-section-num">02 / BEST PRACTICES</span>
-          <h2 className="kinetic-section-heading">ATS DOS & DON'TS</h2>
-        </div>
-
-        <div className="kinetic-grid-2">
-          <div className="kinetic-card" style={{ borderColor: "var(--clr-green)" }}>
-            <h3 className="kinetic-card-title" style={{ color: "var(--clr-green)" }}>✅ WHAT TO DO</h3>
-            <ul className="kinetic-card-bullet-list">
-              <li>— Use standard section headings: "Experience", "Skills", "Education", "Projects".</li>
-              <li>— Quantify results with metrics (e.g. "Reduced API latency by 45% using Redis").</li>
-              <li>— Include standard tech stack categories (Languages, Frameworks, Databases, Tools).</li>
-              <li>— Provide direct GitHub, LinkedIn, and live portfolio URLs.</li>
-            </ul>
+                      {isOpen && (
+                        <div style={{ padding: "0 1.5rem 1.25rem", borderTop: "1px solid var(--color-border)", paddingTop: "1rem" }}>
+                          <p style={{ margin: 0, fontSize: "0.92rem", color: "var(--color-text)", lineHeight: 1.65 }}>
+                            {faq.a}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })
+              )}
+            </div>
           </div>
 
-          <div className="kinetic-card" style={{ borderColor: "var(--clr-red)" }}>
-            <h3 className="kinetic-card-title" style={{ color: "var(--clr-red)" }}>❌ WHAT TO AVOID</h3>
-            <ul className="kinetic-card-bullet-list">
-              <li>— Embedding critical text in flattened raster images or canvas graphics.</li>
-              <li>— Using vague skill bars (e.g. "Python: 80%") with no project evidence.</li>
-              <li>— Multi-column nested tables that confuse standard ATS left-to-right line parsers.</li>
-              <li>— Generic non-action bullets like "Responsible for maintenance".</li>
-            </ul>
+          {/* ATS Best Practices Guide */}
+          <div style={{ marginBottom: "4rem" }}>
+            <h2 style={{ fontSize: "1.35rem", fontWeight: 700, color: "var(--color-heading)", marginBottom: "1.25rem" }}>
+              ATS Formatting Guidelines
+            </h2>
+
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "1.5rem" }}>
+              {/* Dos */}
+              <div className="card" style={{ padding: "1.5rem", borderTop: "3px solid var(--color-success)" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1rem" }}>
+                  <CheckCircle2 size={18} style={{ color: "var(--color-success)" }} />
+                  <h3 style={{ fontSize: "1.05rem", fontWeight: 600, color: "var(--color-heading)", margin: 0 }}>
+                    Recommended Practices
+                  </h3>
+                </div>
+                <ul style={{ paddingLeft: "1.2rem", margin: 0, fontSize: "0.88rem", color: "var(--color-text)", lineHeight: 1.6 }}>
+                  <li>Use standard section headings: Professional Summary, Skills, Experience, Education.</li>
+                  <li>Quantify impact with numbers, percentages, or scale metrics in bullet points.</li>
+                  <li>Explicitly list developer tools and frameworks in a dedicated Skills block.</li>
+                  <li>Provide clickable, clean URLs to GitHub, LinkedIn, or portfolio projects.</li>
+                </ul>
+              </div>
+
+              {/* Don'ts */}
+              <div className="card" style={{ padding: "1.5rem", borderTop: "3px solid var(--color-error)" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1rem" }}>
+                  <XCircle size={18} style={{ color: "var(--color-error)" }} />
+                  <h3 style={{ fontSize: "1.05rem", fontWeight: 600, color: "var(--color-heading)", margin: 0 }}>
+                    Common Pitfalls to Avoid
+                  </h3>
+                </div>
+                <ul style={{ paddingLeft: "1.2rem", margin: 0, fontSize: "0.88rem", color: "var(--color-text)", lineHeight: 1.6 }}>
+                  <li>Embedding essential text inside images, non-OCR scans, or raster graphics.</li>
+                  <li>Using multi-column nested tables that confuse standard left-to-right parser pipelines.</li>
+                  <li>Visual skill percentage bars (e.g. "React: 80%") with no context.</li>
+                  <li>Vague non-action bullet points like "Assisted team with daily tasks".</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          {/* CTA Banner */}
+          <div style={{ background: "var(--color-bg-secondary)", border: "1px solid var(--color-border)", borderRadius: "var(--radius-md)", padding: "2.5rem 2rem", textAlign: "center" }}>
+            <h3 style={{ fontSize: "1.35rem", fontWeight: 700, color: "var(--color-heading)", marginBottom: "0.5rem" }}>
+              Ready to test your resume?
+            </h3>
+            <p style={{ color: "var(--color-text-muted)", fontSize: "0.92rem", margin: "0 auto 1.5rem", maxWidth: "480px" }}>
+              Upload your document and run the analysis against real ATS parsing algorithms.
+            </p>
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={() => navigate("/upload")}
+            >
+              Analyze Your Resume <ArrowRight size={15} />
+            </button>
           </div>
         </div>
-      </section>
+      </main>
 
-      {/* Bottom CTA */}
-      <section className="kinetic-cta-banner">
-        <h2 className="kinetic-cta-title">READY TO SCAN YOUR RESUME?</h2>
-        <p className="kinetic-cta-subtitle">Get your full score report and recruiter feedback in under 10 seconds.</p>
-        <button type="button" className="kinetic-cta-btn primary lg" onClick={() => navigate("/upload")}>
-          UPLOAD YOUR RESUME NOW →
-        </button>
-      </section>
+      <Footer />
     </div>
   );
 }

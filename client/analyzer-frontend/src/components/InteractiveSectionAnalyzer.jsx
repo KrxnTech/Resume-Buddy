@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { Layers } from "lucide-react";
 import { buildSectionAnalysis } from "../utils/sectionAnalyzer";
 import SectionAnalysisCard from "./SectionAnalysisCard";
 
@@ -10,16 +11,21 @@ function InteractiveSectionAnalyzer({ analysis }) {
   if (!insights?.sections?.length) return null;
 
   return (
-    <section className="interactive-analyzer-card" aria-label="Interactive section analyzer">
-      <div className="tag-card-header">
-        <span className="tag-card-title">Interactive Resume Section Analyzer</span>
-        <span className="tag-card-count">{insights.sections.length} sections</span>
+    <section className="card" style={{ padding: "1.75rem", marginBottom: "2rem" }} aria-label="Interactive section analyzer">
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+          <Layers size={20} style={{ color: "var(--color-primary)" }} />
+          <h3 style={{ fontSize: "1.15rem", fontWeight: 600, color: "var(--color-heading)", margin: 0 }}>
+            Resume Section Analysis
+          </h3>
+        </div>
+        <span className="badge badge-neutral">{insights.sections.length} Sections</span>
       </div>
-      <p className="interactive-analyzer-subtitle">
-        Expand each ATS section to inspect detailed strengths, weaknesses, key terms, and recommendations.
+      <p style={{ fontSize: "0.88rem", color: "var(--color-text-muted)", margin: "0 0 1.25rem", lineHeight: 1.5 }}>
+        Expand each resume section to inspect detected strengths, missing keywords, and targeted recommendations.
       </p>
 
-      <div className="section-analysis-list">
+      <div>
         {insights.sections.map((section) => (
           <SectionAnalysisCard
             key={section.key}

@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { UploadCloud, FileText, CheckCircle2, Trash2, ArrowUpRight, Clipboard } from "lucide-react";
 
 const SAMPLE_RESUME = `ALEX MORGAN
 Software Engineer | Full Stack Developer
@@ -33,8 +34,16 @@ CERTIFICATIONS
 • AWS Certified Solutions Architect – Associate (2023)
 • Meta Certified Front-End Developer (2022)`;
 
+function formatFileSize(bytes) {
+  if (!bytes || bytes === 0) return "0 KB";
+  const k = 1024;
+  const sizes = ["Bytes", "KB", "MB"];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + " " + sizes[i];
+}
+
 function ResumeUpload({ setResume, resume, resumeText, setResumeText }) {
-  const [activeTab, setActiveTab] = useState(resumeText ? "paste" : "upload");
+  const [activeTab, setActiveTab] = useState(resumeText && !resume ? "paste" : "upload");
   const [dragOver, setDragOver] = useState(false);
   const inputRef = useRef(null);
 
@@ -42,7 +51,7 @@ function ResumeUpload({ setResume, resume, resumeText, setResumeText }) {
     if (!file) return;
     setResume(file);
 
-    // If text-like file, read contents directly
+    // If text-like file, read contents directly as well
     if (file.type.startsWith("text/") || file.name.endsWith(".txt") || file.name.endsWith(".md")) {
       const reader = new FileReader();
       reader.onload = (e) => {
@@ -60,7 +69,9 @@ function ResumeUpload({ setResume, resume, resumeText, setResumeText }) {
   const handleDrop = (e) => {
     e.preventDefault();
     setDragOver(false);
-    handleFile(e.dataTransfer.files[0]);
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      handleFile(e.dataTransfer.files[0]);
+    }
   };
 
   const handleDragOver = (e) => {
@@ -69,6 +80,12 @@ function ResumeUpload({ setResume, resume, resumeText, setResumeText }) {
   };
 
   const handleDragLeave = () => setDragOver(false);
+
+  const handleRemoveFile = (e) => {
+    e.stopPropagation();
+    setResume(null);
+    if (inputRef.current) inputRef.current.value = "";
+  };
 
   const handlePasteSample = () => {
     if (setResumeText) {
@@ -79,129 +96,159 @@ function ResumeUpload({ setResume, resume, resumeText, setResumeText }) {
 
   return (
     <div>
-      <div className="section-label" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <span>Resume Input</span>
-        <div style={{ display: "flex", gap: "0.5rem" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.75rem" }}>
+        <label className="form-label" style={{ marginBottom: 0, fontWeight: 600 }}>
+          Resume Document
+        </label>
+        <div style={{ display: "flex", gap: "0.25rem", background: "var(--color-bg-secondary)", padding: "2px", borderRadius: "var(--radius-sm)", border: "1px solid var(--color-border)" }}>
           <button
             type="button"
-            className={`btn-subtle ${activeTab === "upload" ? "active" : ""}`}
+            className="btn-link"
             onClick={() => setActiveTab("upload")}
             style={{
-              background: activeTab === "upload" ? "var(--clr-accent)" : "transparent",
-              color: activeTab === "upload" ? "#000" : "var(--clr-text-2)",
-              border: "1px solid var(--clr-border)",
-              padding: "0.2rem 0.6rem",
+              padding: "4px 10px",
+              fontSize: "0.78rem",
+              fontWeight: 500,
               borderRadius: "4px",
-              fontSize: "0.75rem",
-              fontWeight: 600,
-              cursor: "pointer",
+              background: activeTab === "upload" ? "var(--color-bg-primary)" : "transparent",
+              color: activeTab === "upload" ? "var(--color-primary)" : "var(--color-text-muted)",
+              boxShadow: activeTab === "upload" ? "var(--shadow-sm)" : "none",
             }}
           >
-            📁 File Upload
+            Upload File
           </button>
           <button
             type="button"
-            className={`btn-subtle ${activeTab === "paste" ? "active" : ""}`}
+            className="btn-link"
             onClick={() => setActiveTab("paste")}
             style={{
-              background: activeTab === "paste" ? "var(--clr-accent)" : "transparent",
-              color: activeTab === "paste" ? "#000" : "var(--clr-text-2)",
-              border: "1px solid var(--clr-border)",
-              padding: "0.2rem 0.6rem",
+              padding: "4px 10px",
+              fontSize: "0.78rem",
+              fontWeight: 500,
               borderRadius: "4px",
-              fontSize: "0.75rem",
-              fontWeight: 600,
-              cursor: "pointer",
+              background: activeTab === "paste" ? "var(--color-bg-primary)" : "transparent",
+              color: activeTab === "paste" ? "var(--color-primary)" : "var(--color-text-muted)",
+              boxShadow: activeTab === "paste" ? "var(--shadow-sm)" : "none",
             }}
           >
-            📋 Paste Text
+            Paste Text
           </button>
         </div>
       </div>
 
       {activeTab === "upload" ? (
         <div>
-          <label
+          <div
             className={`upload-zone ${dragOver ? "drag-over" : ""} ${resume ? "has-file" : ""}`}
             onDrop={handleDrop}
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
             onClick={() => inputRef.current?.click()}
+            style={{ cursor: "pointer" }}
           >
             <input
               ref={inputRef}
               type="file"
-              accept=".txt,.md,.pdf,.doc,.docx"
-              className="upload-input"
+              accept=".pdf,.txt,.doc,.docx"
+              style={{ display: "none" }}
               onChange={handleChange}
             />
 
             {resume ? (
-              <>
-                <span className="upload-icon">✅</span>
-                <div className="upload-filename">
-                  <span className="upload-filename-icon">📎</span>
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.5rem", width: "100%" }}>
+                <div style={{ width: "42px", height: "42px", borderRadius: "50%", background: "#E8F5E9", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--color-success)" }}>
+                  <CheckCircle2 size={22} />
+                </div>
+                <div style={{ fontWeight: 600, color: "var(--color-heading)", fontSize: "0.95rem" }}>
                   {resume.name}
                 </div>
-                <span style={{ fontSize: "0.78rem", color: "var(--clr-text-3)" }}>
-                  Click or drag to replace
-                </span>
-              </>
+                <div style={{ fontSize: "0.8rem", color: "var(--color-text-muted)" }}>
+                  Size: {formatFileSize(resume.size)} • PDF / Document Ready
+                </div>
+                <div style={{ display: "flex", gap: "0.75rem", marginTop: "0.5rem" }}>
+                  <button
+                    type="button"
+                    className="btn btn-secondary btn-sm"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      inputRef.current?.click();
+                    }}
+                  >
+                    Replace File
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-secondary btn-sm"
+                    onClick={handleRemoveFile}
+                    style={{ color: "var(--color-error)" }}
+                  >
+                    <Trash2 size={13} style={{ marginRight: "4px" }} /> Remove
+                  </button>
+                </div>
+              </div>
             ) : (
-              <>
-                <span className="upload-icon">☁️</span>
-                <span className="upload-text-main">Drop your resume here</span>
-                <span className="upload-text-sub">Supports .txt, .md, .pdf, or click to browse</span>
-              </>
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.5rem" }}>
+                <div style={{ width: "48px", height: "48px", borderRadius: "50%", background: "var(--color-info)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--color-primary)" }}>
+                  <UploadCloud size={24} />
+                </div>
+                <div style={{ fontWeight: 600, color: "var(--color-heading)", fontSize: "0.95rem" }}>
+                  Choose a file or drag & drop here
+                </div>
+                <div style={{ fontSize: "0.82rem", color: "var(--color-text-muted)" }}>
+                  PDF, TXT, DOCX supported up to 10MB
+                </div>
+                <button
+                  type="button"
+                  className="btn btn-secondary btn-sm"
+                  style={{ marginTop: "0.5rem" }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    inputRef.current?.click();
+                  }}
+                >
+                  Browse Files
+                </button>
+              </div>
             )}
-          </label>
+          </div>
 
-          <div style={{ marginTop: "0.5rem", display: "flex", justifyContent: "flex-end" }}>
+          <div style={{ marginTop: "0.5rem", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <span style={{ fontSize: "0.75rem", color: "var(--color-text-muted)" }}>
+              Backend size limit: 10MB (Memory buffer parsed)
+            </span>
             <button
               type="button"
               onClick={handlePasteSample}
-              style={{
-                background: "none",
-                border: "none",
-                color: "var(--clr-accent)",
-                fontSize: "0.75rem",
-                cursor: "pointer",
-                textDecoration: "underline",
-              }}
+              className="btn-link"
+              style={{ fontSize: "0.8rem", color: "var(--color-primary)", display: "flex", alignItems: "center", gap: "2px" }}
             >
-              Use Sample Software Engineer Resume ↗
+              Use Sample Resume <ArrowUpRight size={13} />
             </button>
           </div>
         </div>
       ) : (
         <div>
           <textarea
-            className="job-desc-textarea"
-            placeholder="Paste your full resume text here (Summary, Experience, Skills, Education)..."
+            className="form-textarea"
+            placeholder="Paste your full resume text here (Summary, Technical Skills, Experience, Education)..."
             value={resumeText || ""}
             onChange={(e) => {
               if (setResumeText) setResumeText(e.target.value);
             }}
             rows={10}
-            style={{ minHeight: "180px", fontFamily: "monospace", fontSize: "0.82rem" }}
+            style={{ minHeight: "180px", fontFamily: "monospace", fontSize: "0.82rem", lineHeight: 1.5 }}
           />
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "0.4rem" }}>
-            <span style={{ fontSize: "0.75rem", color: "var(--clr-text-3)" }}>
-              {resumeText ? `${resumeText.length} characters` : "No text pasted"}
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "0.5rem" }}>
+            <span style={{ fontSize: "0.78rem", color: "var(--color-text-muted)" }}>
+              {resumeText ? `${resumeText.length} characters entered` : "No text pasted"}
             </span>
             <button
               type="button"
               onClick={handlePasteSample}
-              style={{
-                background: "none",
-                border: "none",
-                color: "var(--clr-accent)",
-                fontSize: "0.75rem",
-                cursor: "pointer",
-                textDecoration: "underline",
-              }}
+              className="btn-link"
+              style={{ fontSize: "0.8rem", color: "var(--color-primary)", display: "flex", alignItems: "center", gap: "2px" }}
             >
-              Paste Sample Resume ↗
+              Paste Sample Resume <ArrowUpRight size={13} />
             </button>
           </div>
         </div>

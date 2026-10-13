@@ -1,7 +1,11 @@
+import { Bot } from "lucide-react";
+
 function TypingIndicator() {
   return (
     <div className="copilot-message assistant typing">
-      <div className="message-avatar">🤖</div>
+      <div className="message-avatar">
+        <Bot size={15} />
+      </div>
       <div className="message-bubble">
         <div className="typing-dots" aria-label="Assistant is typing">
           <span />

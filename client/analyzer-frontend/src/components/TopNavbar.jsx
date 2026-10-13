@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Menu, ChevronDown, User, LogOut, Settings as SettingsIcon, UploadCloud } from "lucide-react";
 import { useAnalysis } from "../hooks/useAnalysis";
 import { useAuth } from "../hooks/useAuth";
-import ThemeToggle from "./ThemeToggle";
 
 function TopNavbar({ toggleMobileSidebar, isMobile }) {
   const { resume, result, loading } = useAnalysis();
@@ -18,22 +18,22 @@ function TopNavbar({ toggleMobileSidebar, isMobile }) {
   const score = result?.analysis?.matchScore ?? 0;
   const scorePercent = Math.round(score * 100);
 
-  // Map route pathname to beautiful human readable section headers
+  // Map route pathname to clean human readable section headers
   const getPageHeader = () => {
     const path = location.pathname;
-    if (path === "/dashboard") return "ANALYSIS RADAR";
-    if (path === "/dashboard/profile") return "CANDIDATE PROFILE";
-    if (path === "/dashboard/ats") return "ATS PRECISION SCORING";
-    if (path === "/dashboard/recruiter") return "RECRUITER REVIEW MATRIX";
-    if (path === "/dashboard/sections") return "SECTION DEEP-DIVE";
-    if (path === "/dashboard/health") return "RESUME HEALTH AUDIT";
-    if (path === "/dashboard/interview") return "AI MOCK INTERVIEW ARENA";
-    if (path === "/dashboard/roadmap") return "CAREER ROADMAP";
-    if (path === "/dashboard/export") return "EXPORT ANALYSIS REPORT";
-    if (path === "/dashboard/copilot") return "CAREER COPILOT";
-    if (path === "/dashboard/settings") return "ACCOUNT & SETTINGS";
-    if (path === "/upload") return "UPLOAD RESUME";
-    return "ANALYZER SUITE";
+    if (path === "/dashboard") return "Overview";
+    if (path === "/dashboard/profile") return "Candidate Profile";
+    if (path === "/dashboard/ats") return "ATS Compatibility";
+    if (path === "/dashboard/recruiter") return "Recruiter Review";
+    if (path === "/dashboard/sections") return "Section Analysis";
+    if (path === "/dashboard/health") return "Resume Health Audit";
+    if (path === "/dashboard/interview") return "Interview Preparation";
+    if (path === "/dashboard/roadmap") return "Career Roadmap";
+    if (path === "/dashboard/export") return "Export Report";
+    if (path === "/dashboard/copilot") return "Career Copilot";
+    if (path === "/dashboard/settings") return "Settings";
+    if (path === "/upload") return "Upload Resume";
+    return "";
   };
 
   const getUserInitials = (name) => {
@@ -46,155 +46,166 @@ function TopNavbar({ toggleMobileSidebar, isMobile }) {
       .toUpperCase();
   };
 
+  const isDashboard = location.pathname.startsWith("/dashboard");
+
   return (
     <header className="top-navbar">
-      {/* Left side: Mobile hamburger & breadcrumb */}
-      <div className="navbar-left">
-        {isMobile && (
-          <button className="mobile-hamburger-btn" onClick={toggleMobileSidebar} aria-label="Toggle Navigation Sidebar">
-            ☰
-          </button>
-        )}
-        <div className="navbar-breadcrumb">
-          <span className="breadcrumb-main">{getPageHeader()}</span>
-        </div>
-      </div>
-
-      {/* Right side: Links + Resume score meta + Theme toggle + Auth */}
-      <div className="navbar-actions" style={{ position: "relative" }}>
-        <div className="navbar-nav-quick-links">
-          <Link to="/" className="top-nav-quick-link">HOME</Link>
-          <Link to="/features" className="top-nav-quick-link">FEATURES</Link>
-          <Link to="/help" className="top-nav-quick-link">HELP</Link>
-        </div>
-
-        {resume && (
-          <div className="navbar-meta-pane">
-            {result && (
-              <div className="navbar-score-badge" title="Overall Match Score">
-                <span className="score-badge-circle" />
-                MATCH: <strong>{scorePercent}%</strong>
-              </div>
-            )}
-
-            <button className="navbar-reanalyze-btn" onClick={handleReanalyze} disabled={loading}>
-              SCAN NEW
+      <div className="navbar-container">
+        {/* Left Side: Mobile Menu + Brand / Breadcrumb */}
+        <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+          {isMobile && isDashboard && (
+            <button
+              className="mobile-hamburger-btn"
+              onClick={toggleMobileSidebar}
+              aria-label="Toggle Navigation Sidebar"
+              style={{ display: "flex", alignItems: "center" }}
+            >
+              <Menu size={20} />
             </button>
-          </div>
-        )}
+          )}
 
-        {/* User Auth Section */}
-        {isAuthenticated && user ? (
-          <div style={{ position: "relative" }}>
+          <Link to="/" className="navbar-brand">
+            <span className="brand-dot" />
+            <span>Resume Buddy</span>
+            <span className="brand-badge">Career Intelligence</span>
+          </Link>
+
+          {isDashboard && getPageHeader() && (
+            <div className="navbar-breadcrumb" style={{ marginLeft: "12px", paddingLeft: "16px", borderLeft: "1px solid var(--clr-border)" }}>
+              <span className="breadcrumb-main">{getPageHeader()}</span>
+            </div>
+          )}
+        </div>
+
+        {/* Right Side: Navigation Links & Actions */}
+        <div className="navbar-actions">
+          <nav className="navbar-links">
+            <Link to="/" className={`nav-link ${location.pathname === "/" ? "active" : ""}`}>
+              Home
+            </Link>
+            <Link to="/features" className={`nav-link ${location.pathname === "/features" ? "active" : ""}`}>
+              Features
+            </Link>
+            <Link to="/about" className={`nav-link ${location.pathname === "/about" ? "active" : ""}`}>
+              About
+            </Link>
+            <Link to="/help" className={`nav-link ${location.pathname === "/help" ? "active" : ""}`}>
+              Help
+            </Link>
+          </nav>
+
+          {/* Quick upload / Re-scan button */}
+          <Link to="/upload" className="btn btn-primary btn-sm" style={{ textDecoration: "none" }}>
+            <UploadCloud size={14} />
+            <span>{isDashboard ? "Analyze New" : "Upload Resume"}</span>
+          </Link>
+
+          {/* Auth Section */}
+          {isAuthenticated && user ? (
+            <div style={{ position: "relative" }}>
+              <button
+                type="button"
+                onClick={() => setUserDropdownOpen((prev) => !prev)}
+                className="btn btn-secondary btn-sm"
+                style={{ padding: "5px 10px", gap: "6px" }}
+              >
+                <span
+                  style={{
+                    width: "22px",
+                    height: "22px",
+                    borderRadius: "50%",
+                    backgroundColor: "var(--clr-brand-subtle)",
+                    color: "var(--clr-brand)",
+                    fontWeight: 600,
+                    fontSize: "11px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  {getUserInitials(user.name)}
+                </span>
+                <span style={{ fontSize: "13px", fontWeight: 500, maxWidth: "100px", overflow: "hidden", textOverflow: "ellipsis" }}>
+                  {user.name.split(" ")[0]}
+                </span>
+                <ChevronDown size={14} color="var(--clr-muted)" />
+              </button>
+
+              {userDropdownOpen && (
+                <div
+                  style={{
+                    position: "absolute",
+                    right: 0,
+                    top: "calc(100% + 8px)",
+                    backgroundColor: "var(--clr-surface)",
+                    border: "1px solid var(--clr-border)",
+                    borderRadius: "var(--radius-md)",
+                    padding: "12px",
+                    minWidth: "210px",
+                    boxShadow: "var(--shadow-dropdown)",
+                    zIndex: 1000,
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "8px",
+                  }}
+                >
+                  <div style={{ paddingBottom: "8px", borderBottom: "1px solid var(--clr-border-light)" }}>
+                    <div style={{ fontWeight: 600, fontSize: "13px", color: "var(--clr-heading)" }}>{user.name}</div>
+                    <div style={{ fontSize: "12px", color: "var(--clr-muted)", overflow: "hidden", textOverflow: "ellipsis" }}>{user.email}</div>
+                  </div>
+
+                  <Link
+                    to="/dashboard/settings"
+                    onClick={() => setUserDropdownOpen(false)}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "8px",
+                      fontSize: "13px",
+                      color: "var(--clr-text)",
+                      padding: "6px 8px",
+                      borderRadius: "var(--radius-xs)",
+                    }}
+                  >
+                    <SettingsIcon size={14} />
+                    <span>Account Settings</span>
+                  </Link>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setUserDropdownOpen(false);
+                      logout();
+                    }}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "8px",
+                      fontSize: "13px",
+                      color: "var(--clr-error)",
+                      padding: "6px 8px",
+                      borderRadius: "var(--radius-xs)",
+                      textAlign: "left",
+                      width: "100%",
+                    }}
+                  >
+                    <LogOut size={14} />
+                    <span>Sign Out</span>
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
             <button
               type="button"
-              onClick={() => setUserDropdownOpen((prev) => !prev)}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "0.5rem",
-                padding: "0.3rem 0.6rem",
-                background: "rgba(255, 255, 255, 0.05)",
-                border: "1px solid var(--clr-border)",
-                borderRadius: "20px",
-                color: "var(--clr-text)",
-                cursor: "pointer",
-                fontSize: "0.82rem",
-              }}
+              className="btn btn-secondary btn-sm"
+              onClick={() => openAuthModal("login")}
             >
-              <span
-                style={{
-                  width: "24px",
-                  height: "24px",
-                  borderRadius: "50%",
-                  background: "var(--clr-accent)",
-                  color: "#000",
-                  fontWeight: 700,
-                  fontSize: "0.72rem",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                {getUserInitials(user.name)}
-              </span>
-              <span style={{ fontWeight: 600, maxWidth: "100px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                {user.name.split(" ")[0]}
-              </span>
-              <span style={{ fontSize: "0.65rem", color: "var(--clr-text-3)" }}>▼</span>
+              <User size={14} />
+              <span>Sign In</span>
             </button>
-
-            {/* Dropdown Menu */}
-            {userDropdownOpen && (
-              <div
-                style={{
-                  position: "absolute",
-                  right: 0,
-                  top: "calc(100% + 8px)",
-                  background: "var(--clr-card-bg, #141417)",
-                  border: "1px solid var(--clr-border)",
-                  borderRadius: "12px",
-                  padding: "0.75rem",
-                  minWidth: "200px",
-                  boxShadow: "0 10px 30px rgba(0,0,0,0.5)",
-                  zIndex: 1000,
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "0.5rem",
-                }}
-              >
-                <div style={{ paddingBottom: "0.5rem", borderBottom: "1px solid var(--clr-border)" }}>
-                  <div style={{ fontWeight: 600, fontSize: "0.85rem", color: "var(--clr-text)" }}>{user.name}</div>
-                  <div style={{ fontSize: "0.75rem", color: "var(--clr-text-3)", overflow: "hidden", textOverflow: "ellipsis" }}>{user.email}</div>
-                  <span style={{ display: "inline-block", marginTop: "0.25rem", fontSize: "0.65rem", background: "rgba(230,254,83,0.15)", color: "var(--clr-accent)", padding: "2px 6px", borderRadius: "4px" }}>
-                    {user.role || "Pro Member"}
-                  </span>
-                </div>
-
-                <Link
-                  to="/dashboard/settings"
-                  onClick={() => setUserDropdownOpen(false)}
-                  style={{ textDecoration: "none", color: "var(--clr-text)", fontSize: "0.8rem", padding: "0.35rem 0.5rem", borderRadius: "6px" }}
-                >
-                  ⚙️ Account Settings
-                </Link>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    setUserDropdownOpen(false);
-                    logout();
-                  }}
-                  style={{
-                    background: "rgba(255, 75, 75, 0.1)",
-                    border: "1px solid rgba(255, 75, 75, 0.3)",
-                    color: "#ff6b6b",
-                    padding: "0.4rem 0.6rem",
-                    borderRadius: "6px",
-                    cursor: "pointer",
-                    fontSize: "0.78rem",
-                    fontWeight: 600,
-                    textAlign: "center",
-                    marginTop: "0.25rem",
-                  }}
-                >
-                  Sign Out
-                </button>
-              </div>
-            )}
-          </div>
-        ) : (
-          <button
-            type="button"
-            className="navbar-reanalyze-btn"
-            onClick={() => openAuthModal("login")}
-            style={{ background: "var(--clr-accent)", color: "#000", fontWeight: 700 }}
-          >
-            SIGN IN
-          </button>
-        )}
-
-        <ThemeToggle compact={true} />
+          )}
+        </div>
       </div>
     </header>
   );

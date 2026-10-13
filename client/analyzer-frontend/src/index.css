@@ -1,169 +1,212 @@
 /* =========================================================
-   KINETIC TYPOGRAPHY DESIGN SYSTEM
-   Acid Yellow (#DFE104) • Rich Black (#09090B) • Zinc 700 (#3F3F46)
-   Space Grotesk • 0px Radius • Flat Brutalism • High-Energy Motion
+   RESUME BUDDY — ZERODHA-INSPIRED MINIMAL SAAS DESIGN SYSTEM
+   Clean White (#FFFFFF) • Subtle Gray (#F8F9FA) • Brand Blue (#387ED1)
+   Minimalist Typography • 1px Hairline Borders • Information Dense
    ========================================================= */
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700;800&family=Inter:wght@400;500;600;700;800&display=swap');
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  /* Surfaces & Backgrounds */
+  --clr-bg: #FFFFFF;
+  --clr-bg-alt: #FAFAFA;
+  --clr-surface: #FFFFFF;
+  --clr-surface-card: #FFFFFF;
+  --clr-surface-alt: #FAFAFA;
+
+  /* Typography Colors */
+  --clr-text: #424242;
+  --clr-heading: #222222;
+  --clr-text-secondary: #666666;
+  --clr-muted: #9B9B9B;
+  --clr-text-light: #9B9B9B;
+
+  /* Primary Brand Accent (Zerodha Blue) */
+  --clr-brand: #387ED1;
+  --clr-brand-hover: #2F6FB8;
+  --clr-brand-subtle: #EAF3FC;
+  --clr-brand-text: #387ED1;
+
+  /* Borders & Dividers */
+  --clr-border: #EEEEEE;
+  --clr-border-light: #F5F5F5;
+  --clr-border-strong: #DDDDDD;
+
+  /* Semantic Status Tokens */
+  --clr-success: #00A86B;
+  --clr-success-bg: #E8F8F1;
+  --clr-success-text: #007A4D;
+
+  --clr-warning: #E5A000;
+  --clr-warning-bg: #FEF7E6;
+  --clr-warning-text: #996B00;
+
+  --clr-error: #D9534F;
+  --clr-error-bg: #FDF2F2;
+  --clr-error-text: #A92320;
+
+  --clr-info: #387ED1;
+  --clr-info-bg: #EAF3FC;
+  --clr-info-text: #225C9E;
+
+  /* Full Aliases for --color-* naming convention */
+  --color-bg-primary: #FFFFFF;
+  --color-bg-secondary: #FAFAFA;
+  --color-heading: #222222;
+  --color-text: #424242;
+  --color-text-secondary: #666666;
+  --color-text-muted: #9B9B9B;
+  --color-primary: #387ED1;
+  --color-primary-hover: #2F6FB8;
+  --color-border: #EEEEEE;
+  --color-border-light: #F5F5F5;
+  --color-success: #00A86B;
+  --color-warning: #E5A000;
+  --color-error: #D9534F;
+  --color-info: #EAF3FC;
+
+  /* Typography */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+
+  /* Geometry & Radii */
+  --radius-xs: 3px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-full: 9999px;
+
+  /* Layout Constants */
+  --max-width: 1200px;
+  --header-height: 68px;
+  --sidebar-width: 240px;
+  --sidebar-collapsed-width: 68px;
+
+  /* Subtle Shadows */
+  --shadow-none: none;
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+  --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.04);
+  --shadow-card: 0 1px 4px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06);
+  --shadow-dropdown: 0 4px 16px rgba(0, 0, 0, 0.08);
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-normal: 220ms ease;
+}
+
+/* =========================================================
+   BASE RESET & TYPOGRAPHY ENFORCEMENT
+   ========================================================= */
 *, *::before, *::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Space Grotesk', 'JetBrains Mono', -apple-system, BlinkMacSystemFont, sans-serif;
-  border-radius: 0 !important;
 }
 
-/* Dark Mode Tokens (Kinetic Signature) */
-:root,
-:root[data-theme="dark"],
-[data-theme="dark"],
-.dark-theme {
-  --font-display:     'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-body:        'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-mono:        'JetBrains Mono', monospace;
-
-  --clr-bg:           #09090b;
-  --clr-bg-2:         #121216;
-  --clr-surface:      #09090b;
-  --clr-surface-2:    #18181b;
-  --clr-surface-glass: rgba(9, 9, 11, 0.92);
-  --clr-muted:        #27272a;
-  --clr-muted-foreground: #a1a1aa;
-  --clr-border:       #3f3f46;
-  --clr-border-hover: #dfe104;
-
-  --clr-accent:       #dfe104;
-  --clr-accent-2:     #f4f620;
-  --clr-accent-glow:  rgba(223, 225, 4, 0.35);
-  --clr-accent-foreground: #000000;
-  --gradient-accent:  linear-gradient(135deg, #dfe104 0%, #f4f620 100%);
-
-  --clr-green:        #22c55e;
-  --clr-green-soft:   rgba(34, 197, 94, 0.16);
-  --clr-red:          #ef4444;
-  --clr-red-soft:     rgba(239, 68, 68, 0.16);
-  --clr-yellow:       #dfe104;
-  --clr-yellow-soft:  rgba(223, 225, 4, 0.16);
-  --clr-blue:         #dfe104;
-  --clr-blue-soft:    rgba(223, 225, 4, 0.14);
-
-  --clr-text:         #fafafa;
-  --clr-text-2:       #a1a1aa;
-  --clr-text-3:       #71717a;
-
-  /* Brutalist Geometry (0px radius) */
-  --radius-xl:        0px;
-  --radius-lg:        0px;
-  --radius-md:        0px;
-  --radius-sm:        0px;
-
-  /* Flat Brutalism (Zero Soft Shadows) */
-  --shadow-sm:        none;
-  --shadow-card:      none;
-  --shadow-lg:        none;
-  --shadow-glow:      none;
-  --shadow-accent:    none;
-  --shadow-accent-lg: none;
-
-  --bg-radial:        #09090b;
-}
-
-/* Light Mode Tokens (Brutalist High-Contrast) */
-:root[data-theme="light"],
-[data-theme="light"],
-.light-theme {
-  --font-display:     'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-body:        'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-mono:        'JetBrains Mono', monospace;
-
-  --clr-bg:           #f4f4f5;
-  --clr-bg-2:         #e4e4e7;
-  --clr-surface:      #ffffff;
-  --clr-surface-2:    #f4f4f5;
-  --clr-surface-glass: rgba(255, 255, 255, 0.95);
-  --clr-muted:        #e4e4e7;
-  --clr-muted-foreground: #52525b;
-  --clr-border:       #27272a;
-  --clr-border-hover: #000000;
-
-  --clr-accent:       #dfe104;
-  --clr-accent-2:     #c8ca00;
-  --clr-accent-glow:  rgba(223, 225, 4, 0.25);
-  --clr-accent-foreground: #000000;
-  --gradient-accent:  linear-gradient(135deg, #dfe104 0%, #c8ca00 100%);
-
-  --clr-green:        #15803d;
-  --clr-green-soft:   rgba(21, 128, 61, 0.12);
-  --clr-red:          #b91c1c;
-  --clr-red-soft:     rgba(185, 28, 28, 0.12);
-  --clr-yellow:       #854d0e;
-  --clr-yellow-soft:  rgba(133, 77, 14, 0.12);
-  --clr-blue:         #000000;
-  --clr-blue-soft:    rgba(0, 0, 0, 0.08);
-
-  --clr-text:         #09090b;
-  --clr-text-2:       #52525b;
-  --clr-text-3:       #71717a;
-
-  --radius-xl:        0px;
-  --radius-lg:        0px;
-  --radius-md:        0px;
-  --radius-sm:        0px;
-
-  --shadow-sm:        none;
-  --shadow-card:      none;
-  --shadow-lg:        none;
-  --shadow-glow:      none;
-  --shadow-accent:    none;
-  --shadow-accent-lg: none;
-
-  --bg-radial:        #f4f4f5;
-}
-
-html { 
+html {
+  font-size: 16px;
   scroll-behavior: smooth;
   background-color: var(--clr-bg);
 }
 
 body {
-  font-family: var(--font-body);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
   background-color: var(--clr-bg);
   color: var(--clr-text);
-  min-height: 100vh;
-  line-height: 1.5;
+  line-height: 1.55;
   -webkit-font-smoothing: antialiased;
-  letter-spacing: -0.02em;
+  -moz-osx-font-smoothing: grayscale;
+  letter-spacing: -0.01em;
 }
 
 #root {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: stretch;
-  padding: 0;
-  width: 100%;
+  background-color: var(--clr-bg);
 }
 
-/* Kinetic Selection */
-::selection {
-  background-color: #dfe104;
-  color: #000000;
+/* Enforce sans-serif across all elements */
+h1, h2, h3, h4, h5, h6,
+p, span, div, a, button,
+input, textarea, select, label {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
 }
 
-button { 
-  font-family: inherit; 
+/* Typography Hierarchy */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--clr-heading);
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.025em;
+}
+
+h1 {
+  font-size: 2.25rem; /* 36px */
+  margin-bottom: 0.5rem;
+}
+
+h2 {
+  font-size: 1.625rem; /* 26px */
+  margin-bottom: 0.5rem;
+}
+
+h3 {
+  font-size: 1.25rem; /* 20px */
+  margin-bottom: 0.35rem;
+}
+
+h4 {
+  font-size: 1.05rem; /* 17px */
+  margin-bottom: 0.25rem;
+}
+
+p {
+  color: var(--clr-text);
+  font-size: 0.9375rem; /* 15px */
+  line-height: 1.6;
+}
+
+small, .text-muted {
+  font-size: 0.8125rem; /* 13px */
+  color: var(--clr-muted);
+}
+
+a {
+  color: var(--clr-brand);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--clr-brand-hover);
+}
+
+button {
   cursor: pointer;
-  border-radius: 0 !important;
+  border: none;
+  outline: none;
+  background: none;
 }
 
-input, textarea, select { 
-  font-family: inherit;
-  border-radius: 0 !important;
+:focus-visible {
+  outline: 2px solid var(--clr-brand);
+  outline-offset: 2px;
 }
 
-/* Headings uppercase default */
-h1, h2, h3, h4, .kinetic-title {
-  text-transform: uppercase;
-  letter-spacing: -0.04em;
-  font-weight: 700;
+/* Utility Containers */
+.container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.divider {
+  border: 0;
+  height: 1px;
+  background: var(--clr-border);
+  margin: 24px 0;
 }
